@@ -3,7 +3,9 @@ const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-io.origins('*:*');
+if (process.env.NODE_ENV !== 'production') {
+    io.origins('*:*');
+}
 
 const port = process.env.PORT || 8000;
 
@@ -43,40 +45,3 @@ io.on('connection', function(socket) {
         io.sockets.in(socket.room).emit('message', socket.id, `${message}`);
     });
 });
-
-
-
-// io.sockets.on('connection', function(socket) {
-//     socket.on('newuser', function(username, room) {
-//         // store the user's username
-//         socket.username = username;
-        
-//         if (rooms.includes(room)) {
-//             socket.room = room;
-//         } else {
-//             rooms.push(room);
-//         }
-
-//         socket.join(room);
-        
-//         socket.emit('updatechat', 'SERVER', `'connected to ${room}'`);
-
-//         socket.broadcast.to(room).emit('updatechat', 'SERVER', `${username} connected`);
-
-//         socket.emit('updaterooms', rooms, room);
-//     });
-
-//     socket.on('sendmessage', function(data) {
-//         io.sockets.in(socket.room).emit('updatechat', socket.username, data);
-//     });
-
-//     socket.on('joinroom', function(room) {
-//         if (socket.room) {
-//             socket.leave(socket.room);
-
-//             socket.join(room);
-
-
-//         }
-//     });
-// });
