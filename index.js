@@ -1,4 +1,5 @@
-
+const express = require('express');
+const path = require('path');
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -7,11 +8,17 @@ if (process.env.NODE_ENV !== 'production') {
     io.origins('*:*');
 }
 
-const port = process.env.PORT || 8000;
+// serve static files from the react app
+app.use(express.static(path.join(__dirname, 'client/build')));
 
-http.listen(port, function() {
-    console.log(`Listening on port ${port}`)
+// send back reacts index file.
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
+
+// start the express server
+const port = process.env.PORT || 5000;
+http.listen(port, () => console.log(`Listening on port ${port}`));
 
 // all active rooms
 let rooms = [];

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { sendMessage } from '../actions/RoomActions';
 
-export class MessageList extends Component {
+export class Messenger extends Component {
     constructor(props) {
         super(props);
 
@@ -49,4 +49,4 @@ const mapDispatchToProps = dispatch => ({
     sendMessage: (message) => dispatch(sendMessage(message))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MessageList);
+export default connect(mapStateToProps, mapDispatchToProps)(Messenger);

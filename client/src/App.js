@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import './App.css';
 import { socket, subscribeToMessages } from './utils/Socket';
 import JoinRoom from './components/JoinRoom';
-import MessageList from './components/MessageList';
+import Messenger from './components/Messenger';
 import { receiveMessage } from './actions/RoomActions';
 
 class App extends Component {
@@ -21,7 +21,7 @@ class App extends Component {
         <div>
           <JoinRoom socket={socket} />
           {this.props.roomReducer.room ? (
-            <MessageList />
+            <Messenger />
           ) : null}
         </div>
     );
