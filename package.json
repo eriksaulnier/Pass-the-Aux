@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "nodemon index.js",
-    "heroku-postbuild": "cd client && npm && npm run build",
+    "heroku-postbuild": "cd client && npm install && npm run build",
     "dev": "concurrently 'npm start' 'cd client && npm start'"
   }
 }
