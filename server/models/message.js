@@ -1,4 +1,5 @@
-const mongoose, { Schema } = require('mongoose');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const MessageSchema = new Schema({
     room: {
@@ -17,4 +18,4 @@ const MessageSchema = new Schema({
     timestamps: true
 });
 
-export default mongoose.model('Message', MessageSchema);
+module.exports = mongoose.model('Message', MessageSchema);

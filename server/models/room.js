@@ -1,4 +1,5 @@
-const mongoose, { Schema } = require('mongoose');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const RoomSchema = new Schema({
     code: {
@@ -10,4 +11,4 @@ const RoomSchema = new Schema({
     timestamps: true
 });
 
-export default mongoose.model('Room', RoomSchema);
+module.exports = mongoose.model('Room', RoomSchema);
