@@ -20,11 +20,11 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 });
 
 // serve static files from the react app
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 // send back reacts index file.
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+    res.sendFile(path.join(__dirname+'../client/build/index.html'));
 });
 
 // start the express server
