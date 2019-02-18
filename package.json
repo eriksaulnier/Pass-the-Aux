@@ -11,10 +11,10 @@
   },
   "scripts": {
     "start": "node index.js",
-    "server": "nodemon index.js",
     "client": "npm start --prefix client",
+    "server": "nodemon index.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "client-install": "npm install --prefix client",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "postinstall": "npm install --prefix client",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build --prefix client"
   }
 }
