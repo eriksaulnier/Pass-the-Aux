@@ -1,3 +1,4 @@
+const ObjectId = require('mongoose').Types.ObjectId;
 const Room = require('../models/room');
 
 let service = {};
@@ -6,6 +7,7 @@ service.findRoom = findRoom;
 service.createRoom = createRoom;
 service.joinRoom = joinRoom;
 service.leaveRoom = leaveRoom;
+service.sendMessage = sendMessage;
 
 module.exports = service;
 
@@ -90,6 +92,35 @@ function leaveRoom(joinCode, socket) {
 
                     // emit welcome messages
                     socket.volatile.in(room.joinCode).emit('message', 'SERVER', `User ${socket.id} has left the room`);
+
+                    resolve(room);
+                }
+            );
+        }, (err) => {
+            reject(err);
+        });
+    });
+}
+
+function sendMessage(io, joinCode, socket, body) {
+    return new Promise((resolve, reject) => {
+        // find the room using service function
+        findRoom(joinCode).then((room) => {
+            // construct message object
+            const message = {
+                _id: ObjectId(),
+                body: body
+            };
+
+            // add the new message to the room
+            Room.updateOne(
+                { _id: room._id },
+                { $push: { messages: message }},
+                function (err, res) {
+                    if (err) reject(err);
+
+                    // emit the message to the room
+                    io.sockets.in(joinCode).emit('message', socket.id, `${body}`);
 
                     resolve(room);
                 }

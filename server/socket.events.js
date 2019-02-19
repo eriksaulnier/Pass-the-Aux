@@ -40,7 +40,11 @@ exports = module.exports = function(io) {
         });
     
         socket.on('message', function(message) {
-            io.sockets.in(socket.room).emit('message', socket.id, `${message}`);
+            roomService.sendMessage(io, socket.room, socket, message).then((room) => {
+                console.log(`message sent to '${socket.room}'`);
+            }, (err) => {
+                console.error(err);
+            });
         });
     
         socket.on('disconnect', function() {
