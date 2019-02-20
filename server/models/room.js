@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const MessageSchema = new Schema({
+const SongSchema = new Schema({
     body: {
         type: Schema.Types.String,
         required: true
@@ -10,9 +10,8 @@ const MessageSchema = new Schema({
     //     type: Schema.Types.ObjectId,
     //     ref: 'User',
     //     required: true
-    // }
-}, {
-    timestamps: true
+    // },
+    created: { type: Date, default: Date.now }
 });
 
 const RoomSchema = new Schema({
@@ -21,7 +20,7 @@ const RoomSchema = new Schema({
         required: true
     },
     participants: [{ type: Schema.Types.String, default: [] }],
-    messages: [MessageSchema]
+    queue: [SongSchema]
 }, {
     timestamps: true
 });

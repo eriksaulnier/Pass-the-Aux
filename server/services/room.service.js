@@ -7,7 +7,7 @@ service.findRoom = findRoom;
 service.createRoom = createRoom;
 service.joinRoom = joinRoom;
 service.leaveRoom = leaveRoom;
-service.sendMessage = sendMessage;
+service.addSong = addSong;
 
 module.exports = service;
 
@@ -48,10 +48,11 @@ function joinRoom(joinCode, socket) {
         // find the room using service function
         findRoom(joinCode).then((room) => {
             // add the user to the room
-            Room.updateOne(
+            Room.findOneAndUpdate(
                 { _id: room._id },
                 { $push: { participants: socket.id }},
-                function (err, res) {
+                { new: true },
+                function (err, doc) {
                     if (err) reject(err);
 
                     // set the socket's room
@@ -60,11 +61,22 @@ function joinRoom(joinCode, socket) {
                     // join the appropriate socket
                     socket.join(room.joinCode);
 
-                    // emit welcome messages
-                    socket.volatile.emit('message', 'SERVER', `Welcome to room "${room.joinCode}"!`);
-                    socket.volatile.in(room.joinCode).emit('message', 'SERVER', `User ${socket.id} has joined the room`);
+                    // emit welcome message to new user
+                    socket.emit('RECEIVE_MESSAGE', {
+                        user: 'SERVER',
+                        body: `Welcome to room "${room.joinCode}"!`
+                    });
 
-                    resolve(room);
+                    // emit notification to rest of room
+                    socket.in(room.joinCode).emit('RECEIVE_MESSAGE', {
+                        user: 'SERVER',
+                        body: `User ${socket.id} has joined the room}`
+                    });
+
+                    // emit current queue to new user
+                    socket.emit('UPDATE_QUEUE', doc.queue);
+
+                    resolve(doc);
                 }
             );
         }, (err) => {
@@ -78,10 +90,11 @@ function leaveRoom(joinCode, socket) {
         // find the room using service function
         findRoom(joinCode).then((room) => {
             // add the user to the room
-            Room.updateOne(
+            Room.findOneAndUpdate(
                 { _id: room._id },
                 { $pull: { participants: socket.id }},
-                function (err, res) {
+                { new: true },
+                function (err, doc) {
                     if (err) reject(err);
 
                     // clear the socket's room
@@ -90,10 +103,13 @@ function leaveRoom(joinCode, socket) {
                     // leave the appropriate socket
                     socket.leave(room.joinCode);
 
-                    // emit welcome messages
-                    socket.volatile.in(room.joinCode).emit('message', 'SERVER', `User ${socket.id} has left the room`);
-
-                    resolve(room);
+                    // emit notification to rest of room
+                    socket.in(room.joinCode).emit('RECEIVE_MESSAGE', {
+                        user: 'SERVER',
+                        body: `User ${socket.id} has left the room`
+                    });
+                    
+                    resolve(doc);
                 }
             );
         }, (err) => {
@@ -102,27 +118,28 @@ function leaveRoom(joinCode, socket) {
     });
 }
 
-function sendMessage(io, joinCode, socket, body) {
+function addSong(io, joinCode, body) {
     return new Promise((resolve, reject) => {
         // find the room using service function
         findRoom(joinCode).then((room) => {
-            // construct message object
-            const message = {
+            // construct song object
+            const song = {
                 _id: ObjectId(),
                 body: body
             };
 
-            // add the new message to the room
-            Room.updateOne(
+            // add the new song to the room's queue
+            Room.findOneAndUpdate(
                 { _id: room._id },
-                { $push: { messages: message }},
-                function (err, res) {
+                { $push: { queue: song }},
+                { new: true },
+                function (err, doc) {
                     if (err) reject(err);
 
-                    // emit the message to the room
-                    io.sockets.in(joinCode).emit('message', socket.id, `${body}`);
+                    // emit the new queue to the room
+                    io.sockets.in(joinCode).emit('UPDATE_QUEUE', doc.queue);
 
-                    resolve(room);
+                    resolve(doc);
                 }
             );
         }, (err) => {

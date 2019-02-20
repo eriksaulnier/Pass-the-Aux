@@ -1,11 +1,8 @@
-const Room = require('./models/room');
 const roomService = require('./services/room.service');
 
 exports = module.exports = function(io) {
     io.on('connection', function(socket) {
-        // console.log('a user has connected');
-
-        socket.on('joinroom', function(joinCode) {
+        socket.on('JOIN_ROOM_START', function(joinCode) {
             // check if the room exists
             roomService.findRoom(joinCode).then((room) => {
                 if (room) {
@@ -29,7 +26,8 @@ exports = module.exports = function(io) {
             
         });
 
-        socket.on('leaveroom', function() {
+        socket.on('LEAVE_ROOM', function() {
+            // if the socket is in a room, leave the room
             if (socket.room) {
                 roomService.leaveRoom(socket.room, socket).then((room) => {
                     console.log(`user left room '${room.joinCode}'`);                        
@@ -39,17 +37,25 @@ exports = module.exports = function(io) {
             }
         });
     
-        socket.on('message', function(message) {
-            roomService.sendMessage(io, socket.room, socket, message).then((room) => {
-                console.log(`message sent to '${socket.room}'`);
+        socket.on('SEND_MESSAGE', function(message) {
+            // emit the message to the room
+            io.sockets.in(socket.room).emit('RECEIVE_MESSAGE', {
+                user: socket.id,
+                body: `${message}`
+            });
+
+            console.log(`message sent to '${socket.room}'`);
+        });
+
+        socket.on('ADD_SONG', function(song) {
+            roomService.addSong(io, socket.room, song).then((room) => {
+                console.log(`song added to '${socket.room}'`);
             }, (err) => {
                 console.error(err);
             });
         });
     
-        socket.on('disconnect', function() {
-            // console.log('a user has disconnected');
-            
+        socket.on('disconnect', function() {            
             // if the socket is in a room, leave the room
             if (socket.room) {
                 roomService.leaveRoom(socket.room, socket).then((room) => {

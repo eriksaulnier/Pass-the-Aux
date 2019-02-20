@@ -3,16 +3,15 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker';
 import configureStore from './store';
+import { init } from './utils/Socket';
 import App from './App';
 import './index.css';
 
 // configure the redux store
 const store = configureStore();
 
-// DEBUG HELPERS
-// import { sendMessage } from './actions/roomActions';
-// window.store = store;
-// window.sendMessage = sendMessage;
+// initialize socket distpatcher
+init(store);
 
 ReactDOM.render(
     <Provider store={store}>

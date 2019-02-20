@@ -6,14 +6,8 @@ export class Messenger extends Component {
     constructor(props) {
         super(props);
 
-        // initialize state
-        this.state = {message: ''};
-    }
-
-    // handles sending messages
-    sendMessage = () => {
-        this.props.sendMessage(this.state.message);
-        this.setState({message: ''});
+        // initialize component state
+        this.state = { message: '' };
     }
 
     // handle message input change event
@@ -21,18 +15,24 @@ export class Messenger extends Component {
         this.setState({ message: event.target.value });
     }
 
+    // handles sending messages
+    sendMessage = () => {
+        this.props.sendMessage(this.state.message);
+        this.setState({ message: '' });
+    }
+
     render() {
         return (
             <div style={{textAlign: 'center'}}>
                 <ul className="message-list">
-                    {this.props.messages.map((message, index) => (
+                    {this.props.messages.map(({user, body}, index) => (
                         <li className="message" key={index}>
-                            {message}
+                            {`${user}: ${body}`}
                         </li>
                     ))}
                 </ul>
 
-                <input type="text" name="message" onChange={this.changeMessage.bind(this)} value={this.state.message}/>
+                <input type="text" name="message" onChange={this.changeMessage} value={this.state.message}/>
                 <button onClick={this.sendMessage}>SEND</button>
             </div>
         )

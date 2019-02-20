@@ -1,12 +1,12 @@
-import { JOIN_ROOM, SEND_MESSAGE, RECEIVE_MESSAGE } from './Types';
-import { socket } from '../utils/Socket';
+import { JOIN_ROOM_START, JOIN_ROOM_END, SEND_MESSAGE, RECEIVE_MESSAGE } from './Types';
+import { emit } from '../utils/Socket';
 
 export const joinRoom = (room) => {
     return (dispatch) => {
-        socket.emit('joinroom', room);
+        emit(JOIN_ROOM_START, room);
 
         dispatch({
-            type: JOIN_ROOM,
+            type: JOIN_ROOM_END,
             payload: room
         });
     }
@@ -14,12 +14,12 @@ export const joinRoom = (room) => {
 
 export const sendMessage = (message) => {
     return (dispatch) => {
-        socket.emit('message', message);
+        emit(SEND_MESSAGE, message);
 
-        dispatch({
-            type: SEND_MESSAGE,
-            payload: message
-        });
+        // dispatch({
+        //     type: SEND_MESSAGE,
+        //     payload: message
+        // });
     }
 }
 

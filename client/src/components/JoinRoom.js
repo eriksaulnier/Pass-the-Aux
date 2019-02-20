@@ -6,10 +6,15 @@ class JoinRoom extends Component {
   constructor(props) {
     super(props);
 
-    // initialize state
-    this.state = {roomCode: ''};
+    // initialize component state
+    this.state = { roomCode: '' };
   }
 
+  // handle room code input change event
+  changeRoomCode = (event) => {
+    this.setState({ roomCode: event.target.value });
+  }
+  
   // handles joining rooms
   joinRoom = () => {
     // check to make sure room code is provided
@@ -22,17 +27,12 @@ class JoinRoom extends Component {
     this.props.joinRoom(this.state.roomCode);
   }
 
-  // handle room code input change event
-  changeRoomCode = (event) => {
-    this.setState({ roomCode: event.target.value });
-  }
-
   render() {
     return (
       <div style={{textAlign: 'center'}}>
         {!this.props.room ? (
           <div>
-            <input type="text" name="room-code" onChange={this.changeRoomCode.bind(this)} value={this.state.roomCode}/>
+            <input type="text" name="room-code" onChange={this.changeRoomCode} value={this.state.roomCode}/>
             <button onClick={this.joinRoom}>JOIN ROOM</button>
             <p>If the room code does not yet exist it will be created</p>
           </div>
