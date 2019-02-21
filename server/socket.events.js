@@ -47,9 +47,17 @@ exports = module.exports = function(io) {
             console.log(`message sent to '${socket.room}'`);
         });
 
-        socket.on('ADD_SONG', function(song) {
-            roomService.addSong(io, socket.room, song).then((room) => {
+        socket.on('ADD_SONG', function(songTitle) {
+            roomService.addSong(io, socket.room, songTitle).then((room) => {
                 console.log(`song added to '${socket.room}'`);
+            }, (err) => {
+                console.error(err);
+            });
+        });
+
+        socket.on('REMOVE_SONG', function(songId) {
+            roomService.removeSong(io, socket.room, songId).then((room) => {
+                console.log(`song removed from '${socket.room}'`);
             }, (err) => {
                 console.error(err);
             });

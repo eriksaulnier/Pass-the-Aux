@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addSong } from '../actions/QueueActions';
+import { addSong, removeSong } from '../actions/QueueActions';
 
 export class SongQueue extends Component {
     constructor(props) {
@@ -25,6 +25,11 @@ export class SongQueue extends Component {
 
         this.props.addSong(this.state.song);
         this.setState({ song: '' });
+    }
+
+    // handles removing songs
+    removeSong = (songId) => {
+        this.props.removeSong(songId);
     }
 
     render() {
@@ -54,6 +59,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     addSong: (songTitle) => dispatch(addSong(songTitle)),
+    removeSong: (songId) => dispatch(removeSong(songId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SongQueue);

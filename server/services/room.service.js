@@ -8,6 +8,7 @@ service.createRoom = createRoom;
 service.joinRoom = joinRoom;
 service.leaveRoom = leaveRoom;
 service.addSong = addSong;
+service.removeSong = removeSong;
 
 module.exports = service;
 
@@ -131,7 +132,31 @@ function addSong(io, joinCode, songTitle) {
             // add the new song to the room's queue
             Room.findOneAndUpdate(
                 { _id: room._id },
-                { $push: { queue: song }},
+                { $push: { queue: song } },
+                { new: true },
+                function (err, doc) {
+                    if (err) reject(err);
+
+                    // emit the new queue to the room
+                    io.sockets.in(joinCode).emit('UPDATE_QUEUE', doc.queue);
+
+                    resolve(doc);
+                }
+            );
+        }, (err) => {
+            reject(err);
+        });
+    });
+}
+
+function removeSong(io, joinCode, songId) {
+    return new Promise((resolve, reject) => {
+        // find the room using service function
+        findRoom(joinCode).then((room) => {
+            // remove the song from the room's queue
+            Room.findOneAndUpdate(
+                { _id: room._id },
+                { $pull: { queue: { _id: songId } } },
                 { new: true },
                 function (err, doc) {
                     if (err) reject(err);
