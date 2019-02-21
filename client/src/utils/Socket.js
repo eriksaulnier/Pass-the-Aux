@@ -1,9 +1,16 @@
 import io from 'socket.io-client';
+import * as ActionTypes from '../actions/Types';
 
 const socket = io.connect();
 
-function subscribeToMessages(cb) {
-    socket.on('message', (user, message) => cb(`${user}: ${message}`));
-}
+export const init = (store) => {
+    Object.keys(ActionTypes).forEach((type) => {
+        socket.on(type, (payload) => {
+          store.dispatch({ type, payload });
+        });
+    });
+};
 
-export { socket, subscribeToMessages }; 
+export const emit = (type, payload) => {
+    socket.emit(type, payload);
+};

@@ -1,29 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
-import { socket, subscribeToMessages } from './utils/Socket';
 import JoinRoom from './components/JoinRoom';
 import Messenger from './components/Messenger';
-import { receiveMessage } from './actions/RoomActions';
+import SongQueue from './components/SongQueue';
 
 class App extends Component {
-  constructor() {
-    super();
-
-    // console log all socket messages
-    subscribeToMessages((message) => {
-      this.props.receiveMessage(message);
-    });
-  }
-
   render() {
     return (
-        <div>
-          <JoinRoom socket={socket} />
-          {this.props.roomReducer.room ? (
+      <div>
+        <JoinRoom />
+        {this.props.roomReducer.room ? (
+          <div>
             <Messenger />
-          ) : null}
-        </div>
+            <SongQueue />
+          </div>
+        ) : null}
+      </div>
     );
   }
 }
@@ -32,8 +25,4 @@ const mapStateToProps = state => ({
   ...state
 });
 
-const mapDispatchToProps = dispatch => ({
-  receiveMessage: message => dispatch(receiveMessage(message))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);
