@@ -118,14 +118,14 @@ function leaveRoom(joinCode, socket) {
     });
 }
 
-function addSong(io, joinCode, body) {
+function addSong(io, joinCode, songTitle) {
     return new Promise((resolve, reject) => {
         // find the room using service function
         findRoom(joinCode).then((room) => {
             // construct song object
             const song = {
                 _id: ObjectId(),
-                body: body
+                title: songTitle
             };
 
             // add the new song to the room's queue

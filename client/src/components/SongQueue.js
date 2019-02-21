@@ -28,7 +28,7 @@ export class SongQueue extends Component {
                 <ul className="song-list">
                     {this.props.queue.map((song, index) => (
                         <li className="song" key={index}>
-                            {song.body}
+                            {song.title} <button onClick={() => this.removeSong(song._id)}>X</button>
                         </li>
                     ))}
                 </ul>
@@ -47,7 +47,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    addSong: (song) => dispatch(addSong(song))
+    addSong: (songTitle) => dispatch(addSong(songTitle)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SongQueue);

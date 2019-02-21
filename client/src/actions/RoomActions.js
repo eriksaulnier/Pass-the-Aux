@@ -5,6 +5,7 @@ export const joinRoom = (room) => {
     return (dispatch) => {
         emit(JOIN_ROOM_START, room);
 
+        // TODO: this should be emitted from the server
         dispatch({
             type: JOIN_ROOM_END,
             payload: room
@@ -13,13 +14,8 @@ export const joinRoom = (room) => {
 }
 
 export const sendMessage = (message) => {
-    return (dispatch) => {
+    return () => {
         emit(SEND_MESSAGE, message);
-
-        // dispatch({
-        //     type: SEND_MESSAGE,
-        //     payload: message
-        // });
     }
 }
 

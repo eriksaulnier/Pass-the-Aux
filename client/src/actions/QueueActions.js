@@ -1,9 +1,11 @@
 import { ADD_SONG, UPDATE_QUEUE } from './Types';
 import { emit } from '../utils/Socket';
 
-export const addSong = (song) => {
-    return (dispatch) => {
-        emit(ADD_SONG, song);
+export const addSong = (songTitle) => {
+    return () => {
+        emit(ADD_SONG, songTitle);
+    }
+}
 
         // dispatch({
         //     type: ADD_SONG,
