@@ -17,6 +17,12 @@ export class Messenger extends Component {
 
     // handles sending messages
     sendMessage = () => {
+        // check to make sure a message is provided
+        if (!this.state.message) {
+            console.log('You must enter a message!');
+            return;
+        }
+
         this.props.sendMessage(this.state.message);
         this.setState({ message: '' });
     }

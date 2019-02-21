@@ -17,6 +17,12 @@ export class SongQueue extends Component {
 
     // handles adding songs
     addSong = () => {
+        // check to make sure a song is provided
+        if (!this.state.song) {
+            console.log('You must enter a song title!');
+            return;
+        }
+
         this.props.addSong(this.state.song);
         this.setState({ song: '' });
     }
