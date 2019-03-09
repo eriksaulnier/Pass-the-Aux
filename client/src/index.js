@@ -1,11 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 import * as serviceWorker from './serviceWorker';
-import configureStore from './store';
+import configureStore, { history } from './store'
 import { init } from './utils/Socket';
-import App from './App';
 import './index.css';
+
+import App from './App';
+import RoomPage from './components/RoomPage';
+import NotFound from './components/NotFound';
 
 // configure the redux store
 const store = configureStore();
@@ -13,9 +18,22 @@ const store = configureStore();
 // initialize socket distpatcher
 init(store);
 
+// configure routing
+const routing = (
+    <ConnectedRouter history={history}>
+        <div>
+            <Switch>
+                <Route exact path="/" component={App} />
+                <Route path="/room" component={RoomPage} />
+                <Route component={NotFound} />
+            </Switch>
+        </div>
+    </ConnectedRouter>
+);
+
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        {routing}
     </Provider>,
     document.getElementById('root')
 );
