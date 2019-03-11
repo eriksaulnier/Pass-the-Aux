@@ -6,4 +6,6 @@ export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';
 
 export const ADD_SONG = 'ADD_SONG';
 export const REMOVE_SONG = 'REMOVE_SONG';
+export const UPVOTE_SONG = 'UPVOTE_SONG';
+export const DOWNVOTE_SONG = 'DOWNVOTE_SONG';
 export const UPDATE_QUEUE = 'UPDATE_QUEUE';

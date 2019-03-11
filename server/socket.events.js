@@ -44,12 +44,12 @@ exports = module.exports = function(io) {
                 body: `${message}`
             });
 
-            console.log(`message sent to '${socket.room}'`);
+            // console.log(`message sent to '${socket.room}'`);
         });
 
         socket.on('ADD_SONG', function(songTitle) {
             roomService.addSong(io, socket.room, songTitle).then((room) => {
-                console.log(`song added to '${socket.room}'`);
+                // console.log(`song added to '${socket.room}'`);
             }, (err) => {
                 console.error(err);
             });
@@ -57,7 +57,23 @@ exports = module.exports = function(io) {
 
         socket.on('REMOVE_SONG', function(songId) {
             roomService.removeSong(io, socket.room, songId).then((room) => {
-                console.log(`song removed from '${socket.room}'`);
+                // console.log(`song removed from '${socket.room}'`);
+            }, (err) => {
+                console.error(err);
+            });
+        });
+
+        socket.on('UPVOTE_SONG', function(songId) {
+            roomService.upvoteSong(io, socket.room, songId).then((room) => {
+                // console.log(`song upvoted in '${socket.room}'`);
+            }, (err) => {
+                console.error(err);
+            });
+        });
+
+        socket.on('DOWNVOTE_SONG', function(songId) {
+            roomService.downvoteSong(io, socket.room, songId).then((room) => {
+                // console.log(`song downvoted in '${socket.room}'`);
             }, (err) => {
                 console.error(err);
             });

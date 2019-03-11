@@ -1,4 +1,4 @@
-import { ADD_SONG, REMOVE_SONG, UPDATE_QUEUE } from './Types';
+import { ADD_SONG, REMOVE_SONG, UPVOTE_SONG, DOWNVOTE_SONG, UPDATE_QUEUE } from './Types';
 import { emit } from '../utils/Socket';
 
 export const addSong = (songTitle) => {
@@ -10,6 +10,18 @@ export const addSong = (songTitle) => {
 export const removeSong = (songId) => {
     return () => {
         emit(REMOVE_SONG, songId);
+    }
+}
+
+export const upvoteSong = (songId) => {
+    return () => {
+        emit(UPVOTE_SONG, songId);
+    }
+}
+
+export const downvoteSong = (songId) => {
+    return () => {
+        emit(DOWNVOTE_SONG, songId);
     }
 }
 

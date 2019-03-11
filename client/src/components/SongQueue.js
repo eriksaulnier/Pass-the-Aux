@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addSong, removeSong } from '../actions/QueueActions';
-import { Input, Button, InputGroup, InputGroupAddon, ListGroup, ListGroupItem } from 'reactstrap';
+import { addSong, removeSong, upvoteSong, downvoteSong } from '../actions/QueueActions';
+import { Button, ButtonGroup, Input, InputGroup, InputGroupAddon, ListGroup, ListGroupItem } from 'reactstrap';
 
 export class SongQueue extends Component {
     constructor(props) {
@@ -16,7 +16,8 @@ export class SongQueue extends Component {
         this.setState({ song: event.target.value });
     }
 
-    // handles adding songs
+
+    // handles song actions
     addSong = () => {
         // check to make sure a song is provided
         if (!this.state.song) {
@@ -27,10 +28,14 @@ export class SongQueue extends Component {
         this.props.addSong(this.state.song);
         this.setState({ song: '' });
     }
-
-    // handles removing songs
     removeSong = (songId) => {
         this.props.removeSong(songId);
+    }
+    upvoteSong = (songId) => {
+        this.props.upvoteSong(songId);
+    }
+    downvoteSong = (songId) => {
+        this.props.downvoteSong(songId);
     }
 
     render() {
@@ -40,7 +45,15 @@ export class SongQueue extends Component {
                 <ListGroup className="song-list">
                     {this.props.queue.map((song, index) => (
                         <ListGroupItem className="song" key={index}>
-                            {song.title} <Button onClick={() => this.removeSong(song._id)}>X</Button>
+                            {song.title}
+
+                            <ButtonGroup vertical className="ml-4">
+                                <Button onClick={() => this.upvoteSong(song._id)}>&#8593;</Button>
+                                {song.currentVote}
+                                <Button onClick={() => this.downvoteSong(song._id)}>&#8595;</Button>
+                            </ButtonGroup>
+
+                            <Button className="ml-4" color="danger" onClick={() => this.removeSong(song._id)}>&#215;</Button>
                         </ListGroupItem>
                     ))}
                 </ListGroup>
@@ -64,7 +77,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     addSong: (songTitle) => dispatch(addSong(songTitle)),
-    removeSong: (songId) => dispatch(removeSong(songId))
+    removeSong: (songId) => dispatch(removeSong(songId)),
+    upvoteSong: (songId) => dispatch(upvoteSong(songId)),
+    downvoteSong: (songId) => dispatch(downvoteSong(songId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SongQueue);

@@ -6,6 +6,10 @@ const SongSchema = new Schema({
         type: Schema.Types.String,
         required: true
     },
+    currentVote: {
+        type: Schema.Types.Number,
+        default: 0
+    },
     // user: {
     //     type: Schema.Types.ObjectId,
     //     ref: 'User',

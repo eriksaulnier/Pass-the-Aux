@@ -9,6 +9,8 @@ service.joinRoom = joinRoom;
 service.leaveRoom = leaveRoom;
 service.addSong = addSong;
 service.removeSong = removeSong;
+service.upvoteSong = upvoteSong;
+service.downvoteSong = downvoteSong;
 
 module.exports = service;
 
@@ -75,7 +77,7 @@ function joinRoom(joinCode, socket) {
                     });
 
                     // emit current queue to new user
-                    socket.emit('UPDATE_QUEUE', doc.queue);
+                    socket.emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
 
                     resolve(doc);
                 }
@@ -137,8 +139,8 @@ function addSong(io, joinCode, songTitle) {
                 function (err, doc) {
                     if (err) reject(err);
 
-                    // emit the new queue to the room
-                    io.sockets.in(joinCode).emit('UPDATE_QUEUE', doc.queue);
+                    // emit the updated queue to the room
+                    io.sockets.in(joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
 
                     resolve(doc);
                 }
@@ -161,8 +163,8 @@ function removeSong(io, joinCode, songId) {
                 function (err, doc) {
                     if (err) reject(err);
 
-                    // emit the new queue to the room
-                    io.sockets.in(joinCode).emit('UPDATE_QUEUE', doc.queue);
+                    // emit the updated queue to the room
+                    io.sockets.in(joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
 
                     resolve(doc);
                 }
@@ -171,4 +173,74 @@ function removeSong(io, joinCode, songId) {
             reject(err);
         });
     });
+}
+
+function upvoteSong(io, joinCode, songId) {
+    return new Promise((resolve, reject) => {
+        // find the room using service function
+        findRoom(joinCode).then((room) => {
+            // update the song's current vote
+            Room.findOneAndUpdate(
+                { _id: room._id, 'queue._id': songId },
+                { $inc: { 'queue.$.currentVote': 1 } },
+                { new: true },
+                function (err, doc) {
+                    if (err) reject(err);
+
+                    // emit the updated queue to the room
+                    io.sockets.in(joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
+
+                    resolve(doc);
+                }
+            );
+        }, (err) => {
+            reject(err);
+        });
+    });
+}
+
+function downvoteSong(io, joinCode, songId) {
+    return new Promise((resolve, reject) => {
+        // find the room using service function
+        findRoom(joinCode).then((room) => {
+            // update the song's current vote
+            Room.findOneAndUpdate(
+                { _id: room._id, 'queue._id': songId },
+                { $inc: { 'queue.$.currentVote': -1 } },
+                { new: true },
+                function (err, doc) {
+                    if (err) reject(err);
+
+                    // emit the updated queue to the room
+                    io.sockets.in(joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
+
+                    resolve(doc);
+                }
+            );
+        }, (err) => {
+            reject(err);
+        });
+    });
+}
+
+// helper function for sorting the song queue
+function sortQueue(a, b) {
+    // first sort by current vote
+    if (a.currentVote > b.currentVote) {
+        return -1;
+    } else if (b.currentVote > a.currentVote) {
+        return 1;
+    } else {
+        const aDate = new Date(a.created);
+        const bDate = new Date(b.created);
+
+        // then sort by created date
+        if (aDate > bDate) {
+            return 1;
+        } else if (bDate > aDate) {
+            return -1;
+        }
+        
+        return 0;
+    }
 }
