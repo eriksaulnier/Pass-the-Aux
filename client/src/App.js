@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
+import { Container, Row, Col } from 'reactstrap';
 import JoinRoom from './components/JoinRoom';
 
 class App extends Component {
   render() {
     return (
-      <div>
-        <JoinRoom />
-      </div>
+      <Container>
+        <Row>
+          <Col sm="10" md={{ size: 6, offset: 3 }} lg={{ size: 4, offset: 4 }}>
+            <JoinRoom />
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

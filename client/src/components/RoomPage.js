@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { Container } from 'reactstrap';
 import Messenger from './Messenger';
 import SongQueue from './SongQueue';
 
@@ -16,10 +17,10 @@ class RoomPage extends Component {
 
   render() {
     return (
-      <div style={{textAlign: 'center'}}>
+      <Container>
         <Messenger />
         <SongQueue />
-      </div>
+      </Container>
     )
   }
 }

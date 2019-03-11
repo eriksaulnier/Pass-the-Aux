@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { joinRoom } from '../actions/RoomActions';
+import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 
 class JoinRoom extends Component {
   constructor(props) {
@@ -34,8 +35,12 @@ class JoinRoom extends Component {
   render() {
     return (
       <div style={{textAlign: 'center'}}>
-        <input type="text" name="room-code" onChange={this.changeRoomCode} value={this.state.roomCode}/>
-        <button onClick={this.joinRoom}>JOIN ROOM</button>
+        <InputGroup>
+          <Input type="text" name="room-code" onChange={this.changeRoomCode} value={this.state.roomCode}/>
+          <InputGroupAddon addonType="append">
+            <Button color="primary" onClick={this.joinRoom}>Join Room</Button>
+          </InputGroupAddon>
+        </InputGroup>
         <p>If the room code does not yet exist it will be created</p>
       </div>
     )

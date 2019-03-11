@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addSong, removeSong } from '../actions/QueueActions';
+import { Input, Button, InputGroup, InputGroupAddon, ListGroup, ListGroupItem } from 'reactstrap';
 
 export class SongQueue extends Component {
     constructor(props) {
@@ -34,18 +35,22 @@ export class SongQueue extends Component {
 
     render() {
         return (
-            <div style={{textAlign: 'center'}}>
+            <div>
                 <h2>Current Queue:</h2>
-                <ul className="song-list">
+                <ListGroup className="song-list">
                     {this.props.queue.map((song, index) => (
-                        <li className="song" key={index}>
-                            {song.title} <button onClick={() => this.removeSong(song._id)}>X</button>
-                        </li>
+                        <ListGroupItem className="song" key={index}>
+                            {song.title} <Button onClick={() => this.removeSong(song._id)}>X</Button>
+                        </ListGroupItem>
                     ))}
-                </ul>
+                </ListGroup>
                 
-                <input type="text" name="song" onChange={this.changeSong} value={this.state.song}/>
-                <button onClick={this.addSong}>ADD SONG</button>
+                <InputGroup>
+                    <Input type="text" name="song" onChange={this.changeSong} value={this.state.song}/>
+                    <InputGroupAddon addonType="append">
+                        <Button color="primary" onClick={this.addSong}>Add Song</Button>
+                    </InputGroupAddon>
+                </InputGroup>
             </div>
         )
     }

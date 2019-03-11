@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { sendMessage } from '../actions/RoomActions';
+import { Input, Button, InputGroup, InputGroupAddon, ListGroup, ListGroupItem } from 'reactstrap';
 
 export class Messenger extends Component {
     constructor(props) {
@@ -29,17 +30,21 @@ export class Messenger extends Component {
 
     render() {
         return (
-            <div style={{textAlign: 'center'}}>
-                <ul className="message-list">
+            <div>
+                <ListGroup className="message-list">
                     {this.props.messages.map(({user, body}, index) => (
-                        <li className="message" key={index}>
+                        <ListGroupItem className="message" key={index}>
                             {`${user}: ${body}`}
-                        </li>
+                        </ListGroupItem>
                     ))}
-                </ul>
+                </ListGroup>
 
-                <input type="text" name="message" onChange={this.changeMessage} value={this.state.message}/>
-                <button onClick={this.sendMessage}>SEND</button>
+                <InputGroup>
+                    <Input type="text" name="message" onChange={this.changeMessage} value={this.state.message}/>
+                    <InputGroupAddon addonType="append">
+                        <Button color="primary" onClick={this.sendMessage}>Send</Button>
+                    </InputGroupAddon>
+                </InputGroup>
             </div>
         )
     }
