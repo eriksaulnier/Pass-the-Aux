@@ -14,14 +14,24 @@ export const removeSong = (songId) => {
 }
 
 export const upvoteSong = (songId) => {
-    return () => {
+    return (dispatch) => {
         emit(UPVOTE_SONG, songId);
+
+        dispatch({
+            type: UPVOTE_SONG,
+            payload: songId
+        });
     }
 }
 
 export const downvoteSong = (songId) => {
-    return () => {
+    return (dispatch) => {
         emit(DOWNVOTE_SONG, songId);
+
+        dispatch({
+            type: DOWNVOTE_SONG,
+            payload: songId
+        });
     }
 }
 

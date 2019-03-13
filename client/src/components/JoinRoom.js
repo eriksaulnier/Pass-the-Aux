@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 import { joinRoom } from '../actions/RoomActions';
 import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 
@@ -27,9 +26,6 @@ class JoinRoom extends Component {
 
     // join the room
     this.props.joinRoom(this.state.roomCode);
-
-    // update the route
-    this.props.route('/room');
   }
 
   render() {
@@ -54,8 +50,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  joinRoom: (room) => dispatch(joinRoom(room)),
-  route: (path) => dispatch(push(path))
+  joinRoom: (room) => dispatch(joinRoom(room))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(JoinRoom);

@@ -11,13 +11,18 @@ export class SongQueue extends Component {
         this.state = { song: '' };
     }
 
+    // returns the song's current vote (-1 or 1)
+    getSongVote(songId) {
+        return this.props.votes[songId];
+    }
+
     // handle song input change event
     changeSong = (event) => {
         this.setState({ song: event.target.value });
     }
 
 
-    // handles song actions
+    // handlers for adding and removing songs
     addSong = () => {
         // check to make sure a song is provided
         if (!this.state.song) {
@@ -31,32 +36,43 @@ export class SongQueue extends Component {
     removeSong = (songId) => {
         this.props.removeSong(songId);
     }
+
+    // handlers for upvoting and downvoting songs
     upvoteSong = (songId) => {
-        this.props.upvoteSong(songId);
+        // checks to make sure the song hasn't already been upvoted
+        if (this.getSongVote(songId) !== 1) {
+            this.props.upvoteSong(songId);
+        }
     }
     downvoteSong = (songId) => {
-        this.props.downvoteSong(songId);
+        // checks to make sure the song hasn't already been downvoted
+        if (this.getSongVote(songId) !== -1) {
+            this.props.downvoteSong(songId);
+        }
     }
 
     render() {
         return (
             <div>
                 <h2>Current Queue:</h2>
+                {this.props.queue &&
                 <ListGroup className="song-list">
                     {this.props.queue.map((song, index) => (
                         <ListGroupItem className="song" key={index}>
                             {song.title}
-
-                            <ButtonGroup vertical className="ml-4">
-                                <Button onClick={() => this.upvoteSong(song._id)}>&#8593;</Button>
-                                {song.currentVote}
-                                <Button onClick={() => this.downvoteSong(song._id)}>&#8595;</Button>
+                            <span className="ml-4">{song.currentVote}</span>
+                            <ButtonGroup vertical>
+                                <Button color={this.getSongVote(song._id) === 1 ? 'success' : 'secondary'} 
+                                        onClick={() => this.upvoteSong(song._id)}>&#8593;</Button>
+                                <Button color={this.getSongVote(song._id) === -1 ? 'danger' : 'secondary'} 
+                                        onClick={() => this.downvoteSong(song._id)}>&#8595;</Button>
                             </ButtonGroup>
 
                             <Button className="ml-4" color="danger" onClick={() => this.removeSong(song._id)}>&#215;</Button>
                         </ListGroupItem>
                     ))}
                 </ListGroup>
+                }
                 
                 <InputGroup>
                     <Input type="text" name="song" onChange={this.changeSong} value={this.state.song}/>
@@ -71,7 +87,8 @@ export class SongQueue extends Component {
 
 const mapStateToProps = state => {
     return {
-        queue: state.roomReducer.queue
+        queue: state.queueReducer.queue,
+        votes: state.queueReducer.votes
     };
 };
 
