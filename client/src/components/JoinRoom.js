@@ -30,14 +30,15 @@ class JoinRoom extends Component {
 
   render() {
     return (
-      <div style={{textAlign: 'center'}}>
-        <InputGroup>
+      <div className="mt-5" style={{textAlign: 'center'}}>
+        <h2>Pass the Aux</h2>
+        <InputGroup className="mt-4">
           <Input type="text" name="room-code" onChange={this.changeRoomCode} value={this.state.roomCode}/>
           <InputGroupAddon addonType="append">
             <Button color="primary" onClick={this.joinRoom}>Join Room</Button>
           </InputGroupAddon>
         </InputGroup>
-        <p>If the room code does not yet exist it will be created</p>
+        <p className="mt-2">If the room code does not yet exist it will be created</p>
       </div>
     )
   }
