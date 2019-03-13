@@ -64,17 +64,8 @@ function joinRoom(joinCode, socket) {
                     // join the appropriate socket
                     socket.join(room.joinCode);
 
-                    // emit welcome message to new user
-                    socket.emit('RECEIVE_MESSAGE', {
-                        user: 'SERVER',
-                        body: `Welcome to room "${room.joinCode}"!`
-                    });
-
-                    // emit notification to rest of room
-                    socket.in(room.joinCode).emit('RECEIVE_MESSAGE', {
-                        user: 'SERVER',
-                        body: `User ${socket.id} has joined the room}`
-                    });
+                    // emit successful room join end
+                    socket.emit('JOIN_ROOM_END', joinCode);
 
                     // emit current queue to new user
                     socket.emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
@@ -105,12 +96,6 @@ function leaveRoom(joinCode, socket) {
 
                     // leave the appropriate socket
                     socket.leave(room.joinCode);
-
-                    // emit notification to rest of room
-                    socket.in(room.joinCode).emit('RECEIVE_MESSAGE', {
-                        user: 'SERVER',
-                        body: `User ${socket.id} has left the room`
-                    });
                     
                     resolve(doc);
                 }

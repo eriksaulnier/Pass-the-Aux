@@ -36,17 +36,7 @@ exports = module.exports = function(io) {
                 });
             }
         });
-    
-        socket.on('SEND_MESSAGE', function(message) {
-            // emit the message to the room
-            io.sockets.in(socket.room).emit('RECEIVE_MESSAGE', {
-                user: socket.id,
-                body: `${message}`
-            });
-
-            // console.log(`message sent to '${socket.room}'`);
-        });
-
+        
         socket.on('ADD_SONG', function(songTitle) {
             roomService.addSong(io, socket.room, songTitle).then((room) => {
                 // console.log(`song added to '${socket.room}'`);
