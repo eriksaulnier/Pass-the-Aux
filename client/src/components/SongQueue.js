@@ -56,22 +56,24 @@ export class SongQueue extends Component {
             <div>
                 <h2>Current Queue:</h2>
                 {this.props.queue &&
-                <ListGroup className="song-list">
-                    {this.props.queue.map((song, index) => (
-                        <ListGroupItem className="song" key={index}>
-                            {song.title}
-                            <span className="ml-4">{song.currentVote}</span>
-                            <ButtonGroup vertical>
-                                <Button color={this.getSongVote(song._id) === 1 ? 'success' : 'secondary'} 
-                                        onClick={() => this.upvoteSong(song._id)}>&#8593;</Button>
-                                <Button color={this.getSongVote(song._id) === -1 ? 'danger' : 'secondary'} 
-                                        onClick={() => this.downvoteSong(song._id)}>&#8595;</Button>
-                            </ButtonGroup>
+                    <ListGroup className="song-list">
+                        {this.props.queue.map((song, index) => (
+                            <ListGroupItem className="song" key={index}>
+                                <span>{song.title}</span>
+                                <div className="float-right">
+                                    <span>{song.currentVote}</span>
+                                    <ButtonGroup className="ml-2" vertical>
+                                        <Button color={this.getSongVote(song._id) === 1 ? 'success' : 'secondary'} 
+                                                onClick={() => this.upvoteSong(song._id)}>&#8593;</Button>
+                                        <Button color={this.getSongVote(song._id) === -1 ? 'danger' : 'secondary'} 
+                                                onClick={() => this.downvoteSong(song._id)}>&#8595;</Button>
+                                    </ButtonGroup>
 
-                            <Button className="ml-4" color="danger" onClick={() => this.removeSong(song._id)}>&#215;</Button>
-                        </ListGroupItem>
-                    ))}
-                </ListGroup>
+                                    <Button className="ml-3" color="danger" onClick={() => this.removeSong(song._id)}>&#215;</Button>
+                                </div>
+                            </ListGroupItem>
+                        ))}
+                    </ListGroup>
                 }
                 
                 <InputGroup>
