@@ -1,14 +1,20 @@
-import { JOIN_ROOM_START } from './Types';
+import { JOIN_ROOM_START, CREATE_ROOM_START } from './Types';
 import { emit } from '../utils/Socket';
-import { push } from 'connected-react-router';
 
-export const joinRoom = (room) => {
+export const joinRoom = (joinCode) => {
     return (dispatch) => {
-        emit(JOIN_ROOM_START, room);
+        emit(JOIN_ROOM_START, {
+            joinCode: joinCode
+        });
 
-        // TODO: this should be emitted after JOIN_ROOM_END
-        setTimeout(() => {
-            dispatch(push('/room'));
-        }, 100);
+        dispatch({
+            type: JOIN_ROOM_START
+        });
+    }
+}
+
+export const createRoom = (payload) => {
+    return () => {
+        emit(CREATE_ROOM_START, payload);
     }
 }

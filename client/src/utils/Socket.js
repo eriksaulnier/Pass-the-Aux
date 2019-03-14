@@ -17,7 +17,7 @@ export const init = (store) => {
         });
     });
 
-    // handle reconnecting to rooms
+    // handle reconnecting to room after disconnect
     socket.on('connect', function() {
         const store = configureStore();
         const state = store.getState();

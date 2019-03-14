@@ -29,14 +29,14 @@ function findRoom(joinCode) {
     });
 }
 
-function createRoom(joinCode, socket) {
+function createRoom(payload, socket) {
     return new Promise((resolve, reject) => {
         // use mongoose to create the room
-        Room.create({joinCode: joinCode}, (err, room) => {
+        Room.create(payload, (err, room) => {
             if (err) reject(err);
             
-            // join the room using service function
-            joinRoom(joinCode, socket).then((res) => {
+            // join the room using service functionjoinCode
+            joinRoom(payload.joinCode, socket).then((res) => {
                 // return the room
                 resolve(room);
             }, (err) => {
@@ -63,9 +63,6 @@ function joinRoom(joinCode, socket) {
 
                     // join the appropriate socket
                     socket.join(room.joinCode);
-
-                    // emit successful room join end
-                    socket.emit('JOIN_ROOM_END', joinCode);
 
                     // emit current queue to new user
                     socket.emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));

@@ -23,6 +23,10 @@ const RoomSchema = new Schema({
         type: Schema.Types.String,
         required: true
     },
+    owner: {
+        type: Schema.Types.String,
+        required: true
+    },
     participants: [{ type: Schema.Types.String, default: [] }],
     queue: [SongSchema]
 }, {

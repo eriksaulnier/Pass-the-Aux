@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const socketEvents = require('./socket.events.js');
+const socketEvents = require('./utils/sockets.js');
 
 // allow all origins when in development mode
 if (process.env.NODE_ENV === 'development') {
