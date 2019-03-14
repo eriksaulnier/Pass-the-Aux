@@ -16,14 +16,14 @@ module.exports = service;
 function findRoom(joinCode) {
     return new Promise((resolve, reject) => {
         // use mongoose to find the room
-        Room.find({joinCode: joinCode}, (err, rooms) => {
+        Room.findOne({joinCode: joinCode}, (err, room) => {
             if (err) reject(err);
-            
+
             // check if any room results were found
-            if (rooms.length < 1) resolve(null);   
+            if (!room) resolve(null);   
 
             // return the room
-            resolve(rooms[0]);
+            resolve(room);
         });
     });
 }
@@ -35,11 +35,11 @@ function createRoom(socket, payload) {
             if (err) reject(err);
             
             // join the room using service functionjoinCode
-            joinRoom(payload.joinCode, socket).then((res) => {
+            joinRoom(socket, room.joinCode).then((res) => {
                 // return the room
                 resolve(room);
             }, (err) => {
-                console.error(err);
+                reject(err);
             });
         });
     });
