@@ -1,4 +1,4 @@
-import { UPDATE_QUEUE, UPVOTE_SONG, DOWNVOTE_SONG, LEAVE_ROOM } from '../actions/Types';
+import { UPDATE_QUEUE, VOTE_SONG, LEAVE_ROOM } from '../actions/Types';
 
 const initialState = {
     queue: [],
@@ -11,13 +11,9 @@ export default (state = initialState, action) => {
             return Object.assign({}, state, {
                 queue: action.payload
             });
-        case UPVOTE_SONG:
+        case VOTE_SONG:
             return Object.assign({}, state, {
-                votes: { ...state.votes, [action.payload]: 1 }
-            });
-        case DOWNVOTE_SONG:
-            return Object.assign({}, state, {
-                votes: Object.assign(state.votes, { [action.payload]: -1 })
+                votes: { ...state.votes, [action.payload.songId]: action.payload.vote }
             });
         case LEAVE_ROOM:
             // resets back to the initial state

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addSong, removeSong, upvoteSong, downvoteSong } from '../actions/QueueActions';
+import { addSong, removeSong, voteSong } from '../actions/QueueActions';
 import { Button, ButtonGroup, Input, InputGroup, InputGroupAddon, ListGroup, ListGroupItem } from 'reactstrap';
 
 export class SongQueue extends Component {
@@ -21,7 +21,6 @@ export class SongQueue extends Component {
         this.setState({ song: event.target.value });
     }
 
-
     // handlers for adding and removing songs
     addSong = () => {
         // check to make sure a song is provided
@@ -39,15 +38,25 @@ export class SongQueue extends Component {
 
     // handlers for upvoting and downvoting songs
     upvoteSong = (songId) => {
-        // checks to make sure the song hasn't already been upvoted
-        if (this.getSongVote(songId) !== 1) {
-            this.props.upvoteSong(songId);
+        // if the song has not been voted on, do a normal upvote
+        if (!this.getSongVote(songId)) {
+            this.props.voteSong(songId, 1);
+        }
+        
+        // if the song has been downvoted, do an upvote and cancel out the old vote
+        else if (this.getSongVote(songId) < 0) {
+            this.props.voteSong(songId, 2)
         }
     }
     downvoteSong = (songId) => {
-        // checks to make sure the song hasn't already been downvoted
-        if (this.getSongVote(songId) !== -1) {
-            this.props.downvoteSong(songId);
+        // if the song has not been voted on, do a normal upvote
+        if (!this.getSongVote(songId)) {
+            this.props.voteSong(songId, -1);
+        }
+        
+        // if the song has been upvoted, do a downvote and cancel out the old vote
+        else if (this.getSongVote(songId) > 0) {
+            this.props.voteSong(songId, -2)
         }
     }
 
@@ -70,9 +79,9 @@ export class SongQueue extends Component {
                                 <div className="float-right">
                                     <span>{song.currentVote}</span>
                                     <ButtonGroup className="ml-2" vertical>
-                                        <Button color={this.getSongVote(song._id) === 1 ? 'success' : 'secondary'} 
+                                        <Button color={this.getSongVote(song._id) > 0 ? 'success' : 'secondary'} 
                                                 onClick={() => this.upvoteSong(song._id)}>&#8593;</Button>
-                                        <Button color={this.getSongVote(song._id) === -1 ? 'danger' : 'secondary'} 
+                                        <Button color={this.getSongVote(song._id) < 0 ? 'danger' : 'secondary'} 
                                                 onClick={() => this.downvoteSong(song._id)}>&#8595;</Button>
                                     </ButtonGroup>
 
@@ -97,8 +106,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     addSong: (songTitle) => dispatch(addSong(songTitle)),
     removeSong: (songId) => dispatch(removeSong(songId)),
-    upvoteSong: (songId) => dispatch(upvoteSong(songId)),
-    downvoteSong: (songId) => dispatch(downvoteSong(songId))
+    voteSong: (songId, vote) => dispatch(voteSong(songId, vote))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SongQueue);

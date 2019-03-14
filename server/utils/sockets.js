@@ -2,12 +2,12 @@ const roomService = require('../services/room.service');
 
 exports = module.exports = function(io) {
     io.on('connection', function(socket) {
-        socket.on('JOIN_ROOM_START', function(payload) {
+        socket.on('JOIN_ROOM_START', function(joinCode) {
             // check if the room exists
-            roomService.findRoom(payload.joinCode).then((room) => {
+            roomService.findRoom(joinCode).then((room) => {
                 if (room) {
                     // if it does exist join it
-                    roomService.joinRoom(room.joinCode, socket).then((room) => {
+                    roomService.joinRoom(socket, room.joinCode).then((room) => {
                         socket.emit('JOIN_ROOM_END', room.joinCode);
                         console.log(`user joined room '${room.joinCode}'`);                        
                     }, (err) => {
@@ -26,7 +26,7 @@ exports = module.exports = function(io) {
             roomService.findRoom(payload.joinCode).then((room) => {
                 if (!room) {
                     // if it does not exist yet create the room
-                    roomService.createRoom(payload, socket).then((room) => {
+                    roomService.createRoom(socket, payload).then((room) => {
                         socket.emit('JOIN_ROOM_END', room.joinCode);
                         console.log(`new room '${room.joinCode}' created`);                        
                     }, (err) => {
@@ -43,7 +43,7 @@ exports = module.exports = function(io) {
         socket.on('LEAVE_ROOM', function() {
             // if the socket is in a room, leave the room
             if (socket.room) {
-                roomService.leaveRoom(socket.room, socket).then((room) => {
+                roomService.leaveRoom(socket, socket.room).then((room) => {
                     console.log(`user left room '${room.joinCode}'`);                        
                 }, (err) => {
                     console.error(err);
@@ -67,17 +67,9 @@ exports = module.exports = function(io) {
             });
         });
 
-        socket.on('UPVOTE_SONG', function(songId) {
-            roomService.upvoteSong(io, socket, songId).then((room) => {
+        socket.on('VOTE_SONG', function(payload) {
+            roomService.voteSong(io, socket, payload).then((room) => {
                 // console.log(`song upvoted in '${socket.room}'`);
-            }, (err) => {
-                console.error(err);
-            });
-        });
-
-        socket.on('DOWNVOTE_SONG', function(songId) {
-            roomService.downvoteSong(io, socket, songId).then((room) => {
-                // console.log(`song downvoted in '${socket.room}'`);
             }, (err) => {
                 console.error(err);
             });

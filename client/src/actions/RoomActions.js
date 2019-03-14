@@ -3,9 +3,7 @@ import { emit } from '../utils/Socket';
 
 export const joinRoom = (joinCode) => {
     return (dispatch) => {
-        emit(JOIN_ROOM_START, {
-            joinCode: joinCode
-        });
+        emit(JOIN_ROOM_START, joinCode);
 
         dispatch({
             type: JOIN_ROOM_START

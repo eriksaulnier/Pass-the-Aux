@@ -9,8 +9,7 @@ service.joinRoom = joinRoom;
 service.leaveRoom = leaveRoom;
 service.addSong = addSong;
 service.removeSong = removeSong;
-service.upvoteSong = upvoteSong;
-service.downvoteSong = downvoteSong;
+service.voteSong = voteSong;
 
 module.exports = service;
 
@@ -29,7 +28,7 @@ function findRoom(joinCode) {
     });
 }
 
-function createRoom(payload, socket) {
+function createRoom(socket, payload) {
     return new Promise((resolve, reject) => {
         // use mongoose to create the room
         Room.create(payload, (err, room) => {
@@ -46,7 +45,7 @@ function createRoom(payload, socket) {
     });
 }
 
-function joinRoom(joinCode, socket) {
+function joinRoom(socket, joinCode) {
     return new Promise((resolve, reject) => {
         // find the room using service function
         findRoom(joinCode).then((room) => {
@@ -157,38 +156,14 @@ function removeSong(io, socket, songId) {
     });
 }
 
-function upvoteSong(io, socket, songId) {
+function voteSong(io, socket, payload) {
     return new Promise((resolve, reject) => {
         // find the room using service function
         findRoom(socket.room).then((room) => {
             // update the song's current vote
             Room.findOneAndUpdate(
-                { _id: room._id, 'queue._id': songId },
-                { $inc: { 'queue.$.currentVote': 1 } },
-                { new: true },
-                function (err, doc) {
-                    if (err) reject(err);
-
-                    // emit the updated queue to the room
-                    io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
-
-                    resolve(doc);
-                }
-            );
-        }, (err) => {
-            reject(err);
-        });
-    });
-}
-
-function downvoteSong(io, socket, songId) {
-    return new Promise((resolve, reject) => {
-        // find the room using service function
-        findRoom(socket.room).then((room) => {
-            // update the song's current vote
-            Room.findOneAndUpdate(
-                { _id: room._id, 'queue._id': songId },
-                { $inc: { 'queue.$.currentVote': -1 } },
+                { _id: room._id, 'queue._id': payload.songId },
+                { $inc: { 'queue.$.currentVote': payload.vote } },
                 { new: true },
                 function (err, doc) {
                     if (err) reject(err);
