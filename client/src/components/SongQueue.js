@@ -54,6 +54,13 @@ export class SongQueue extends Component {
     render() {
         return (
             <div>
+                <InputGroup className="mb-3">
+                    <Input type="text" name="song" onChange={this.changeSong} value={this.state.song}/>
+                    <InputGroupAddon addonType="append">
+                        <Button color="primary" onClick={this.addSong}>Add Song</Button>
+                    </InputGroupAddon>
+                </InputGroup>
+
                 <h3>Queue:</h3>
                 {this.props.queue &&
                     <ListGroup className="song-list">
@@ -75,13 +82,6 @@ export class SongQueue extends Component {
                         ))}
                     </ListGroup>
                 }
-                
-                <InputGroup>
-                    <Input type="text" name="song" onChange={this.changeSong} value={this.state.song}/>
-                    <InputGroupAddon addonType="append">
-                        <Button color="primary" onClick={this.addSong}>Add Song</Button>
-                    </InputGroupAddon>
-                </InputGroup>
             </div>
         )
     }
