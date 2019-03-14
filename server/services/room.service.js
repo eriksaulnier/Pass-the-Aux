@@ -76,10 +76,10 @@ function joinRoom(joinCode, socket) {
     });
 }
 
-function leaveRoom(joinCode, socket) {
+function leaveRoom(socket) {
     return new Promise((resolve, reject) => {
         // find the room using service function
-        findRoom(joinCode).then((room) => {
+        findRoom(socket.room).then((room) => {
             // add the user to the room
             Room.findOneAndUpdate(
                 { _id: room._id },
@@ -88,11 +88,11 @@ function leaveRoom(joinCode, socket) {
                 function (err, doc) {
                     if (err) reject(err);
 
-                    // clear the socket's room
-                    socket.room = null;
-
                     // leave the appropriate socket
-                    socket.leave(room.joinCode);
+                    socket.leave(room.room);
+                    
+                    // clear the socket's storage
+                    socket.room = null;
                     
                     resolve(doc);
                 }
@@ -103,10 +103,10 @@ function leaveRoom(joinCode, socket) {
     });
 }
 
-function addSong(io, joinCode, songTitle) {
+function addSong(io, socket, songTitle) {
     return new Promise((resolve, reject) => {
         // find the room using service function
-        findRoom(joinCode).then((room) => {
+        findRoom(socket.room).then((room) => {
             // construct song object
             const song = {
                 _id: ObjectId(),
@@ -122,7 +122,7 @@ function addSong(io, joinCode, songTitle) {
                     if (err) reject(err);
 
                     // emit the updated queue to the room
-                    io.sockets.in(joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
+                    io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
 
                     resolve(doc);
                 }
@@ -133,10 +133,10 @@ function addSong(io, joinCode, songTitle) {
     });
 }
 
-function removeSong(io, joinCode, songId) {
+function removeSong(io, socket, songId) {
     return new Promise((resolve, reject) => {
         // find the room using service function
-        findRoom(joinCode).then((room) => {
+        findRoom(socket.room).then((room) => {
             // remove the song from the room's queue
             Room.findOneAndUpdate(
                 { _id: room._id },
@@ -146,7 +146,7 @@ function removeSong(io, joinCode, songId) {
                     if (err) reject(err);
 
                     // emit the updated queue to the room
-                    io.sockets.in(joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
+                    io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
 
                     resolve(doc);
                 }
@@ -157,10 +157,10 @@ function removeSong(io, joinCode, songId) {
     });
 }
 
-function upvoteSong(io, joinCode, songId) {
+function upvoteSong(io, socket, songId) {
     return new Promise((resolve, reject) => {
         // find the room using service function
-        findRoom(joinCode).then((room) => {
+        findRoom(socket.room).then((room) => {
             // update the song's current vote
             Room.findOneAndUpdate(
                 { _id: room._id, 'queue._id': songId },
@@ -170,7 +170,7 @@ function upvoteSong(io, joinCode, songId) {
                     if (err) reject(err);
 
                     // emit the updated queue to the room
-                    io.sockets.in(joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
+                    io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
 
                     resolve(doc);
                 }
@@ -181,10 +181,10 @@ function upvoteSong(io, joinCode, songId) {
     });
 }
 
-function downvoteSong(io, joinCode, songId) {
+function downvoteSong(io, socket, songId) {
     return new Promise((resolve, reject) => {
         // find the room using service function
-        findRoom(joinCode).then((room) => {
+        findRoom(socket.room).then((room) => {
             // update the song's current vote
             Room.findOneAndUpdate(
                 { _id: room._id, 'queue._id': songId },
@@ -194,7 +194,7 @@ function downvoteSong(io, joinCode, songId) {
                     if (err) reject(err);
 
                     // emit the updated queue to the room
-                    io.sockets.in(joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
+                    io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
 
                     resolve(doc);
                 }
