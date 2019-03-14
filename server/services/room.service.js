@@ -89,7 +89,7 @@ function leaveRoom(socket) {
                     if (err) reject(err);
 
                     // leave the appropriate socket
-                    socket.leave(room.room);
+                    socket.leave(room.joinCode);
                     
                     // clear the socket's storage
                     socket.room = null;
