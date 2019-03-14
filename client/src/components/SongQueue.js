@@ -54,7 +54,7 @@ export class SongQueue extends Component {
     render() {
         return (
             <div>
-                <h2>Current Queue:</h2>
+                <h3>Queue:</h3>
                 {this.props.queue &&
                     <ListGroup className="song-list">
                         {this.props.queue.map((song, index) => (

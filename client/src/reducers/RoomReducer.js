@@ -1,4 +1,4 @@
-import { JOIN_ROOM_START, JOIN_ROOM_END } from '../actions/Types';
+import { JOIN_ROOM_START, JOIN_ROOM_END, LEAVE_ROOM } from '../actions/Types';
 
 const initialState = {
     room: null,
@@ -14,16 +14,13 @@ export default (state = initialState, action) => {
                 room: null
             });
         case JOIN_ROOM_END:
-            // check if the room is being switched
-            if (sessionStorage.getItem('room') !== null && sessionStorage.getItem('room') !== action.payload) {
-                // reset session storage
-                sessionStorage.clear();
-            }
-
             // set the room code in the store
             return Object.assign({}, state, {
                 room: action.payload
             });
+        case LEAVE_ROOM:
+            // reset back to the initial state
+            return initialState;
         default:
             return state
     }

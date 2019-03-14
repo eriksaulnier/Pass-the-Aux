@@ -1,4 +1,4 @@
-import { JOIN_ROOM_START, CREATE_ROOM_START } from './Types';
+import { JOIN_ROOM_START, CREATE_ROOM_START, LEAVE_ROOM } from './Types';
 import { emit } from '../utils/Socket';
 
 export const joinRoom = (joinCode) => {
@@ -16,5 +16,15 @@ export const joinRoom = (joinCode) => {
 export const createRoom = (payload) => {
     return () => {
         emit(CREATE_ROOM_START, payload);
+    }
+}
+
+export const leaveRoom = () => {
+    return (dispatch) => {
+        emit(LEAVE_ROOM);
+
+        dispatch({
+            type: LEAVE_ROOM
+        });
     }
 }
