@@ -70,10 +70,24 @@ export class SongQueue extends Component {
                     </InputGroupAddon>
                 </InputGroup>
 
-                <h3>Queue:</h3>
-                {this.props.queue &&
+                {this.props.queue && this.props.queue.length > 0 &&
+                    <ListGroup className="now-playing mb-4">
+                        <h4>Now Playing:</h4>
+                        <ListGroupItem className="song">
+                            <span>{this.props.queue[0].title}</span>
+                            <div className="float-right">
+                                <span>{this.props.queue[0].currentVote}</span>
+        
+                                <Button className="ml-3" color="danger" onClick={() => this.removeSong(this.props.queue[0]._id)}>&#215;</Button>
+                            </div>
+                        </ListGroupItem>
+                    </ListGroup>
+                }
+
+                {this.props.queue && this.props.queue.length > 1 &&
                     <ListGroup className="song-list">
-                        {this.props.queue.map((song, index) => (
+                        <h4>Queue:</h4>
+                        {this.props.queue.slice(1).map((song, index) => (
                             <ListGroupItem className="song" key={index}>
                                 <span>{song.title}</span>
                                 <div className="float-right">
