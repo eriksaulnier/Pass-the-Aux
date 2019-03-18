@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addSong, removeSong, voteSong } from '../actions/QueueActions';
 import { Button, ButtonGroup, Input, InputGroup, InputGroupAddon, ListGroup, ListGroupItem } from 'reactstrap';
+import { MdKeyboardArrowUp, MdKeyboardArrowDown, MdClose, MdSkipNext } from 'react-icons/md';
 
 export class SongQueue extends Component {
     constructor(props) {
@@ -70,6 +71,7 @@ export class SongQueue extends Component {
                     </InputGroupAddon>
                 </InputGroup>
 
+                {/* Now Playing Display */}
                 {this.props.queue && this.props.queue.length > 0 &&
                     <ListGroup className="now-playing mb-4">
                         <h4>Now Playing:</h4>
@@ -78,12 +80,15 @@ export class SongQueue extends Component {
                             <div className="float-right">
                                 <span>{this.props.queue[0].currentVote}</span>
         
-                                <Button className="ml-3" color="danger" onClick={() => this.removeSong(this.props.queue[0]._id)}>&#215;</Button>
+                                <Button className="ml-3" color="secondary" 
+                                    onClick={() => this.removeSong(this.props.queue[0]._id)}><MdSkipNext size="1.4em"/>
+                                </Button>
                             </div>
                         </ListGroupItem>
                     </ListGroup>
                 }
 
+                {/* Queue Display */}
                 {this.props.queue && this.props.queue.length > 1 &&
                     <ListGroup className="song-list">
                         <h4>Queue:</h4>
@@ -94,12 +99,16 @@ export class SongQueue extends Component {
                                     <span>{song.currentVote}</span>
                                     <ButtonGroup className="ml-2" vertical>
                                         <Button color={this.getSongVote(song._id) > 0 ? 'success' : 'secondary'} 
-                                                onClick={() => this.upvoteSong(song._id)}>&#8593;</Button>
+                                            onClick={() => this.upvoteSong(song._id)}><MdKeyboardArrowUp size="1.5em"/>
+                                        </Button>
                                         <Button color={this.getSongVote(song._id) < 0 ? 'danger' : 'secondary'} 
-                                                onClick={() => this.downvoteSong(song._id)}>&#8595;</Button>
+                                            onClick={() => this.downvoteSong(song._id)}><MdKeyboardArrowDown size="1.5em"/>
+                                        </Button>
                                     </ButtonGroup>
 
-                                    <Button className="ml-3" color="danger" onClick={() => this.removeSong(song._id)}>&#215;</Button>
+                                    <Button className="ml-3" color="danger" onClick={() => this.removeSong(song._id)}>
+                                        <MdClose size="1.2em"/>
+                                    </Button>
                                 </div>
                             </ListGroupItem>
                         ))}
