@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { Container } from 'reactstrap';
-import { Button } from 'reactstrap';
-import { leaveRoom } from '../actions/RoomActions';
-import SongQueue from './SongQueue';
+import { Container, Button } from 'reactstrap';
+import { leaveRoom } from '../../actions/RoomActions';
+import SongQueueComponent from './SongQueue';
+import AddSongComponent from './AddSong';
 
 class RoomPage extends Component {
   constructor(props) {
@@ -20,18 +20,24 @@ class RoomPage extends Component {
   leaveRoom = () => {
     this.props.leaveRoom();
     this.props.route('/');
-  }
+  };
 
   render() {
     return (
       <Container>
         <div className="mb-4">
-          <h2>Current Room: {this.props.room}</h2>
-          <Button color="danger" onClick={this.leaveRoom}>Leave Room</Button>
+          <h2>
+            Current Room:
+            {this.props.room}
+          </h2>
+          <Button color="danger" onClick={this.leaveRoom}>
+            Leave Room
+          </Button>
         </div>
-        <SongQueue />
+        <AddSongComponent />
+        <SongQueueComponent />
       </Container>
-    )
+    );
   }
 }
 
@@ -42,8 +48,11 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  route: (path) => dispatch(push(path)),
+  route: path => dispatch(push(path)),
   leaveRoom: () => dispatch(leaveRoom())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(RoomPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RoomPage);

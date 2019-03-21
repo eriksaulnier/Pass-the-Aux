@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { joinRoom } from '../actions/RoomActions';
 import { Button, Form, FormGroup, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { joinRoom } from '../../actions/RoomActions';
 
 class JoinRoom extends Component {
   constructor(props) {
@@ -9,13 +9,10 @@ class JoinRoom extends Component {
 
     // initialize component state
     this.state = { joinCode: '' };
-
-    // setup input change binding
-    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   // handle input change event
-  handleInputChange = (event) => {
+  handleInputChange = event => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
@@ -23,10 +20,10 @@ class JoinRoom extends Component {
     this.setState({
       [name]: value
     });
-  }
+  };
 
   // handle form submission
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     event.preventDefault();
 
     // check to make sure room code is provided
@@ -37,21 +34,23 @@ class JoinRoom extends Component {
 
     // join the room
     this.props.joinRoom(this.state.joinCode);
-  }
+  };
 
   render() {
     return (
       <Form className="mt-4" onSubmit={this.handleSubmit}>
         <FormGroup>
           <InputGroup>
-            <Input type="text" name="joinCode" onChange={this.handleInputChange} value={this.state.joinCode}/>
+            <Input type="text" name="joinCode" onChange={this.handleInputChange} value={this.state.joinCode} />
             <InputGroupAddon addonType="append">
-              <Button color="primary" type="submit">Join Room</Button>
+              <Button color="primary" type="submit">
+                Join Room
+              </Button>
             </InputGroupAddon>
           </InputGroup>
         </FormGroup>
       </Form>
-    )
+    );
   }
 }
 
@@ -62,7 +61,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  joinRoom: (room) => dispatch(joinRoom(room))
+  joinRoom: room => dispatch(joinRoom(room))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(JoinRoom);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(JoinRoom);

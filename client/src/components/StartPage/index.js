@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Container, Row, Col, Button } from 'reactstrap';
-import { joinRoom } from '../actions/RoomActions';
-import JoinRoom from './JoinRoom';
-import CreateRoom from './CreateRoom';
+import { joinRoom } from '../../actions/RoomActions';
+import JoinRoomComponent from './JoinRoom';
+import CreateRoomComponent from './CreateRoom';
 
 class StartPage extends Component {
   constructor(props) {
@@ -20,17 +20,17 @@ class StartPage extends Component {
   }
 
   // changes the route when the room code is changed in the state
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
     if (this.props.room && prevProps.room !== this.props.room) {
       this.props.route('/room');
     }
-  }
+  };
 
   // toggles beteen components for creating and joining rooms
   toggleIsCreating = () => {
-    const temp = this.state.creatingRoom;
-    this.setState({ creatingRoom: !temp });
-  }
+    const isCreatingRoom = this.state.creatingRoom;
+    this.setState({ creatingRoom: !isCreatingRoom });
+  };
 
   render() {
     return (
@@ -40,20 +40,24 @@ class StartPage extends Component {
             <h2>Pass the Aux</h2>
             {this.state.creatingRoom ? (
               <div>
-                <CreateRoom />
-                <Button className="mt-3" color="secondary" onClick={this.toggleIsCreating}>Cancel</Button>
+                <CreateRoomComponent />
+                <Button className="mt-3" color="secondary" onClick={this.toggleIsCreating}>
+                  Cancel
+                </Button>
               </div>
             ) : (
               <div>
-                <JoinRoom />
+                <JoinRoomComponent />
                 <p className="mt-4">OR</p>
-                <Button color="secondary" onClick={this.toggleIsCreating}>Create a New Room</Button>
+                <Button color="secondary" onClick={this.toggleIsCreating}>
+                  Create a New Room
+                </Button>
               </div>
             )}
           </Col>
         </Row>
       </Container>
-    )
+    );
   }
 }
 
@@ -64,8 +68,11 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  route: (path) => dispatch(push(path)),
-  joinRoom: (room) => dispatch(joinRoom(room))
+  route: path => dispatch(push(path)),
+  joinRoom: room => dispatch(joinRoom(room))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(StartPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StartPage);

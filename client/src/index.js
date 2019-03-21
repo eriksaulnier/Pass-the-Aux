@@ -4,14 +4,14 @@ import { Provider } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import * as serviceWorker from './serviceWorker';
-import configureStore, { history } from './store'
+import configureStore, { history } from './store';
 import { init } from './utils/Socket';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
 import App from './App';
 import RoomPage from './components/RoomPage';
-import NotFound from './components/NotFound';
+import NotFoundPage from './components/NotFoundPage';
 
 // configure the redux store
 const store = configureStore();
@@ -21,23 +21,18 @@ init(store);
 
 // configure routing
 const routing = (
-    <ConnectedRouter history={history}>
-        <div>
-            <Switch>
-                <Route exact path="/" component={App} />
-                <Route path="/room" component={RoomPage} />
-                <Route component={NotFound} />
-            </Switch>
-        </div>
-    </ConnectedRouter>
+  <ConnectedRouter history={history}>
+    <div>
+      <Switch>
+        <Route exact path="/" component={App} />
+        <Route path="/room" component={RoomPage} />
+        <Route component={NotFoundPage} />
+      </Switch>
+    </div>
+  </ConnectedRouter>
 );
 
-ReactDOM.render(
-    <Provider store={store}>
-        {routing}
-    </Provider>,
-    document.getElementById('root')
-);
+ReactDOM.render(<Provider store={store}>{routing}</Provider>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
