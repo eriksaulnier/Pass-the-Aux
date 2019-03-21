@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "node": ">=7.0.0"
+  },
   "dependencies": {
     "concurrently": "^4.1.0"
   },
@@ -13,5 +16,17 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "postinstall": "npm install --prefix client && npm install --prefix server",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build --prefix client"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
+    "prettier": "^1.16.4",
+    "prettier-eslint": "^8.8.2"
   }
 }

@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
@@ -10,25 +10,28 @@ const socketEvents = require('./utils/sockets.js');
 
 // allow all origins when in development mode
 if (process.env.NODE_ENV === 'development') {
-    io.origins('*:*');
+  io.origins('*:*');
 }
 
 // connect to mongo database
-mongoose.connect(process.env.MONGO_URI).then(() => {
+mongoose.connect(process.env.MONGO_URI).then(
+  () => {
     console.log(`Connected to MongoDB server ${process.env.MONGO_URI}`);
-}, (err) => {
+  },
+  err => {
     console.error(err);
-});
+  }
+);
 
 // if running in production, serve react client
 if (process.env.NODE_ENV === 'production') {
-    // serve static files from the react app
-    app.use(express.static(path.join(__dirname, '../client/build')));
+  // serve static files from the react app
+  app.use(express.static(path.join(__dirname, '../client/build')));
 
-    // send back reacts index file.
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname+'../client/build/index.html'));
-    });
+  // send back reacts index file.
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  });
 }
 
 // start the express server

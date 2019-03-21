@@ -5,9 +5,7 @@ import StartPage from './components/StartPage';
 
 class App extends Component {
   render() {
-    return (
-      <StartPage />
-    );
+    return <StartPage />;
   }
 }
 
