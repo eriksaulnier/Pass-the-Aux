@@ -1,4 +1,4 @@
-import { UPDATE_QUEUE, VOTE_SONG, LEAVE_ROOM } from '../actions/Types';
+import { UPDATE_QUEUE, VOTE_SONG, LEAVE_ROOM, RESET_QUEUE} from '../actions/Types';
 
 const initialState = {
     queue: [],
@@ -18,6 +18,10 @@ export default (state = initialState, action) => {
         case LEAVE_ROOM:
             // resets back to the initial state
             return initialState;
+        case RESET_QUEUE:
+            return Object.assign({}, state, {
+                queue: action.payload
+            });
         default:
             return state
     }

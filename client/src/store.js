@@ -28,7 +28,8 @@ export default function configureStore() {
                 room: state.roomReducer.room
             },
             queueReducer: {
-                votes: state.queueReducer.votes
+                votes: state.queueReducer.votes,
+                queue: state.queueReducer.queue
             }
         });
     });

@@ -10,6 +10,7 @@ service.leaveRoom = leaveRoom;
 service.addSong = addSong;
 service.removeSong = removeSong;
 service.voteSong = voteSong;
+service.resetQueue = resetQueue;
 
 module.exports = service;
 
@@ -170,6 +171,28 @@ function voteSong(io, socket, payload) {
 
                     // emit the updated queue to the room
                     io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
+
+                    resolve(doc);
+                }
+            );
+        }, (err) => {
+            reject(err);
+        });
+    });
+}
+
+function resetQueue(io, socket){
+    return new Promise((resolve,reject) => {
+        findRoom(socket.room).then((room) => {
+            Room.findOneAndUpdate(
+                { _id: room._id},
+                { $set: {queue: [] }},
+
+                {new: true},
+                function(err, doc) {
+                    if(err) reject(err);
+                    //Emit the queue (or lack theirof to the room
+                    //io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
 
                     resolve(doc);
                 }
