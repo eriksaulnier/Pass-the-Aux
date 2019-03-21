@@ -7,3 +7,4 @@ export const ADD_SONG = 'ADD_SONG';
 export const REMOVE_SONG = 'REMOVE_SONG';
 export const VOTE_SONG = 'VOTE_SONG';
 export const UPDATE_QUEUE = 'UPDATE_QUEUE';
+export const RESET_QUEUE = 'RESET_QUEUE';
