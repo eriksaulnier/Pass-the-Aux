@@ -61,7 +61,7 @@ exports = module.exports = function(io) {
 
         socket.on('REMOVE_SONG', function(songId) {
             roomService.removeSong(io, socket, songId).then((room) => {
-                // console.log(`song removed from '${socket.room}'`);
+                console.log(`song removed from '${socket.room}'`);
             }, (err) => {
                 console.error(err);
             });
@@ -74,7 +74,14 @@ exports = module.exports = function(io) {
                 console.error(err);
             });
         });
-    
+         socket.on('RESET_QUEUE', function() {
+
+            roomService.resetQueue(io, socket).then((room) => {
+                console.log(`Queue deleted in '${socket.room}'`);
+            }, (err) => {
+                console.error(err);
+            });
+        });
         socket.on('disconnect', function() {            
             // if the socket is in a room, leave the room
             if (socket.room) {

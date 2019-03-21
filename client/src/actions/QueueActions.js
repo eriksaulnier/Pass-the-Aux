@@ -1,4 +1,4 @@
-import { ADD_SONG, REMOVE_SONG, VOTE_SONG, UPDATE_QUEUE } from './Types';
+import { ADD_SONG, REMOVE_SONG, VOTE_SONG, UPDATE_QUEUE, RESET_QUEUE } from './Types';
 import { emit } from '../utils/Socket';
 
 export const addSong = (songTitle) => {
@@ -36,5 +36,15 @@ export const updateQueue = (queue) => {
             type: UPDATE_QUEUE,
             payload: queue
         });
+    }
+}
+
+export const resetQueue = () => {
+    return (dispatch) => {
+        emit(RESET_QUEUE);
+         dispatch({
+             type: RESET_QUEUE,
+             //payload: queue
+         })
     }
 }
