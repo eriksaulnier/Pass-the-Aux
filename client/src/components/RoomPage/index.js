@@ -40,7 +40,7 @@ class RoomPage extends Component {
             Leave Room
           </Button>
           <Button color="danger" onClick={this.resetQueue}>
-            ResetQueue
+            Reset Queue
           </Button>
         </div>
         <AddSongComponent />
