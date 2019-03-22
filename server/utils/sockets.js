@@ -100,6 +100,17 @@ exports = module.exports = io => {
       );
     });
 
+    socket.on('RESET_QUEUE', () => {
+      roomService.resetQueue(io, socket).then(
+        room => {
+          console.log(`Queue deleted in '${room.joinCode}'`);
+        },
+        err => {
+          console.error(err);
+        }
+      );
+    });
+
     socket.on('disconnect', () => {
       // if the socket is in a room, leave the room
       if (socket.room) {

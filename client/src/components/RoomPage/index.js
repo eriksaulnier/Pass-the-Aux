@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Container, Button } from 'reactstrap';
 import { leaveRoom } from '../../actions/RoomActions';
+import { resetQueue } from '../../actions/QueueActions';
 import SongQueueComponent from './SongQueue';
 import AddSongComponent from './AddSong';
 import NowPlayingComponent from './NowPlaying';
@@ -23,6 +24,11 @@ class RoomPage extends Component {
     this.props.route('/');
   };
 
+  // handles reseting the queue
+  resetQueue = () => {
+    this.props.resetQueue();
+  };
+
   render() {
     return (
       <Container>
@@ -31,8 +37,11 @@ class RoomPage extends Component {
             Current Room:
             {this.props.room}
           </h2>
-          <Button color="danger" onClick={this.leaveRoom}>
+          <Button color="secondary" onClick={this.leaveRoom}>
             Leave Room
+          </Button>
+          <Button color="danger" onClick={this.resetQueue}>
+            Reset Queue
           </Button>
         </div>
         <AddSongComponent />
@@ -51,7 +60,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   route: path => dispatch(push(path)),
-  leaveRoom: () => dispatch(leaveRoom())
+  leaveRoom: () => dispatch(leaveRoom()),
+  resetQueue: () => dispatch(resetQueue())
 });
 
 export default connect(

@@ -179,6 +179,7 @@ module.exports = {
         room => {
           // update the song's current vote
           Room.findOneAndUpdate(
+            // eslint-disable-next-line quote-props
             { _id: room._id, 'queue._id': payload.songId },
             { $inc: { 'queue.$.currentVote': payload.vote } },
             { new: true },
@@ -191,6 +192,27 @@ module.exports = {
               resolve(doc);
             }
           );
+        },
+        err => {
+          reject(err);
+        }
+      );
+    });
+  },
+
+  resetQueue(io, socket) {
+    return new Promise((resolve, reject) => {
+      // find the room using service function
+      this.findRoom(socket.room).then(
+        room => {
+          Room.findOneAndUpdate({ _id: room._id }, { $set: { queue: [] } }, { new: true }, (err, doc) => {
+            if (err) reject(err);
+
+            // emit the queue (or lack theirof) to the room
+            io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', doc.queue);
+
+            resolve(doc);
+          });
         },
         err => {
           reject(err);
