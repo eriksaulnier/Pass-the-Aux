@@ -57,12 +57,14 @@ class StartPage extends Component {
   }
 }
 
+//So that we can access the room functions of state in props
 const mapStateToProps = state => {
   return {
     room: state.roomReducer.room
   };
 };
 
+//So that we can dispatch to RoomActions with props
 const mapDispatchToProps = dispatch => ({
   route: (path) => dispatch(push(path)),
   joinRoom: (room) => dispatch(joinRoom(room))

@@ -27,6 +27,7 @@ export const init = (store) => {
     });
 };
 
+//emits a type from the client socket to the server socket
 export const emit = (type, payload) => {
     socket.emit(type, payload);
 };

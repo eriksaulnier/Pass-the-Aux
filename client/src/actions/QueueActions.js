@@ -1,6 +1,7 @@
 import { ADD_SONG, REMOVE_SONG, VOTE_SONG, UPDATE_QUEUE, RESET_QUEUE } from './Types';
 import { emit } from '../utils/Socket';
 
+//These send the queue related functions to the sockets
 export const addSong = (songTitle) => {
     return () => {
         emit(ADD_SONG, songTitle);
@@ -44,7 +45,6 @@ export const resetQueue = () => {
         emit(RESET_QUEUE);
          dispatch({
              type: RESET_QUEUE,
-             //payload: queue
          })
     }
 }

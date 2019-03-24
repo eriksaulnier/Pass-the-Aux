@@ -1,3 +1,4 @@
+//This file details the different databases used in MongoDB pertaining to the room
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 

@@ -183,16 +183,16 @@ function voteSong(io, socket, payload) {
 
 function resetQueue(io, socket){
     return new Promise((resolve,reject) => {
+        //find the room using the service function
         findRoom(socket.room).then((room) => {
+            //Reset the whole queue
             Room.findOneAndUpdate(
                 { _id: room._id},
                 { $set: {queue: [] }},
-
                 {new: true},
                 function(err, doc) {
                     if(err) reject(err);
-                    //Emit the queue (or lack theirof to the room
-                    //io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', doc.queue.sort(sortQueue));
+                    //There is no queue to update, so we do not need to emit the queue
 
                     resolve(doc);
                 }

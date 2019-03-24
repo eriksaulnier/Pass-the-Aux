@@ -54,14 +54,14 @@ export class SongQueue extends Component {
             this.props.voteSong(songId, -1);
         }
         
-        // if the song has been upvoted, do a downvote and cancel out the old vote
+        //The song has been upvoted, so 
         else if (this.getSongVote(songId) > 0) {
             this.props.voteSong(songId, -2)
         }
     }
 
+    //handler for resetting the queue
     resetQueue = () => {
-        //console.log('SongQueue');
         this.props.resetQueue();
         this.setState({queue: []});
     }
@@ -112,6 +112,7 @@ export class SongQueue extends Component {
     }
 }
 
+///This is so we can access the queue and votes of state in props
 const mapStateToProps = state => {
     return {
         queue: state.queueReducer.queue,
@@ -119,6 +120,7 @@ const mapStateToProps = state => {
     };
 };
 
+//So we can dispatch to the QueueActions with props
 const mapDispatchToProps = dispatch => ({
     addSong: (songTitle) => dispatch(addSong(songTitle)),
     removeSong: (songId) => dispatch(removeSong(songId)),
