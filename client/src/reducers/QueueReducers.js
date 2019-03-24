@@ -2,14 +2,15 @@ import { UPDATE_QUEUE, VOTE_SONG, LEAVE_ROOM, RESET_QUEUE } from '../actions/Typ
 
 const initialState = {
   queue: [],
-  votes: {}
+  votes: {},
+  currentSong: null
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_QUEUE:
       return Object.assign({}, state, {
-        queue: action.payload
+        queue: action.payload.slice(1)
       });
     case VOTE_SONG:
       return Object.assign({}, state, {
