@@ -3,7 +3,7 @@ const roomService = require('../services/room.service');
 const queueService = require('../services/queue.service');
 const playbackService = require('../services/playback.service');
 
-exports = module.exports = io => {
+module.exports = io => {
   io.on('connection', socket => {
     socket.on('JOIN_ROOM_START', joinCode => {
       // check if the room exists
