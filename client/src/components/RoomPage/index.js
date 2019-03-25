@@ -6,6 +6,7 @@ import { leaveRoom } from '../../actions/RoomActions';
 import { resetQueue } from '../../actions/QueueActions';
 import SongQueueComponent from './SongQueue';
 import AddSongComponent from './AddSong';
+import NowPlayingComponent from './NowPlaying';
 
 class RoomPage extends Component {
   constructor(props) {
@@ -44,6 +45,7 @@ class RoomPage extends Component {
           </Button>
         </div>
         <AddSongComponent />
+        <NowPlayingComponent />
         <SongQueueComponent />
       </Container>
     );

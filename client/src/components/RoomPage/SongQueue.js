@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonGroup, ListGroup, ListGroupItem } from 'reactstrap';
+import { MdKeyboardArrowUp, MdKeyboardArrowDown, MdClose } from 'react-icons/md';
 import { removeSong, voteSong } from '../../actions/QueueActions';
 
 export class SongQueue extends Component {
@@ -56,17 +57,17 @@ export class SongQueue extends Component {
                       color={this.getSongVote(song._id) > 0 ? 'success' : 'secondary'}
                       onClick={() => this.upvoteSong(song._id)}
                     >
-                      &#8593;
+                      <MdKeyboardArrowUp size="1.5em" />
                     </Button>
                     <Button
                       color={this.getSongVote(song._id) < 0 ? 'danger' : 'secondary'}
                       onClick={() => this.downvoteSong(song._id)}
                     >
-                      &#8595;
+                      <MdKeyboardArrowDown size="1.5em" />
                     </Button>
                   </ButtonGroup>
                   <Button className="ml-3" color="danger" onClick={() => this.removeSong(song._id)}>
-                    &#215;
+                    <MdClose size="1.2em" />
                   </Button>
                 </div>
               </ListGroupItem>

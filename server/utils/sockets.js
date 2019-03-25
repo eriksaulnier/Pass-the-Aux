@@ -1,7 +1,9 @@
 /* eslint-disable no-multi-assign */
 const roomService = require('../services/room.service');
+const queueService = require('../services/queue.service');
+const playbackService = require('../services/playback.service');
 
-exports = module.exports = io => {
+module.exports = io => {
   io.on('connection', socket => {
     socket.on('JOIN_ROOM_START', joinCode => {
       // check if the room exists
@@ -68,7 +70,7 @@ exports = module.exports = io => {
     });
 
     socket.on('ADD_SONG', songTitle => {
-      roomService.addSong(io, socket, songTitle).then(
+      queueService.addSong(io, socket, songTitle).then(
         () => {
           // console.log(`song added to '${socket.room}'`);
         },
@@ -79,7 +81,7 @@ exports = module.exports = io => {
     });
 
     socket.on('REMOVE_SONG', songId => {
-      roomService.removeSong(io, socket, songId).then(
+      queueService.removeSong(io, socket, songId).then(
         () => {
           // console.log(`song removed from '${socket.room}'`);
         },
@@ -90,7 +92,7 @@ exports = module.exports = io => {
     });
 
     socket.on('VOTE_SONG', payload => {
-      roomService.voteSong(io, socket, payload).then(
+      queueService.voteSong(io, socket, payload).then(
         () => {
           // console.log(`song upvoted in '${socket.room}'`);
         },
@@ -100,10 +102,43 @@ exports = module.exports = io => {
       );
     });
 
+    socket.on('PLAY_SONG', payload => {
+      playbackService.playSong(io, socket, payload).then(
+        () => {
+          // console.log(`started playing in '${socket.room}'`);
+        },
+        err => {
+          console.error(err);
+        }
+      );
+    });
+
+    socket.on('PAUSE_SONG', payload => {
+      playbackService.pauseSong(io, socket, payload).then(
+        () => {
+          // console.log(`stopped playing in '${socket.room}'`);
+        },
+        err => {
+          console.error(err);
+        }
+      );
+    });
+
+    socket.on('SKIP_SONG', payload => {
+      playbackService.skipSong(io, socket, payload).then(
+        () => {
+          // console.log(`skipped song in '${socket.room}'`);
+        },
+        err => {
+          console.error(err);
+        }
+      );
+    });
+
     socket.on('RESET_QUEUE', () => {
-      roomService.resetQueue(io, socket).then(
+      queueService.resetQueue(io, socket).then(
         room => {
-          console.log(`Queue deleted in '${room.joinCode}'`);
+          // console.log(`Queue deleted in '${room.joinCode}'`);
         },
         err => {
           console.error(err);
