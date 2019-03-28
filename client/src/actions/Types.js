@@ -4,12 +4,18 @@ export const CREATE_ROOM_START = 'CREATE_ROOM_START';
 export const LEAVE_ROOM = 'LEAVE_ROOM';
 export const ROOM_INFO = 'ROOM_INFO';
 
-export const ADD_SONG = 'ADD_SONG';
-export const REMOVE_SONG = 'REMOVE_SONG';
-export const VOTE_SONG = 'VOTE_SONG';
 export const PLAY_SONG = 'PLAY_SONG';
 export const PAUSE_SONG = 'PAUSE_SONG';
 export const SKIP_SONG = 'SKIP_SONG';
 
+export const ADD_SONG = 'ADD_SONG';
+export const REMOVE_SONG = 'REMOVE_SONG';
+export const VOTE_SONG = 'VOTE_SONG';
 export const UPDATE_QUEUE = 'UPDATE_QUEUE';
 export const RESET_QUEUE = 'RESET_QUEUE';
+
+export const SPOTIFY_TOKEN = 'SPOTIFY_TOKEN';
+export const SPOTIFY_TOKEN_SUCCESS = 'SPOTIFY_TOKEN_SUCCESS';
+export const SPOTIFY_TOKEN_ERROR = 'SPOTIFY_TOKEN_ERROR';
+export const SPOTIFY_SEARCH_SUCCESS = 'SPOTIFY_SEARCH_SUCCESS';
+export const SPOTIFY_SEARCH_ERROR = 'SPOTIFY_SEARCH_ERROR';
