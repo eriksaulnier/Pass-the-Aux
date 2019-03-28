@@ -15,7 +15,7 @@ export class NowPlaying extends Component {
     return (
       <div>
         {this.props.currentSong && (
-          <ListGroup className="song-list mb-4">
+          <ListGroup className="now-playing song-list mb-4">
             <h4>Now Playing:</h4>
             <ListGroupItem className="song">
               {song.artwork && <img className="song-art mr-2" src={song.artwork} alt={song.title} />}
@@ -29,6 +29,7 @@ export class NowPlaying extends Component {
               <div className="song-voting">
                 <Button
                   color="primary"
+                  className="btn-play"
                   onClick={
                     this.props.isPlaying
                       ? () => this.props.pauseSong(this.props.currentSong._id)
