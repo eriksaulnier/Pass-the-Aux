@@ -3,16 +3,13 @@ const Room = require('../models/room');
 const roomService = require('../services/room.service');
 
 module.exports = {
-  addSong(io, socket, songTitle) {
+  addSong(io, socket, songData) {
     return new Promise((resolve, reject) => {
       // find the room using service function
       roomService.findRoom(socket.room).then(
         room => {
           // construct song object
-          const song = {
-            _id: ObjectId(),
-            title: songTitle
-          };
+          const song = Object.assign({}, songData, { _id: ObjectId() });
 
           // add the new song to the room's queue
           Room.findOneAndUpdate({ _id: room._id }, { $push: { queue: song } }, { new: true }, (err, doc) => {

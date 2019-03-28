@@ -7,6 +7,7 @@ import { resetQueue } from '../../actions/QueueActions';
 import SongQueueComponent from './SongQueue';
 import AddSongComponent from './AddSong';
 import NowPlayingComponent from './NowPlaying';
+import './RoomPage.css';
 
 class RoomPage extends Component {
   constructor(props) {

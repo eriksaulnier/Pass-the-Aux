@@ -4,9 +4,12 @@ const { Schema } = mongoose;
 
 const SongSchema = new Schema({
   title: { type: Schema.Types.String, required: true },
+  artist: Schema.Types.String,
+  artwork: Schema.Types.String,
+  spotifyUri: { type: Schema.Types.String, required: true },
   currentVote: { type: Schema.Types.Number, default: 0 },
-  playedAt: Schema.Types.Date,
   nowPlaying: { type: Schema.Types.Boolean, default: false },
+  playedAt: Schema.Types.Date,
   created: { type: Date, default: Date.now }
 });
 

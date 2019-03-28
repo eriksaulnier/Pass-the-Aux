@@ -11,14 +11,22 @@ export class NowPlaying extends Component {
   };
 
   render() {
+    const song = this.props.currentSong;
     return (
       <div>
         {this.props.currentSong && (
-          <ListGroup className="now-playing mb-4">
+          <ListGroup className="song-list mb-4">
             <h4>Now Playing:</h4>
             <ListGroupItem className="song">
-              <span>{this.props.currentSong.title}</span>
-              <div className="float-right">
+              {song.artwork && <img className="song-art mr-2" src={song.artwork} alt={song.title} />}
+
+              <div className="song-info">
+                <b>{song.title}</b>
+                <br />
+                {song.artist}
+              </div>
+
+              <div className="song-voting">
                 <Button
                   color="primary"
                   onClick={

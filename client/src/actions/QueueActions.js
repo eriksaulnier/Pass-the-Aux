@@ -1,9 +1,9 @@
 import { ADD_SONG, REMOVE_SONG, VOTE_SONG, UPDATE_QUEUE, RESET_QUEUE } from './Types';
 import { emit } from '../utils/Socket';
 
-export const addSong = songTitle => {
+export const addSong = songData => {
   return () => {
-    emit(ADD_SONG, songTitle);
+    emit(ADD_SONG, songData);
   };
 };
 
