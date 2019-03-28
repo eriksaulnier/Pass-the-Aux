@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Input, Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import { addSong } from '../../actions/QueueActions';
-import { searchSongs, refreshToken } from '../../actions/SpotifyActions';
+import { searchSongs } from '../../actions/SpotifyActions';
 
 export class AddSong extends Component {
   constructor(props) {
     super(props);
-
-    // TODO: this is temporary
-    this.props.refreshToken();
 
     // initialize component state
     this.state = {
@@ -40,8 +37,6 @@ export class AddSong extends Component {
     if (!songData) {
       console.log('You must select a song!');
     }
-
-    console.log(songData);
 
     // submit the niew song to the queue
     this.props.addSong({
@@ -96,8 +91,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   addSong: songTitle => dispatch(addSong(songTitle)),
-  searchSongs: (query, token) => dispatch(searchSongs(query, token)),
-  refreshToken: () => dispatch(refreshToken())
+  searchSongs: (query, token) => dispatch(searchSongs(query, token))
 });
 
 export default connect(

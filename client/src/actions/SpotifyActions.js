@@ -19,7 +19,7 @@ export const searchSongs = (query, token) => {
     // use api to search for tracks
     spotify.searchTracks(query, { limit: 6 }, (err, data) => {
       // dispatch search results
-      if (data.tracks.items.length > 0) {
+      if (!err && data.tracks.items.length > 0) {
         dispatch({
           type: SPOTIFY_SEARCH_SUCCESS,
           payload: data.tracks.items
