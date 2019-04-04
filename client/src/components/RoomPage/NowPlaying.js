@@ -3,11 +3,17 @@ import { connect } from 'react-redux';
 import { Button, ListGroup, ListGroupItem } from 'reactstrap';
 import { MdPlayArrow, MdPause, MdSkipNext } from 'react-icons/md';
 import { playSong, pauseSong, skipSong } from '../../actions/PlaybackActions';
+import Authenticate from '../../utils/Auth';
 
 export class NowPlaying extends Component {
   // handler for skipping the current song
   skipSong = () => {
     this.props.skipSong();
+  };
+
+  // checks if the current user is owner
+  isOwner = () => {
+    return Authenticate(this.props.ownerId);
   };
 
   render() {
@@ -31,7 +37,7 @@ export class NowPlaying extends Component {
                   color="primary"
                   className="btn-play"
                   onClick={
-                    this.props.isPlaying
+                    this.props.isPlaying && this.isOwner()
                       ? () => this.props.pauseSong(this.props.currentSong._id)
                       : () => this.props.playSong(this.props.currentSong._id)
                   }
@@ -58,7 +64,8 @@ export class NowPlaying extends Component {
 const mapStateToProps = state => {
   return {
     currentSong: state.playbackReducer.currentSong,
-    isPlaying: state.playbackReducer.isPlaying
+    isPlaying: state.playbackReducer.isPlaying,
+    ownerId: state.roomReducer.ownerId
   };
 };
 

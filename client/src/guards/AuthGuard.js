@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Cookies from 'js-cookie';
+import Authenticate from '../utils/Auth';
 
 class AuthGuard extends Component {
   isOwner() {
-    console.log(Cookies.get('user_id'), this.props.ownerId);
-    return Cookies.get('user_id') === this.props.ownerId;
+    return Authenticate(this.props.ownerId);
   }
 
   render() {
