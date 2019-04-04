@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Input, Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
+import { Input, Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Badge } from 'reactstrap';
 import { addSong } from '../../actions/QueueActions';
 import { searchSongs } from '../../actions/SpotifyActions';
 
@@ -43,7 +43,8 @@ export class AddSong extends Component {
       title: songData.name,
       artist: songData.artists[0] ? songData.artists[0].name : null,
       artwork: songData.album ? songData.album.images[0].url : null,
-      spotifyUri: songData.uri
+      spotifyUri: songData.uri,
+      explicit: songData.explicit
     });
 
     // hide the suggestion dropdown and reset input
@@ -70,6 +71,11 @@ export class AddSong extends Component {
               {this.props.searchResults.map(song => (
                 <DropdownItem key={song.id} onClick={() => this.handleSubmit(song)}>
                   <b>{song.name}</b>
+                  {song.explicit ? (
+                    <Badge className="ml-2" color="dark">
+                      EXPLICIT
+                    </Badge>
+                  ) : null}
                   <br />
                   {song.artists[0].name}
                 </DropdownItem>

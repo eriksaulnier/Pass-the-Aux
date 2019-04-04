@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, ListGroup, ListGroupItem } from 'reactstrap';
+import { Button, ListGroup, ListGroupItem, Badge } from 'reactstrap';
 import { MdPlayArrow, MdPause, MdSkipNext } from 'react-icons/md';
 import { playSong, pauseSong, skipSong } from '../../actions/PlaybackActions';
 import Authenticate from '../../utils/Auth';
@@ -28,6 +28,11 @@ export class NowPlaying extends Component {
 
               <div className="song-info">
                 <b>{song.title}</b>
+                {song.explicit ? (
+                  <Badge className="ml-2" color="dark">
+                    EXPLICIT
+                  </Badge>
+                ) : null}
                 <br />
                 {song.artist}
               </div>

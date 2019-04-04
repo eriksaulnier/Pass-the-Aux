@@ -8,6 +8,7 @@ const SongSchema = new Schema({
   artwork: Schema.Types.String,
   spotifyUri: { type: Schema.Types.String, required: true },
   currentVote: { type: Schema.Types.Number, default: 0 },
+  explicit: { type: Schema.Types.Boolean, required: true },
   created: { type: Date, default: Date.now }
 });
 
@@ -16,9 +17,9 @@ const RoomSchema = new Schema(
     joinCode: { type: Schema.Types.String, required: true },
     owner: { type: Schema.Types.String, required: true },
     participants: [{ type: Schema.Types.String, default: [] }],
+    isPlaying: { type: Schema.Types.Boolean, default: false },
     currentSong: SongSchema,
-    queue: [SongSchema],
-    isPlaying: { type: Schema.Types.Boolean, default: false }
+    queue: [SongSchema]
   },
   {
     timestamps: true

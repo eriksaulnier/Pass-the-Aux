@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, ButtonGroup, ListGroup, ListGroupItem } from 'reactstrap';
+import { Button, ButtonGroup, ListGroup, ListGroupItem, Badge } from 'reactstrap';
 import { MdKeyboardArrowUp, MdKeyboardArrowDown, MdClose } from 'react-icons/md';
 import { removeSong, voteSong } from '../../actions/QueueActions';
 import AuthGuard from '../../guards/AuthGuard';
@@ -54,6 +54,11 @@ export class SongQueue extends Component {
 
                 <div className="song-info">
                   <b>{song.title}</b>
+                  {song.explicit ? (
+                    <Badge className="ml-2" color="dark">
+                      EXPLICIT
+                    </Badge>
+                  ) : null}
                   <br />
                   {song.artist}
                 </div>
