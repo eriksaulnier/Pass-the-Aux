@@ -10,7 +10,6 @@ const RoomSchema = new Schema(
   {
     joinCode: { type: Schema.Types.String, required: true },
     owner: { type: Schema.Types.String, required: true },
-    participants: [{ type: Schema.Types.String, default: [] }],
     isPlaying: { type: Schema.Types.Boolean, default: false },
     currentSong: SongSchema,
     queue: [SongSchema]

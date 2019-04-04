@@ -41,30 +41,20 @@ module.exports = {
       // find the room using service function
       this.findRoom(joinCode).then(
         room => {
-          // add the user to the room
-          Room.findOneAndUpdate(
-            { _id: room._id },
-            { $push: { participants: socket.id } },
-            { new: true },
-            (err, doc) => {
-              if (err) reject(err);
+          // set the socket's room
+          socket.room = room.joinCode;
 
-              // set the socket's room
-              socket.room = room.joinCode;
+          // join the appropriate socket
+          socket.join(room.joinCode);
 
-              // join the appropriate socket
-              socket.join(room.joinCode);
+          // emit room information
+          socket.emit('ROOM_INFO', room);
 
-              // emit room information
-              socket.emit('ROOM_INFO', doc);
+          // emit current queue and song to new user
+          socket.emit('UPDATE_QUEUE', room.getSortedQueue());
+          socket.emit('UPDATE_CURRENT_SONG', room.currentSong);
 
-              // emit current queue and song to new user
-              socket.emit('UPDATE_QUEUE', doc.getSortedQueue());
-              socket.emit('UPDATE_CURRENT_SONG', doc.currentSong);
-
-              resolve(doc);
-            }
-          );
+          resolve(room);
         },
         err => {
           reject(err);
@@ -78,23 +68,13 @@ module.exports = {
       // find the room using service function
       this.findRoom(socket.room).then(
         room => {
-          // add the user to the room
-          Room.findOneAndUpdate(
-            { _id: room._id },
-            { $pull: { participants: socket.id } },
-            { new: true },
-            (err, doc) => {
-              if (err) reject(err);
+          // leave the appropriate socket
+          socket.leave(room.joinCode);
 
-              // leave the appropriate socket
-              socket.leave(room.joinCode);
+          // clear the socket's storage
+          socket.room = null;
 
-              // clear the socket's storage
-              socket.room = null;
-
-              resolve(doc);
-            }
-          );
+          resolve(room);
         },
         err => {
           reject(err);
