@@ -58,8 +58,9 @@ module.exports = {
               // emit room information
               socket.emit('ROOM_INFO', doc);
 
-              // emit current queue to new user
+              // emit current queue and song to new user
               socket.emit('UPDATE_QUEUE', doc.getSortedQueue());
+              socket.emit('UPDATE_CURRENT_SONG', doc.currentSong);
 
               resolve(doc);
             }

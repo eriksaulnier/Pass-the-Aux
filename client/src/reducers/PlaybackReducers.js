@@ -1,4 +1,4 @@
-import { ROOM_INFO, UPDATE_QUEUE, RESET_QUEUE, PLAY_SONG, PAUSE_SONG, SKIP_SONG } from '../actions/Types';
+import { ROOM_INFO, RESET_QUEUE, PLAY_SONG, PAUSE_SONG, SKIP_SONG, UPDATE_CURRENT_SONG } from '../actions/Types';
 
 const initialState = {
   currentSong: null,
@@ -9,11 +9,8 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case ROOM_INFO:
       return Object.assign({}, state, {
-        isPlaying: action.payload.isPlaying
-      });
-    case UPDATE_QUEUE:
-      return Object.assign({}, state, {
-        currentSong: action.payload.length > 0 ? action.payload[0] : null
+        isPlaying: action.payload.isPlaying,
+        currentSong: action.payload.currentSong
       });
     case RESET_QUEUE:
       return Object.assign({}, state, {
@@ -30,6 +27,10 @@ export default (state = initialState, action) => {
     case SKIP_SONG:
       return Object.assign({}, state, {
         currentSong: null
+      });
+    case UPDATE_CURRENT_SONG:
+      return Object.assign({}, state, {
+        currentSong: action.payload
       });
     default:
       return state;

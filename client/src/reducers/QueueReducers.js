@@ -10,7 +10,7 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_QUEUE:
       return Object.assign({}, state, {
-        queue: action.payload.slice(1)
+        queue: action.payload
       });
     case VOTE_SONG:
       return Object.assign({}, state, {

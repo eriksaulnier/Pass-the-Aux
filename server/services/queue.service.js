@@ -15,6 +15,12 @@ module.exports = {
           Room.findOneAndUpdate({ _id: room._id }, { $push: { queue: song } }, { new: true }, (err, doc) => {
             if (err) reject(err);
 
+            // if the queue is empty, set this song to the current song
+            if (!doc.currentSong) {
+              doc.nextSong();
+              io.sockets.in(room.joinCode).emit('UPDATE_CURRENT_SONG', doc.currentSong);
+            }
+
             // emit the updated queue to the room
             io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', doc.getSortedQueue());
 

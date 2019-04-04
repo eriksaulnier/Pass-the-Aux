@@ -10,8 +10,8 @@ module.exports = {
           // update the song's current vote
           Room.findOneAndUpdate(
             // eslint-disable-next-line quote-props
-            { _id: room._id, 'queue._id': payload.songId },
-            { $set: { 'queue.$.nowPlaying': true, isPlaying: true } },
+            { _id: room._id },
+            { $set: { isPlaying: true } },
             { new: true },
             (err, doc) => {
               if (err) reject(err);
@@ -38,7 +38,7 @@ module.exports = {
           // update the song's current vote
           Room.findOneAndUpdate(
             // eslint-disable-next-line quote-props
-            { _id: room._id, 'queue._id': payload.songId },
+            { _id: room._id },
             { $set: { isPlaying: false } },
             { new: true },
             (err, doc) => {
@@ -63,21 +63,14 @@ module.exports = {
       // find the room using service function
       roomService.findRoom(socket.room).then(
         room => {
-          // update the song's current vote
-          Room.findOneAndUpdate(
-            // eslint-disable-next-line quote-props
-            { _id: room._id, 'queue._id': payload.songId },
-            { $set: { 'queue.$.nowPlaying': false, 'queue.$.playedAt': Date.now() } },
-            { new: true },
-            (err, doc) => {
-              if (err) reject(err);
+          // skip to the next song
+          room.nextSong();
+          console.log(room.getSortedQueue());
+          // emit the updated queue to the room
+          io.sockets.in(room.joinCode).emit('UPDATE_CURRENT_SONG', room.currentSong);
+          io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', room.getSortedQueue());
 
-              // emit the updated queue to the room
-              io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', doc.getSortedQueue());
-
-              resolve(doc);
-            }
-          );
+          resolve(room);
         },
         err => {
           reject(err);
