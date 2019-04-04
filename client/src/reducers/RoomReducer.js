@@ -1,4 +1,13 @@
-import { JOIN_ROOM_START, JOIN_ROOM_SUCCESS, JOIN_ROOM_ERROR, LEAVE_ROOM } from '../actions/Types';
+import Cookies from 'js-cookie';
+import {
+  JOIN_ROOM_START,
+  JOIN_ROOM_SUCCESS,
+  JOIN_ROOM_ERROR,
+  CREATE_ROOM_SUCCESS,
+  CREATE_ROOM_ERROR,
+  ROOM_INFO,
+  LEAVE_ROOM
+} from '../actions/Types';
 
 const initialState = {
   room: null,
@@ -16,11 +25,26 @@ export default (state = initialState, action) => {
     case JOIN_ROOM_SUCCESS:
       // set the room code in the store
       return Object.assign({}, state, {
-        room: action.payload
+        room: action.payload.joinCode
       });
     case JOIN_ROOM_ERROR:
       console.error(action.payload);
       return state;
+    case CREATE_ROOM_SUCCESS:
+      // set the owner id
+      Cookies.set('user_id', action.payload.owner, { path: '/' });
+
+      // set the room code in the store
+      return Object.assign({}, state, {
+        room: action.payload.joinCode
+      });
+    case CREATE_ROOM_ERROR:
+      console.error(action.payload);
+      return state;
+    case ROOM_INFO:
+      return Object.assign({}, state, {
+        ownerId: action.payload.owner
+      });
     case LEAVE_ROOM:
       // reset back to the initial state
       return initialState;

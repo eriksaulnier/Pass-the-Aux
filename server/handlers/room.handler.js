@@ -9,7 +9,7 @@ module.exports = socket => {
           // if it does exist join it
           roomService.joinRoom(socket, room.joinCode).then(
             res => {
-              socket.emit('JOIN_ROOM_SUCCESS', res.joinCode);
+              socket.emit('JOIN_ROOM_SUCCESS', res);
               console.log(`user joined room '${res.joinCode}'`);
             },
             err => {
@@ -34,11 +34,11 @@ module.exports = socket => {
           // if it does not exist yet create the room
           roomService.createRoom(socket, payload).then(
             res => {
-              socket.emit('JOIN_ROOM_SUCCESS', res.joinCode);
+              socket.emit('CREATE_ROOM_SUCCESS', res);
               console.log(`new room '${res.joinCode}' created`);
             },
             err => {
-              socket.emit('JOIN_ROOM_ERROR', err);
+              socket.emit('CREATE_ROOM_ERROR', err);
               console.error(err);
             }
           );

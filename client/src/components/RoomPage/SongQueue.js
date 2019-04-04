@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button, ButtonGroup, ListGroup, ListGroupItem } from 'reactstrap';
 import { MdKeyboardArrowUp, MdKeyboardArrowDown, MdClose } from 'react-icons/md';
 import { removeSong, voteSong } from '../../actions/QueueActions';
+import AuthGuard from '../../guards/AuthGuard';
 
 export class SongQueue extends Component {
   // returns the song's current vote (-1 or 1)
@@ -73,9 +74,11 @@ export class SongQueue extends Component {
                       <MdKeyboardArrowDown size="1.5em" />
                     </Button>
                   </ButtonGroup>
-                  <Button className="ml-3" color="danger" onClick={() => this.removeSong(song._id)}>
-                    <MdClose size="1.2em" />
-                  </Button>
+                  <AuthGuard>
+                    <Button className="ml-3" color="danger" onClick={() => this.removeSong(song._id)}>
+                      <MdClose size="1.2em" />
+                    </Button>
+                  </AuthGuard>
                 </div>
               </ListGroupItem>
             ))}

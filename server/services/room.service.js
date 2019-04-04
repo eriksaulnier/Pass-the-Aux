@@ -56,9 +56,7 @@ module.exports = {
               socket.join(room.joinCode);
 
               // emit room information
-              socket.emit('ROOM_INFO', {
-                isPlaying: doc.isPlaying
-              });
+              socket.emit('ROOM_INFO', doc);
 
               // emit current queue to new user
               socket.emit('UPDATE_QUEUE', doc.getSortedQueue());

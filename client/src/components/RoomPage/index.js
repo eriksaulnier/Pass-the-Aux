@@ -5,6 +5,7 @@ import { Container, Button } from 'reactstrap';
 import { leaveRoom } from '../../actions/RoomActions';
 import { resetQueue } from '../../actions/QueueActions';
 import { refreshToken } from '../../actions/SpotifyActions';
+import AuthGuard from '../../guards/AuthGuard';
 import SongQueueComponent from './SongQueue';
 import AddSongComponent from './AddSong';
 import NowPlayingComponent from './NowPlaying';
@@ -45,9 +46,11 @@ class RoomPage extends Component {
           <Button color="secondary" onClick={this.leaveRoom}>
             Leave Room
           </Button>
-          <Button color="danger" onClick={this.resetQueue}>
-            Reset Queue
-          </Button>
+          <AuthGuard>
+            <Button color="danger" onClick={this.resetQueue}>
+              Reset Queue
+            </Button>
+          </AuthGuard>
         </div>
         <AddSongComponent />
         <NowPlayingComponent />
