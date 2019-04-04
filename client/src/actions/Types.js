@@ -1,5 +1,6 @@
 export const JOIN_ROOM_START = 'JOIN_ROOM_START';
-export const JOIN_ROOM_END = 'JOIN_ROOM_END';
+export const JOIN_ROOM_SUCCESS = 'JOIN_ROOM_SUCCESS';
+export const JOIN_ROOM_ERROR = 'JOIN_ROOM_ERROR';
 export const CREATE_ROOM_START = 'CREATE_ROOM_START';
 export const LEAVE_ROOM = 'LEAVE_ROOM';
 export const ROOM_INFO = 'ROOM_INFO';
