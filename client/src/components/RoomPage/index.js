@@ -4,13 +4,18 @@ import { push } from 'connected-react-router';
 import { Container, Button } from 'reactstrap';
 import { leaveRoom } from '../../actions/RoomActions';
 import { resetQueue } from '../../actions/QueueActions';
+import { refreshToken } from '../../actions/SpotifyActions';
 import SongQueueComponent from './SongQueue';
 import AddSongComponent from './AddSong';
 import NowPlayingComponent from './NowPlaying';
+import './RoomPage.css';
 
 class RoomPage extends Component {
   constructor(props) {
     super(props);
+
+    // setup spotify api connection
+    this.props.connectSpotify();
 
     // if the user is not in a room route back to the main page
     if (!this.props.room) {
@@ -61,7 +66,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   route: path => dispatch(push(path)),
   leaveRoom: () => dispatch(leaveRoom()),
-  resetQueue: () => dispatch(resetQueue())
+  resetQueue: () => dispatch(resetQueue()),
+  connectSpotify: () => dispatch(refreshToken())
 });
 
 export default connect(

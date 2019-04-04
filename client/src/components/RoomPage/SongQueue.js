@@ -49,8 +49,15 @@ export class SongQueue extends Component {
           <ListGroup className="song-list">
             {this.props.queue.map(song => (
               <ListGroupItem className="song" key={song._id}>
-                <span>{song.title}</span>
-                <div className="float-right">
+                {song.artwork && <img className="song-art mr-2" src={song.artwork} alt={song.title} />}
+
+                <div className="song-info">
+                  <b>{song.title}</b>
+                  <br />
+                  {song.artist}
+                </div>
+
+                <div className="song-voting">
                   <span>{song.currentVote}</span>
                   <ButtonGroup className="ml-2" vertical>
                     <Button

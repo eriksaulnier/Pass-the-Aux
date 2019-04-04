@@ -19,6 +19,9 @@ export const init = store => {
 
   // handle reconnecting to room after disconnect
   socket.on('connect', function() {
+    console.log('connected to server');
+
+    // if there is a room in session storage, reconnect to it
     const store = configureStore();
     const state = store.getState();
     if (state.roomReducer.room) {

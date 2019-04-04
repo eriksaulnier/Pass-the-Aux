@@ -1,8 +1,8 @@
 const queueService = require('../services/queue.service');
 
 module.exports = (io, socket) => {
-  socket.on('ADD_SONG', songTitle => {
-    queueService.addSong(io, socket, songTitle).then(
+  socket.on('ADD_SONG', songData => {
+    queueService.addSong(io, socket, songData).then(
       () => {
         // console.log(`song added to '${socket.room}'`);
       },
