@@ -8,7 +8,11 @@ class AuthGuard extends Component {
   }
 
   render() {
-    return <div>{this.props.ownerId && this.isOwner() ? this.props.children : null}</div>;
+    if (this.props.ownerId && this.isOwner()) {
+      return this.props.children;
+    } else {
+      return null;
+    }
   }
 }
 
