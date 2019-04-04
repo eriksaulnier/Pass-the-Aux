@@ -2,16 +2,10 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const SongSchema = new Schema({
-  title: { type: Schema.Types.String, required: true },
-  artist: Schema.Types.String,
-  artwork: Schema.Types.String,
-  spotifyUri: { type: Schema.Types.String, required: true },
-  currentVote: { type: Schema.Types.Number, default: 0 },
-  explicit: { type: Schema.Types.Boolean, required: true },
-  created: { type: Date, default: Date.now }
-});
+// fetch the song schema from the other file
+const SongSchema = require('./song').schema;
 
+// create the room schema structure
 const RoomSchema = new Schema(
   {
     joinCode: { type: Schema.Types.String, required: true },
