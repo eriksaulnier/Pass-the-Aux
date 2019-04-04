@@ -48,7 +48,7 @@ export class NowPlaying extends Component {
                 <Button
                   className="ml-3"
                   color="secondary"
-                  onClick={() => this.props.skipSong(this.props.currentSong._id)}
+                  onClick={this.isOwner() ? () => this.props.skipSong(this.props.currentSong._id) : null}
                 >
                   <MdSkipNext size="1.4em" />
                 </Button>
