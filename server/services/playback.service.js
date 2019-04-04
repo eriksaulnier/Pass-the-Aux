@@ -65,7 +65,7 @@ module.exports = {
         room => {
           // skip to the next song
           room.nextSong();
-          console.log(room.getSortedQueue());
+
           // emit the updated queue to the room
           io.sockets.in(room.joinCode).emit('UPDATE_CURRENT_SONG', room.currentSong);
           io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', room.getSortedQueue());

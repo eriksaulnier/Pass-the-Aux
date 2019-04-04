@@ -30,7 +30,7 @@ RoomSchema.methods.nextSong = function() {
   // if there are songs in the queue then set the next song
   if (this.queue.length > 0) {
     // pop the next song off the top of the sorted queue
-    const nextSong = this.getSortedQueue().pop();
+    const nextSong = this.getSortedQueue().shift();
 
     // set the current song value
     this.currentSong = nextSong;
