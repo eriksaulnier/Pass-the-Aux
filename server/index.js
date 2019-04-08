@@ -28,6 +28,10 @@ mongoose.connect(process.env.MONGO_URI).then(
 // set up cookie parser
 app.use(cookieParser());
 
+// handle spotify authorization routes
+app.get('/spotify_login', spotifyService.handleAuthRequest);
+app.get('/spotify_login/cb', spotifyService.handleAuthCallback);
+
 // if running in production, serve react client
 if (process.env.NODE_ENV === 'production') {
   // serve static files from the react app
@@ -38,10 +42,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
   });
 }
-
-// handle spotify authorization routes
-app.get('/spotify_login', spotifyService.handleAuthRequest);
-app.get('/spotify_login/cb', spotifyService.handleAuthCallback);
 
 // start the express server
 const port = process.env.PORT || 5000;
