@@ -35,6 +35,7 @@ class StartPage extends Component {
 
     // if there is a hash present then update the access tokens
     if (Object.keys(hash).length !== 0) {
+      // store tokens in the store
       this.props.updateTokenStorage(hash);
 
       // get the current user's info
@@ -53,6 +54,22 @@ class StartPage extends Component {
   toggleIsCreating = () => {
     const isCreatingRoom = this.state.creatingRoom;
     this.setState({ creatingRoom: !isCreatingRoom });
+  };
+
+  // start authentication process with spotify
+  openSpotifyAuthPopup = () => {
+    // request an authentication url from the server
+    fetch('/spotify_login')
+      .then(res => res.json()) // parse response
+      .then(
+        data => {
+          // redirect to the returned url
+          window.location = data.url;
+        },
+        err => {
+          console.error(err);
+        }
+      );
   };
 
   render() {
@@ -83,7 +100,7 @@ class StartPage extends Component {
                     </Button>
                   </div>
                 ) : (
-                  <Button color="secondary" href="http://localhost:5000/spotify_login">
+                  <Button color="secondary" onClick={this.openSpotifyAuthPopup}>
                     <FaSpotify className="mr-2" />
                     Login to Create Room
                   </Button>

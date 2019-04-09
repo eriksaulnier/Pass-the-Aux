@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const SpotifyWebApi = require('spotify-web-api-node');
 const querystring = require('querystring');
 
@@ -46,7 +44,7 @@ module.exports = {
     const authUrl = spotifyApi.createAuthorizeURL(scopes, state);
 
     // redirect user to spotify authorization url
-    res.redirect(authUrl);
+    res.send({ url: authUrl });
   },
 
   handleAuthCallback(req, res) {
