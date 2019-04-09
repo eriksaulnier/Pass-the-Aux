@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Container, Row, Col, Button } from 'reactstrap';
+import { FaSpotify } from 'react-icons/fa';
 import { joinRoom } from '../../actions/RoomActions';
+import { updateTokenStorage, getCurrentUser } from '../../actions/SpotifyActions';
 import JoinRoomComponent from './JoinRoom';
 import CreateRoomComponent from './CreateRoom';
 
@@ -16,6 +18,27 @@ class StartPage extends Component {
     // if there is a room already in the store, attempt to join it
     if (this.props.room) {
       this.props.joinRoom(this.props.room);
+    }
+
+    // decode the url hash
+    const hash = window.location.hash
+      .substring(1)
+      .split('&')
+      .reduce(function(initial, item) {
+        if (item) {
+          const parts = item.split('=');
+          initial[parts[0]] = decodeURIComponent(parts[1]);
+        }
+        return initial;
+      }, {});
+    window.location.hash = '';
+
+    // if there is a hash present then update the access tokens
+    if (Object.keys(hash).length !== 0) {
+      this.props.updateTokenStorage(hash);
+
+      // get the current user's info
+      this.props.getCurrentUser(hash.access_token);
     }
   }
 
@@ -49,9 +72,22 @@ class StartPage extends Component {
               <div>
                 <JoinRoomComponent />
                 <p className="mt-4">OR</p>
-                <Button color="secondary" onClick={this.toggleIsCreating}>
-                  Create a New Room
-                </Button>
+                {this.props.userId ? (
+                  <div>
+                    <p>
+                      Logged in as
+                      <b>{` ${this.props.userId}`}</b>
+                    </p>
+                    <Button color="secondary" onClick={this.toggleIsCreating}>
+                      Create a New Room
+                    </Button>
+                  </div>
+                ) : (
+                  <Button color="secondary" href="http://localhost:5000/spotify_login">
+                    <FaSpotify className="mr-2" />
+                    Login to Create Room
+                  </Button>
+                )}
               </div>
             )}
           </Col>
@@ -63,13 +99,16 @@ class StartPage extends Component {
 
 const mapStateToProps = state => {
   return {
-    room: state.roomReducer.room
+    room: state.roomReducer.room,
+    userId: state.spotifyReducer.userId
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   route: path => dispatch(push(path)),
-  joinRoom: room => dispatch(joinRoom(room))
+  joinRoom: room => dispatch(joinRoom(room)),
+  updateTokenStorage: tokens => dispatch(updateTokenStorage(tokens)),
+  getCurrentUser: token => dispatch(getCurrentUser(token))
 });
 
 export default connect(

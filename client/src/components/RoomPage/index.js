@@ -4,7 +4,7 @@ import { push } from 'connected-react-router';
 import { Container, Button } from 'reactstrap';
 import { leaveRoom } from '../../actions/RoomActions';
 import { resetQueue } from '../../actions/QueueActions';
-import { refreshToken } from '../../actions/SpotifyActions';
+import { getAccessToken } from '../../actions/SpotifyActions';
 import AuthGuard from '../../guards/AuthGuard';
 import SongQueueComponent from './SongQueue';
 import AddSongComponent from './AddSong';
@@ -15,11 +15,13 @@ class RoomPage extends Component {
   constructor(props) {
     super(props);
 
-    // setup spotify api connection
-    this.props.connectSpotify();
+    // setup spotify api connection if no access code is present
+    if (!this.props.accessToken) {
+      this.props.connectSpotify();
+    }
 
     // if the user is not in a room route back to the main page
-    if (!this.props.room) {
+    if (!props.room) {
       this.props.route('/');
     }
   }
@@ -62,7 +64,8 @@ class RoomPage extends Component {
 
 const mapStateToProps = state => {
   return {
-    room: state.roomReducer.room
+    room: state.roomReducer.room,
+    accessToken: state.spotifyReducer.accessToken
   };
 };
 
@@ -70,7 +73,7 @@ const mapDispatchToProps = dispatch => ({
   route: path => dispatch(push(path)),
   leaveRoom: () => dispatch(leaveRoom()),
   resetQueue: () => dispatch(resetQueue()),
-  connectSpotify: () => dispatch(refreshToken())
+  connectSpotify: () => dispatch(getAccessToken())
 });
 
 export default connect(

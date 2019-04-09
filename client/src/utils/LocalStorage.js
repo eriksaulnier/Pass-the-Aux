@@ -1,7 +1,7 @@
-export function loadSessionState() {
+export function loadLocalState() {
   try {
     // load the saved state from storage
-    const serializedState = sessionStorage.getItem('state');
+    const serializedState = localStorage.getItem('state');
     if (serializedState == null) {
       return undefined;
     }
@@ -11,11 +11,11 @@ export function loadSessionState() {
   }
 }
 
-export function saveSessionState(state) {
+export function saveLocalState(state) {
   try {
     // fetch and serialize the state for storage
     const serializedState = JSON.stringify(state);
-    sessionStorage.setItem('state', serializedState);
+    localStorage.setItem('state', serializedState);
   } catch (err) {
     // ignore this error
     console.log(err);

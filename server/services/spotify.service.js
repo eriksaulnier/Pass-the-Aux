@@ -4,7 +4,7 @@ const querystring = require('querystring');
 // key for storing spotify authoriation state as a cookie
 const stateKey = 'spotify_auth_state';
 
-// function for creating a ramdom state string
+// function for creating a random state string for authentication
 const generateRandomString = function(length) {
   let text = '';
   const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -15,14 +15,15 @@ const generateRandomString = function(length) {
   return text;
 };
 
+// create the spotify api client using the client credentials
+const spotifyApi = new SpotifyWebApi({
+  clientId: process.env.SPOTIFY_CLIENT_ID,
+  clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+  redirectUri: process.env.SPOTIFY_REDIRECT_URI
+});
+
 module.exports = {
   handleAuthRequest(req, res) {
-    // create the spotify api client
-    const spotifyApi = new SpotifyWebApi({
-      redirectUri: process.env.SPOTIFY_REDIRECT_URI,
-      clientId: process.env.SPOTIFY_CLIENT_ID
-    });
-
     // generate random state string and store it as a cookie
     const state = generateRandomString(16);
     res.cookie(stateKey, state);
@@ -47,18 +48,18 @@ module.exports = {
   },
 
   handleAuthCallback(req, res) {
-    // fetch variables from response
+    // fetch parameters from response
     const code = req.query.code || null;
     const state = req.query.state || null;
 
-    // fetch the state that was stored as a cookie
+    // fetch the state that was previously stored as a cookie
     const storedState = req.cookies ? req.cookies[stateKey] : null;
 
     // make sure the returned state matches the one we stored
     if (state === null || state !== storedState) {
       // redirect back to client with an error
       res.redirect(
-        `/#${querystring.stringify({
+        `http://localhost:3000/#${querystring.stringify({
           error: 'state_mismatch'
         })}`
       );
@@ -66,28 +67,54 @@ module.exports = {
       // clear the stored state
       res.clearCookie(stateKey);
 
-      // TODO
-      res.send(code);
-      console.log('SUCCESSSSSSSS');
+      // use the authorization code to get access token
+      spotifyApi.authorizationCodeGrant(code).then(
+        response => {
+          // redirect back to the client with tokens
+          res.redirect(
+            `http://localhost:3000/#${querystring.stringify({
+              access_token: response.body.access_token,
+              refresh_token: response.body.refresh_token,
+              expires_in: response.body.expires_in
+            })}`
+          );
+        },
+        err => {
+          // redirect back to client with an error
+          res.redirect(
+            `http://localhost:3000/#${querystring.stringify({
+              error: 'refresh_failed'
+            })}`
+          );
+        }
+      );
     }
   },
 
   generateAccessToken() {
     return new Promise((resolve, reject) => {
-      // configure the spotify api with client credentials
-      const spotifyApi = new SpotifyWebApi({
-        clientId: process.env.SPOTIFY_CLIENT_ID,
-        clientSecret: process.env.SPOTIFY_CLIENT_SECRET
-      });
-
       // generate an access token
       spotifyApi.clientCredentialsGrant().then(
-        data => {
+        res => {
           // if successful, return body back to client
-          resolve(data.body);
+          resolve(res.body);
         },
         err => {
           // otherwise send error
+          reject(err);
+        }
+      );
+    });
+  },
+
+  refreshAccessToken(refreshToken) {
+    return new Promise((resolve, reject) => {
+      spotifyApi.setRefreshToken(refreshToken);
+      spotifyApi.refreshAccessToken().then(
+        res => {
+          resolve(res.body);
+        },
+        err => {
           reject(err);
         }
       );
