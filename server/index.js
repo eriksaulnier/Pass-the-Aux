@@ -28,15 +28,18 @@ mongoose.connect(process.env.MONGO_URI).then(
 // set up cookie parser
 app.use(cookieParser());
 
+// if running in production, serve static files
+if (process.env.NODE_ENV === 'production') {
+  // serve static files from the react app
+  app.use(express.static(path.join(__dirname, '../client/build')));
+}
+
 // handle spotify authorization routes
 app.get('/spotify_login', spotifyService.handleAuthRequest);
 app.get('/spotify_login/cb', spotifyService.handleAuthCallback);
 
 // if running in production, serve react client
 if (process.env.NODE_ENV === 'production') {
-  // serve static files from the react app
-  // app.use(express.static(path.join(__dirname, '../client/build')));
-
   // send back reacts index file.
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
