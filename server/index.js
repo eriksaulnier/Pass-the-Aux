@@ -35,7 +35,7 @@ app.get('/spotify_login/cb', spotifyService.handleAuthCallback);
 // if running in production, serve react client
 if (process.env.NODE_ENV === 'production') {
   // serve static files from the react app
-  app.use(express.static(path.join(__dirname, '../client/build')));
+  // app.use(express.static(path.join(__dirname, '../client/build')));
 
   // send back reacts index file.
   app.get('*', (req, res) => {
