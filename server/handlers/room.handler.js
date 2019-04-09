@@ -13,11 +13,12 @@ module.exports = socket => {
               console.log(`user joined room '${res.joinCode}'`);
             },
             err => {
+              socket.emit('JOIN_ROOM_ERROR', 'There was an unexpected error while joining room');
               console.error(err);
             }
           );
         } else {
-          console.log('Room does not exist!');
+          socket.emit('JOIN_ROOM_ERROR', 'Room could not be found');
         }
       },
       err => {
@@ -38,12 +39,12 @@ module.exports = socket => {
               console.log(`new room '${res.joinCode}' created`);
             },
             err => {
-              socket.emit('CREATE_ROOM_ERROR', err);
+              socket.emit('CREATE_ROOM_ERROR', 'There was an unexpected error while creating room');
               console.error(err);
             }
           );
         } else {
-          console.log('Room already exists!');
+          socket.emit('CREATE_ROOM_ERROR', 'That room code already exists!');
         }
       },
       err => {

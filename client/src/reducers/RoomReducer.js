@@ -31,7 +31,7 @@ export default (state = initialState, action) => {
 
     case JOIN_ROOM_ERROR:
       // handle error
-      console.error(action.payload);
+      alert(action.payload);
       return state;
 
     case CREATE_ROOM_SUCCESS:
@@ -42,7 +42,7 @@ export default (state = initialState, action) => {
 
     case CREATE_ROOM_ERROR:
       // handle error
-      console.error(action.payload);
+      alert(action.payload);
       return state;
 
     case ROOM_INFO:
