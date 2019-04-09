@@ -59,7 +59,7 @@ module.exports = {
     if (state === null || state !== storedState) {
       // redirect back to client with an error
       res.redirect(
-        `${process.env.CLIENT_URL}/#${querystring.stringify({
+        `${process.env.CLIENT_URL}#${querystring.stringify({
           error: 'state_mismatch'
         })}`
       );
@@ -72,7 +72,7 @@ module.exports = {
         response => {
           // redirect back to the client with tokens
           res.redirect(
-            `${process.env.CLIENT_URL}/#${querystring.stringify({
+            `${process.env.CLIENT_URL}#${querystring.stringify({
               access_token: response.body.access_token,
               refresh_token: response.body.refresh_token,
               expires_in: response.body.expires_in
@@ -82,7 +82,7 @@ module.exports = {
         err => {
           // redirect back to client with an error
           res.redirect(
-            `${process.env.CLIENT_URL}/#${querystring.stringify({
+            `${process.env.CLIENT_URL}#${querystring.stringify({
               error: 'refresh_failed'
             })}`
           );
