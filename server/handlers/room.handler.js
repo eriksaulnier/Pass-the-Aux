@@ -44,7 +44,7 @@ module.exports = socket => {
             }
           );
         } else {
-          socket.emit('CREATE_ROOM_ERROR', 'That room code already exists!');
+          socket.emit('CREATE_ROOM_ERROR', 'A room with that join code already exists!');
         }
       },
       err => {
