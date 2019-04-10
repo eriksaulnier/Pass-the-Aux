@@ -1,8 +1,4 @@
 const SpotifyWebApi = require('spotify-web-api-node');
-const querystring = require('querystring');
-
-// key for storing spotify authoriation state as a cookie
-const stateKey = 'spotify_auth_state';
 
 // function for creating a random state string for authentication
 const generateRandomString = function(length) {
@@ -26,7 +22,7 @@ module.exports = {
   handleAuthRequest(req, res) {
     // generate random state string and store it as a cookie
     const state = generateRandomString(16);
-    res.cookie(stateKey, state);
+    res.cookie('spotify_auth_state', state);
 
     // set up spotify permission scope array
     const scopes = [
@@ -47,63 +43,45 @@ module.exports = {
     res.send({ url: authUrl });
   },
 
-  handleAuthCallback(req, res) {
-    // fetch parameters from response
-    const code = req.query.code || null;
-    const state = req.query.state || null;
-
-    // fetch the state that was previously stored as a cookie
-    const storedState = req.cookies ? req.cookies[stateKey] : null;
-
-    // make sure the returned state matches the one we stored
-    if (state === null || state !== storedState) {
-      // redirect back to client with an error
-      res.redirect(
-        `${process.env.CLIENT_URL}#${querystring.stringify({
-          error: 'state_mismatch'
-        })}`
-      );
-    } else {
-      // clear the stored state
-      res.clearCookie(stateKey);
-
-      // use the authorization code to get access token
-      spotifyApi.authorizationCodeGrant(code).then(
-        response => {
-          // redirect back to the client with tokens
-          res.redirect(
-            `${process.env.CLIENT_URL}#${querystring.stringify({
-              access_token: response.body.access_token,
-              refresh_token: response.body.refresh_token,
-              expires_in: response.body.expires_in
-            })}`
-          );
-        },
-        err => {
-          // redirect back to client with an error
-          res.redirect(
-            `${process.env.CLIENT_URL}#${querystring.stringify({
-              error: 'refresh_failed'
-            })}`
-          );
-        }
-      );
-    }
-  },
-
-  generateAccessToken() {
+  generateAccessToken(socket, authCode) {
     return new Promise((resolve, reject) => {
-      // generate an access token
-      spotifyApi.clientCredentialsGrant().then(
-        res => {
-          // if successful, return body back to client
-          resolve(res.body);
-        },
-        err => {
-          // otherwise send error
-          reject(err);
-        }
-      );
+      if (authCode) {
+        // use the authorization code to get access token
+        spotifyApi.authorizationCodeGrant(authCode).then(
+          res => {
+            spotifyApi.setAccessToken(res.body.access_token);
+
+            // fetch the user's info and send it back to the client
+            spotifyApi.getMe().then(
+              result => {
+                socket.emit('SPOTIFY_USER_SUCCESS', result.body);
+              },
+              error => {
+                socket.emit('SPOTIFY_USER_ERROR', error);
+              }
+            );
+
+            // if successful, return response back to client
+            resolve(res.body);
+          },
+          err => {
+            // otherwise send error
+            reject(err);
+          }
+        );
+      } else {
+        // generate an access token using client credentials
+        spotifyApi.clientCredentialsGrant().then(
+          res => {
+            // if successful, return response back to client
+            resolve(res.body);
+          },
+          err => {
+            // otherwise send error
+            reject(err);
+          }
+        );
+      }
     });
   },
 

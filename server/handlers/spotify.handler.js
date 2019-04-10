@@ -1,9 +1,9 @@
 const spotifyService = require('../services/spotify.service');
 
 module.exports = socket => {
-  socket.on('SPOTIFY_TOKEN', () => {
-    // generate a new spotify api access token
-    spotifyService.generateAccessToken().then(
+  socket.on('SPOTIFY_REQUEST_TOKEN', authCode => {
+    // generate a new spotify api access token using client credentials
+    spotifyService.generateAccessToken(socket, authCode).then(
       res => {
         socket.emit('SPOTIFY_TOKEN_SUCCESS', res);
       },

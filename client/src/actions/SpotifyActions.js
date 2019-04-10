@@ -1,18 +1,19 @@
 import SpotifyAPI from 'spotify-web-api-js';
 import {
-  SPOTIFY_TOKEN,
+  SPOTIFY_REQUEST_TOKEN,
   SPOTIFY_SEARCH_SUCCESS,
   SPOTIFY_SEARCH_ERROR,
   SPOTIFY_TOKEN_SUCCESS,
   SPOTIFY_REFRESH_TOKEN,
-  SPOTIFY_USER_INFO
+  SPOTIFY_USER_SUCCESS,
+  SPOTIFY_USER_ERROR
 } from './Types';
 import { emit } from '../utils/Socket';
 
-// fetches a new access token from the server using client credentials
-export const getAccessToken = () => {
+// fetches a new access token from the server using optional auth code
+export const getAccessToken = authCode => {
   return () => {
-    emit(SPOTIFY_TOKEN);
+    emit(SPOTIFY_REQUEST_TOKEN, authCode);
   };
 };
 
@@ -53,7 +54,7 @@ export const searchSongs = (query, token) => {
       } else {
         dispatch({
           type: SPOTIFY_SEARCH_ERROR,
-          payload: res
+          payload: err
         });
       }
     });
@@ -73,12 +74,15 @@ export const getCurrentUser = token => {
     spotify.getMe().then(
       res => {
         dispatch({
-          type: SPOTIFY_USER_INFO,
+          type: SPOTIFY_USER_SUCCESS,
           payload: res
         });
       },
       err => {
-        console.error(err);
+        dispatch({
+          type: SPOTIFY_USER_ERROR,
+          payload: err
+        });
       }
     );
   };

@@ -13,12 +13,14 @@ export default function configureStore() {
   const persistedSessionState = loadSessionState();
   const persistedLocalState = loadLocalState();
 
+  // create the store
   const store = createStore(
     createRootReducer(history),
     { ...persistedSessionState, ...persistedLocalState },
     compose(applyMiddleware(routerMiddleware(history), thunk))
   );
 
+  // subscribe to change events
   store.subscribe(() => {
     const state = store.getState();
 

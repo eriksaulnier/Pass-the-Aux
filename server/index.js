@@ -34,9 +34,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 }
 
-// handle spotify authorization routes
+// set up spotify authorization route
 app.get('/spotify_login', spotifyService.handleAuthRequest);
-app.get('/spotify_login/cb', spotifyService.handleAuthCallback);
 
 // if running in production, serve react client
 if (process.env.NODE_ENV === 'production') {

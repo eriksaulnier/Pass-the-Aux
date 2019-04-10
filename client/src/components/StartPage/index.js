@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Container, Row, Col, Button } from 'reactstrap';
 import { FaSpotify } from 'react-icons/fa';
+import Cookie from 'js-cookie';
 import { joinRoom } from '../../actions/RoomActions';
-import { updateTokenStorage, getCurrentUser } from '../../actions/SpotifyActions';
+import { getAccessToken } from '../../actions/SpotifyActions';
 import JoinRoomComponent from './JoinRoom';
 import CreateRoomComponent from './CreateRoom';
+import { history } from '../../store';
 
 class StartPage extends Component {
   constructor(props) {
@@ -20,26 +22,25 @@ class StartPage extends Component {
       this.props.joinRoom(this.props.room);
     }
 
-    // decode the url hash
-    const hash = window.location.hash
-      .substring(1)
-      .split('&')
-      .reduce(function(initial, item) {
-        if (item) {
-          const parts = item.split('=');
-          initial[parts[0]] = decodeURIComponent(parts[1]);
-        }
-        return initial;
-      }, {});
-    window.location.hash = '';
+    // check if there is a query in the url
+    let query = history.location.search;
+    if (query) {
+      // parse the query to get parameters
+      query = query.substr(1);
+      const result = {};
+      query.split('&').forEach(function(part) {
+        const item = part.split('=');
+        result[item[0]] = decodeURIComponent(item[1]);
+      });
 
-    // if there is a hash present then update the access tokens
-    if (Object.keys(hash).length !== 0) {
-      // store tokens in the store
-      this.props.updateTokenStorage(hash);
+      // if there is a code present use it for auth
+      if (result.code && result.state === Cookie.get('spotify_auth_state')) {
+        Cookie.remove('spotify_auth_state');
+        this.props.getAccessToken(result.code);
+      }
 
-      // get the current user's info
-      this.props.getCurrentUser(hash.access_token);
+      // reset the url path
+      history.push('/');
     }
   }
 
@@ -117,15 +118,15 @@ class StartPage extends Component {
 const mapStateToProps = state => {
   return {
     room: state.roomReducer.room,
-    userId: state.spotifyReducer.userId
+    userId: state.spotifyReducer.userId,
+    accessToken: state.spotifyReducer.accessToken
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   route: path => dispatch(push(path)),
   joinRoom: room => dispatch(joinRoom(room)),
-  updateTokenStorage: tokens => dispatch(updateTokenStorage(tokens)),
-  getCurrentUser: token => dispatch(getCurrentUser(token))
+  getAccessToken: authCode => dispatch(getAccessToken(authCode))
 });
 
 export default connect(

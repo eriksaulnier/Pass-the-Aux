@@ -3,7 +3,8 @@ import {
   SPOTIFY_TOKEN_ERROR,
   SPOTIFY_SEARCH_SUCCESS,
   SPOTIFY_SEARCH_ERROR,
-  SPOTIFY_USER_INFO
+  SPOTIFY_USER_SUCCESS,
+  SPOTIFY_USER_ERROR
 } from '../actions/Types';
 
 const initialState = {
@@ -29,11 +30,16 @@ export default (state = initialState, action) => {
       console.error('Error refreshing access token');
       return state;
 
-    case SPOTIFY_USER_INFO:
+    case SPOTIFY_USER_SUCCESS:
       // store the current user id in the store
       return Object.assign({}, state, {
         userId: action.payload.id || null
       });
+
+    case SPOTIFY_USER_ERROR:
+      // handle error
+      console.error('Error fetching current user info');
+      return state;
 
     case SPOTIFY_SEARCH_SUCCESS:
       // store the search results in the store
