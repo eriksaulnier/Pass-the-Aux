@@ -6,7 +6,9 @@ const mongoose = require('mongoose');
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const cookieParser = require('cookie-parser');
 const socketEvents = require('./utils/sockets.js');
+const spotifyService = require('./services/spotify.service');
 
 // allow all origins when in development mode
 if (process.env.NODE_ENV === 'development') {
@@ -23,11 +25,20 @@ mongoose.connect(process.env.MONGO_URI).then(
   }
 );
 
-// if running in production, serve react client
+// set up cookie parser
+app.use(cookieParser());
+
+// if running in production, serve static files
 if (process.env.NODE_ENV === 'production') {
   // serve static files from the react app
   app.use(express.static(path.join(__dirname, '../client/build')));
+}
 
+// set up spotify authorization route
+app.get('/spotify_login', spotifyService.handleAuthRequest);
+
+// if running in production, serve react client
+if (process.env.NODE_ENV === 'production') {
   // send back reacts index file.
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));

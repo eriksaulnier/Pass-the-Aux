@@ -1,5 +1,6 @@
-import Cookies from 'js-cookie';
+import { loadLocalState } from './LocalStorage';
 
-export default userId => {
-  return Cookies.get('user_id') === userId;
+export default (userId, ownerId) => {
+  // check if the userId and ownerId match
+  return userId === ownerId;
 };

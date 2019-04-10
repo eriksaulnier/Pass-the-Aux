@@ -35,15 +35,8 @@ class CreateRoom extends Component {
     // join the room
     this.props.createRoom({
       joinCode: this.state.joinCode,
-      owner: this.generateID()
+      owner: this.props.userId
     });
-  };
-
-  // generates a random id
-  generateID = () => {
-    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-      (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)
-    );
   };
 
   render() {
@@ -69,11 +62,17 @@ class CreateRoom extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    userId: state.spotifyReducer.userId
+  };
+};
+
 const mapDispatchToProps = dispatch => ({
   createRoom: payload => dispatch(createRoom(payload))
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(CreateRoom);

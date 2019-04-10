@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Container, Row, Col, Button } from 'reactstrap';
+import { FaSpotify } from 'react-icons/fa';
+import Cookie from 'js-cookie';
 import { joinRoom } from '../../actions/RoomActions';
+import { getAccessToken } from '../../actions/SpotifyActions';
 import JoinRoomComponent from './JoinRoom';
 import CreateRoomComponent from './CreateRoom';
+import { history } from '../../store';
 
 class StartPage extends Component {
   constructor(props) {
@@ -16,6 +20,27 @@ class StartPage extends Component {
     // if there is a room already in the store, attempt to join it
     if (this.props.room) {
       this.props.joinRoom(this.props.room);
+    }
+
+    // check if there is a query in the url
+    let query = history.location.search;
+    if (query) {
+      // parse the query to get parameters
+      query = query.substr(1);
+      const result = {};
+      query.split('&').forEach(function(part) {
+        const item = part.split('=');
+        result[item[0]] = decodeURIComponent(item[1]);
+      });
+
+      // if there is a code present use it for auth
+      if (result.code && result.state === Cookie.get('spotify_auth_state')) {
+        Cookie.remove('spotify_auth_state');
+        this.props.getAccessToken(result.code);
+      }
+
+      // reset the url path
+      history.push('/');
     }
   }
 
@@ -30,6 +55,22 @@ class StartPage extends Component {
   toggleIsCreating = () => {
     const isCreatingRoom = this.state.creatingRoom;
     this.setState({ creatingRoom: !isCreatingRoom });
+  };
+
+  // start authentication process with spotify
+  openSpotifyAuthPopup = () => {
+    // request an authentication url from the server
+    fetch('/spotify_login')
+      .then(res => res.json()) // parse response
+      .then(
+        data => {
+          // redirect to the returned url
+          window.location = data.url;
+        },
+        err => {
+          console.error(err);
+        }
+      );
   };
 
   render() {
@@ -49,9 +90,22 @@ class StartPage extends Component {
               <div>
                 <JoinRoomComponent />
                 <p className="mt-4">OR</p>
-                <Button color="secondary" onClick={this.toggleIsCreating}>
-                  Create a New Room
-                </Button>
+                {this.props.userId ? (
+                  <div>
+                    <p>
+                      Logged in as
+                      <b>{` ${this.props.userId}`}</b>
+                    </p>
+                    <Button color="secondary" onClick={this.toggleIsCreating}>
+                      Create a New Room
+                    </Button>
+                  </div>
+                ) : (
+                  <Button color="secondary" onClick={this.openSpotifyAuthPopup}>
+                    <FaSpotify className="mr-2" />
+                    Login to Create Room
+                  </Button>
+                )}
               </div>
             )}
           </Col>
@@ -63,13 +117,16 @@ class StartPage extends Component {
 
 const mapStateToProps = state => {
   return {
-    room: state.roomReducer.room
+    room: state.roomReducer.room,
+    userId: state.spotifyReducer.userId,
+    accessToken: state.spotifyReducer.accessToken
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   route: path => dispatch(push(path)),
-  joinRoom: room => dispatch(joinRoom(room))
+  joinRoom: room => dispatch(joinRoom(room)),
+  getAccessToken: authCode => dispatch(getAccessToken(authCode))
 });
 
 export default connect(
