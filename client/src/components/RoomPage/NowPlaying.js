@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button, ListGroup, ListGroupItem, Badge } from 'reactstrap';
 import { MdPlayArrow, MdPause, MdSkipNext } from 'react-icons/md';
 import { playSong, pauseSong, skipSong } from '../../actions/PlaybackActions';
+import SpotifyPlayer from './SpotifyPlayer';
 
 export class NowPlaying extends Component {
   // handler for skipping the current song
@@ -60,6 +61,8 @@ export class NowPlaying extends Component {
             </ListGroupItem>
           </ListGroup>
         )}
+
+        {this.isOwner() && <SpotifyPlayer />}
       </div>
     );
   }
@@ -70,7 +73,7 @@ const mapStateToProps = state => {
     currentSong: state.playbackReducer.currentSong,
     isPlaying: state.playbackReducer.isPlaying,
     ownerId: state.roomReducer.ownerId,
-    userId: state.roomReducer.userId
+    userId: state.spotifyReducer.userId
   };
 };
 
