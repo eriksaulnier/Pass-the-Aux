@@ -50,7 +50,9 @@ export default (state = initialState, action) => {
     case UPDATE_CURRENT_SONG:
       if (state.skipping) {
         // play the new song using the spotify client
-        spotifyClient.play({ uris: [action.payload.spotifyUri] });
+        if (action.payload.currentUri) {
+          spotifyClient.play({ uris: [action.payload.spotifyUri] });
+        }
 
         return Object.assign({}, state, {
           currentSong: action.payload,
