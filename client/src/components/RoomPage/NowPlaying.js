@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, ListGroup, ListGroupItem, Badge } from 'reactstrap';
+import { Button, ListGroup, ListGroupItem, Badge, Progress } from 'reactstrap';
 import { MdPlayArrow, MdPause, MdSkipNext } from 'react-icons/md';
 import { playSong, pauseSong, skipSong } from '../../actions/PlaybackActions';
 import SpotifyPlayer from './SpotifyPlayer';
@@ -13,6 +13,7 @@ export class NowPlaying extends Component {
     }
   };
 
+  // toggles between play and pause actions
   togglePlaying = () => {
     if (this.isOwner()) {
       if (this.props.isPlaying) {
@@ -21,6 +22,11 @@ export class NowPlaying extends Component {
         this.props.playSong();
       }
     }
+  };
+
+  // returns the current progress of the track as a percent
+  playbackProgressPercent = () => {
+    return this.props.position ? (this.props.position / this.props.duration) * 100 : 0;
   };
 
   // checks if the current user is owner
@@ -47,6 +53,8 @@ export class NowPlaying extends Component {
                 ) : null}
                 <br />
                 {song.artist}
+
+                <Progress className="song-progress mt-2" value={this.playbackProgressPercent()} />
               </div>
 
               <div className="song-voting">
@@ -72,6 +80,8 @@ const mapStateToProps = state => {
   return {
     currentSong: state.playbackReducer.currentSong,
     isPlaying: state.playbackReducer.isPlaying,
+    duration: state.playbackReducer.duration,
+    position: state.playbackReducer.position,
     ownerId: state.roomReducer.ownerId,
     userId: state.spotifyReducer.userId
   };
