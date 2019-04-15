@@ -14,7 +14,7 @@
     "client": "npm start --prefix client",
     "server": "npm run dev --prefix server",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "postinstall": "npm install --prefix client && npm install --prefix server",
+    "postinstall": "npm install --prefix ./client && npm install --prefix ./server",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build --prefix client"
   },
   "devDependencies": {
