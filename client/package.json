@@ -8,6 +8,7 @@
     "history": "^4.9.0",
     "jquery": "^3.3.1",
     "js-cookie": "^2.2.0",
+    "lodash": "^4.17.11",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-icons": "^3.5.0",
@@ -18,8 +19,10 @@
     "reactstrap": "^7.1.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
+    "remove": "^0.1.5",
     "socket.io-client": "^2.2.0",
     "spotify-web-api-js": "^1.2.0",
+    "throttle-debounce": "^2.1.0",
     "typescript": "^3.4.2"
   },
   "scripts": {
