@@ -59,6 +59,9 @@ export const skipSong = () => {
 // dispatch the new playback state
 export const updatePlaybackState = state => {
   return dispatch => {
+    // emit event to server
+    emit(UPDATE_PLAYBACK_STATE, state);
+
     // dispatch event to app
     dispatch({
       type: UPDATE_PLAYBACK_STATE,

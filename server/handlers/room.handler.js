@@ -1,5 +1,6 @@
 const roomService = require('../services/room.service');
 
+// socket listeners for room functionality
 module.exports = socket => {
   socket.on('JOIN_ROOM_START', joinCode => {
     // check if the room exists

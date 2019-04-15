@@ -77,5 +77,22 @@ module.exports = {
         }
       );
     });
+  },
+
+  updatePlaybackState(io, socket, state) {
+    return new Promise((resolve, reject) => {
+      // find the room using service function
+      roomService.findRoom(socket.room).then(
+        room => {
+          // emit the updated playback state to the room
+          io.sockets.in(room.joinCode).emit('UPDATE_PLAYBACK_STATE', state);
+
+          resolve(room);
+        },
+        err => {
+          reject(err);
+        }
+      );
+    });
   }
 };
