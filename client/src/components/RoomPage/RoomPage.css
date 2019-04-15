@@ -28,3 +28,6 @@
   width: 60px;
   border-radius: 50%;
 }
+.now-playing .song-progress {
+  height: 6px;
+}

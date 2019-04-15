@@ -1,13 +1,32 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, ListGroup, ListGroupItem, Badge } from 'reactstrap';
+import { Button, ListGroup, ListGroupItem, Badge, Progress } from 'reactstrap';
 import { MdPlayArrow, MdPause, MdSkipNext } from 'react-icons/md';
 import { playSong, pauseSong, skipSong } from '../../actions/PlaybackActions';
+import SpotifyPlayer from './SpotifyPlayer';
 
 export class NowPlaying extends Component {
   // handler for skipping the current song
   skipSong = () => {
-    this.props.skipSong();
+    if (this.isOwner()) {
+      this.props.skipSong();
+    }
+  };
+
+  // toggles between play and pause actions
+  togglePlaying = () => {
+    if (this.isOwner()) {
+      if (this.props.isPlaying) {
+        this.props.pauseSong();
+      } else {
+        this.props.playSong();
+      }
+    }
+  };
+
+  // returns the current progress of the track as a percent
+  playbackProgressPercent = () => {
+    return this.props.position ? (this.props.position / this.props.duration) * 100 : 0;
   };
 
   // checks if the current user is owner
@@ -34,32 +53,24 @@ export class NowPlaying extends Component {
                 ) : null}
                 <br />
                 {song.artist}
+
+                <Progress className="song-progress mt-2" value={this.playbackProgressPercent()} />
               </div>
 
               <div className="song-voting">
-                <Button
-                  color="primary"
-                  className="btn-play"
-                  onClick={
-                    this.props.isPlaying && this.isOwner()
-                      ? () => this.props.pauseSong(this.props.currentSong._id)
-                      : () => this.props.playSong(this.props.currentSong._id)
-                  }
-                >
+                <Button color="primary" className="btn-play" onClick={this.togglePlaying}>
                   {this.props.isPlaying ? <MdPause size="1.4em" /> : <MdPlayArrow size="1.4em" />}
                 </Button>
 
-                <Button
-                  className="ml-3"
-                  color="secondary"
-                  onClick={this.isOwner() ? () => this.props.skipSong(this.props.currentSong._id) : null}
-                >
+                <Button className="ml-3" color="secondary" onClick={this.skipSong}>
                   <MdSkipNext size="1.4em" />
                 </Button>
               </div>
             </ListGroupItem>
           </ListGroup>
         )}
+
+        {this.isOwner() && <SpotifyPlayer />}
       </div>
     );
   }
@@ -69,8 +80,10 @@ const mapStateToProps = state => {
   return {
     currentSong: state.playbackReducer.currentSong,
     isPlaying: state.playbackReducer.isPlaying,
+    duration: state.playbackReducer.duration,
+    position: state.playbackReducer.position,
     ownerId: state.roomReducer.ownerId,
-    userId: state.roomReducer.userId
+    userId: state.spotifyReducer.userId
   };
 };
 

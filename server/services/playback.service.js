@@ -2,7 +2,7 @@ const Room = require('../models/room');
 const roomService = require('../services/room.service');
 
 module.exports = {
-  playSong(io, socket, payload) {
+  playSong(io, socket) {
     return new Promise((resolve, reject) => {
       // find the room using service function
       roomService.findRoom(socket.room).then(
@@ -17,7 +17,7 @@ module.exports = {
               if (err) reject(err);
 
               // emit the updated queue to the room
-              io.sockets.in(room.joinCode).emit('PLAY_SONG', payload.songId);
+              io.sockets.in(room.joinCode).emit('PLAY_SONG');
 
               resolve(doc);
             }
@@ -30,7 +30,7 @@ module.exports = {
     });
   },
 
-  pauseSong(io, socket, payload) {
+  pauseSong(io, socket) {
     return new Promise((resolve, reject) => {
       // find the room using service function
       roomService.findRoom(socket.room).then(
@@ -45,7 +45,7 @@ module.exports = {
               if (err) reject(err);
 
               // emit the updated queue to the room
-              io.sockets.in(room.joinCode).emit('PAUSE_SONG', payload.songId);
+              io.sockets.in(room.joinCode).emit('PAUSE_SONG');
 
               resolve(doc);
             }
@@ -58,7 +58,7 @@ module.exports = {
     });
   },
 
-  skipSong(io, socket, payload) {
+  skipSong(io, socket) {
     return new Promise((resolve, reject) => {
       // find the room using service function
       roomService.findRoom(socket.room).then(

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Input, Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Badge } from 'reactstrap';
+import * as _ from 'lodash';
 import { addSong } from '../../actions/QueueActions';
 import { searchSongs } from '../../actions/SpotifyActions';
 
@@ -20,14 +21,17 @@ export class AddSong extends Component {
     this.setState({ query: event.target.value });
 
     if (this.state.query.length > 0) {
-      this.props.searchSongs(this.state.query, this.props.accessToken);
+      _.debounce(() => {
+        // dispatch search request
+        this.props.searchSongs(this.state.query);
 
-      // make sure the suggestion dropdown is visible
-      if (!this.state.displayResults) {
-        this.setState(() => ({
-          displayResults: true
-        }));
-      }
+        // make sure the suggestion dropdown is visible
+        if (!this.state.displayResults) {
+          this.setState(() => ({
+            displayResults: true
+          }));
+        }
+      }, 350)();
     }
   };
 
@@ -90,7 +94,6 @@ export class AddSong extends Component {
 
 const mapStateToProps = state => {
   return {
-    accessToken: state.spotifyReducer.accessToken,
     searchResults: state.spotifyReducer.searchResults
   };
 };
