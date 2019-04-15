@@ -1,0 +1,33 @@
+/* AddSong Component */
+.search-song .song-dropdown-toggle {
+  display: none;
+}
+.search-song .song-dropdown-menu {
+  transform: none !important;
+  width: 100%;
+  background-color: #e7e7e7;
+}
+
+/* SongQueue and NowPlaying Components */
+.song-list .song {
+  display: flex;
+  align-items: center;
+  justify-content: justify;
+}
+.song-list .song .song-art {
+  height: 100px;
+}
+.song-list .song .song-info {
+  display: inline-block;
+}
+.song-list .song .song-voting {
+  margin-left: auto;
+}
+.now-playing button.btn-play {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+}
+.now-playing .song-progress {
+  height: 6px;
+}
