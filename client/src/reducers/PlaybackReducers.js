@@ -50,15 +50,26 @@ export default (state = initialState, action) => {
     case UPDATE_CURRENT_SONG:
       // check if the state is curently waiting for a new song
       if (state.skipping) {
-        // play the new song using the spotify client
-        if (action.payload && action.payload.spotifyUri) {
+        // check if a new song was provided
+        if (action.payload) {
+          // play the new song using the spotify client
           spotifyClient.play({ uris: [action.payload.spotifyUri] });
-        }
 
-        return Object.assign({}, state, {
-          currentSong: action.payload,
-          skipping: false
-        });
+          // set skipping to false and update currentSong
+          return Object.assign({}, state, {
+            currentSong: action.payload,
+            skipping: false
+          });
+        } else {
+          // pause spotify client playback
+          spotifyClient.pause();
+
+          // set skipping to true and wait for next song
+          return Object.assign({}, state, {
+            currentSong: action.payload,
+            skipping: true
+          });
+        }
       } else {
         return Object.assign({}, state, {
           currentSong: action.payload
