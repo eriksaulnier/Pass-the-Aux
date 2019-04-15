@@ -8,6 +8,7 @@ import {
   LEAVE_ROOM
 } from '../actions/Types';
 
+// the initial state for the reducer
 const initialState = {
   room: null,
   ownerId: null,

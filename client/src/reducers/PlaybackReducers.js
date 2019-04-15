@@ -1,15 +1,16 @@
 import {
-  ROOM_INFO,
-  RESET_QUEUE,
   PLAY_SONG,
   PAUSE_SONG,
   SKIP_SONG,
   UPDATE_CURRENT_SONG,
   UPDATE_PLAYBACK_STATE,
+  RESET_QUEUE,
+  ROOM_INFO,
   LEAVE_ROOM
 } from '../actions/Types';
 import { spotifyClient } from '../utils/SpotifyClient';
 
+// the initial state for the reducer
 const initialState = {
   currentSong: null,
   isPlaying: false,

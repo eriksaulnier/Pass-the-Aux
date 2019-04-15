@@ -1,5 +1,6 @@
-import { UPDATE_QUEUE, VOTE_SONG, LEAVE_ROOM, RESET_QUEUE } from '../actions/Types';
+import { UPDATE_QUEUE, VOTE_SONG, RESET_QUEUE, LEAVE_ROOM } from '../actions/Types';
 
+// the initial state for the reducer
 const initialState = {
   queue: [],
   votes: {},

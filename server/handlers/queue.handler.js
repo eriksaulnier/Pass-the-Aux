@@ -1,5 +1,6 @@
 const queueService = require('../services/queue.service');
 
+// socket listeners for queue functionality
 module.exports = (io, socket) => {
   socket.on('ADD_SONG', songData => {
     queueService.addSong(io, socket, songData).then(

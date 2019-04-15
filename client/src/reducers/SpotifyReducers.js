@@ -1,4 +1,3 @@
-import { spotifyClient } from '../utils/SpotifyClient';
 import {
   SPOTIFY_TOKEN_SUCCESS,
   SPOTIFY_TOKEN_ERROR,
@@ -9,7 +8,9 @@ import {
   SPOTIFY_PLAYER_SUCCESS,
   SPOTIFY_PLAYER_ERROR
 } from '../actions/Types';
+import { spotifyClient } from '../utils/SpotifyClient';
 
+// the initial state for the reducer
 const initialState = {
   accessToken: null,
   refreshToken: null,
@@ -38,7 +39,7 @@ export default (state = initialState, action) => {
       // handle error
       console.error('Error refreshing access token');
       return Object.assign({}, state, {
-        loggedIn: true
+        loggedIn: false
       });
 
     case SPOTIFY_PLAYER_SUCCESS:

@@ -1,9 +1,9 @@
 import {
   SPOTIFY_REQUEST_TOKEN,
+  SPOTIFY_REFRESH_TOKEN,
+  SPOTIFY_TOKEN_SUCCESS,
   SPOTIFY_SEARCH_SUCCESS,
   SPOTIFY_SEARCH_ERROR,
-  SPOTIFY_TOKEN_SUCCESS,
-  SPOTIFY_REFRESH_TOKEN,
   SPOTIFY_USER_SUCCESS,
   SPOTIFY_USER_ERROR,
   SPOTIFY_PLAYER_SUCCESS,
@@ -15,6 +15,7 @@ import { emit } from '../utils/Socket';
 // fetches a new access token from the server using optional auth code
 export const getAccessToken = authCode => {
   return () => {
+    // emit event to server
     emit(SPOTIFY_REQUEST_TOKEN, authCode);
   };
 };
@@ -22,6 +23,7 @@ export const getAccessToken = authCode => {
 // refreshes the current access token using the refresh token
 export const refreshAccessToken = refreshToken => {
   return () => {
+    // emit event to server
     emit(SPOTIFY_REFRESH_TOKEN, refreshToken);
   };
 };
@@ -29,6 +31,7 @@ export const refreshAccessToken = refreshToken => {
 // updates the tokens currently stored in the state
 export const updateTokenStorage = payload => {
   return dispatch => {
+    // dispatch event to app
     dispatch({
       type: SPOTIFY_TOKEN_SUCCESS,
       payload
@@ -45,7 +48,7 @@ export const playerInitSuccess = payload => {
     // transfer the user's account playback to the app
     spotifyClient.transferMyPlayback([payload.deviceId], null, (err, res) => {
       if (err) {
-        // dispatch any errors
+        // dispatch any errors to app
         dispatch({
           type: SPOTIFY_PLAYER_ERROR,
           payload: err
@@ -57,7 +60,7 @@ export const playerInitSuccess = payload => {
           spotifyClient.play({ uris: [payload.currentSong.spotifyUri] });
         }
 
-        // dispatch player init success
+        // dispatch success to app
         dispatch({
           type: SPOTIFY_PLAYER_SUCCESS,
           payload: payload.deviceId
@@ -70,6 +73,7 @@ export const playerInitSuccess = payload => {
 // callback function for when the spotify player fails to initialize
 export const playerInitError = err => {
   return dispatch => {
+    // dispatch event to app
     dispatch({
       type: SPOTIFY_PLAYER_ERROR,
       payload: err
@@ -83,12 +87,14 @@ export const getCurrentUser = () => {
     // fetch current user info
     spotifyClient.getMe().then(
       res => {
+        // dispatch success to app
         dispatch({
           type: SPOTIFY_USER_SUCCESS,
           payload: res
         });
       },
       err => {
+        // dispatch any errors to app
         dispatch({
           type: SPOTIFY_USER_ERROR,
           payload: err
@@ -105,11 +111,13 @@ export const searchSongs = query => {
     spotifyClient.searchTracks(query, { limit: 6 }, (err, res) => {
       // dispatch search results
       if (!err && res.tracks.items.length > 0) {
+        // dispatch success to app
         dispatch({
           type: SPOTIFY_SEARCH_SUCCESS,
           payload: res.tracks.items
         });
       } else {
+        // dispatch any errors to app
         dispatch({
           type: SPOTIFY_SEARCH_ERROR,
           payload: err

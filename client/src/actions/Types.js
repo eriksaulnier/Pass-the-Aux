@@ -1,3 +1,17 @@
+// playback actions
+export const PLAY_SONG = 'PLAY_SONG';
+export const PAUSE_SONG = 'PAUSE_SONG';
+export const SKIP_SONG = 'SKIP_SONG';
+export const UPDATE_CURRENT_SONG = 'UPDATE_CURRENT_SONG';
+export const UPDATE_PLAYBACK_STATE = 'UPDATE_PLAYBACK_STATE';
+
+// queue actions
+export const ADD_SONG = 'ADD_SONG';
+export const REMOVE_SONG = 'REMOVE_SONG';
+export const VOTE_SONG = 'VOTE_SONG';
+export const UPDATE_QUEUE = 'UPDATE_QUEUE';
+export const RESET_QUEUE = 'RESET_QUEUE';
+
 // room actions
 export const JOIN_ROOM_START = 'JOIN_ROOM_START';
 export const JOIN_ROOM_SUCCESS = 'JOIN_ROOM_SUCCESS';
@@ -7,20 +21,6 @@ export const CREATE_ROOM_SUCCESS = 'CREATE_ROOM_SUCCESS';
 export const CREATE_ROOM_ERROR = 'CREATE_ROOM_ERROR';
 export const LEAVE_ROOM = 'LEAVE_ROOM';
 export const ROOM_INFO = 'ROOM_INFO';
-
-// queue actions
-export const ADD_SONG = 'ADD_SONG';
-export const REMOVE_SONG = 'REMOVE_SONG';
-export const VOTE_SONG = 'VOTE_SONG';
-export const UPDATE_QUEUE = 'UPDATE_QUEUE';
-export const RESET_QUEUE = 'RESET_QUEUE';
-
-// playback actions
-export const PLAY_SONG = 'PLAY_SONG';
-export const PAUSE_SONG = 'PAUSE_SONG';
-export const SKIP_SONG = 'SKIP_SONG';
-export const UPDATE_CURRENT_SONG = 'UPDATE_CURRENT_SONG';
-export const UPDATE_PLAYBACK_STATE = 'UPDATE_PLAYBACK_STATE';
 
 // spotify actions
 export const SPOTIFY_REQUEST_TOKEN = 'SPOTIFY_REQUEST_TOKEN';
