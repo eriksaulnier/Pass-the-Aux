@@ -15,7 +15,7 @@ const initialState = {
   duration: 0,
   position: 0,
   connected: false,
-  skipping: true
+  skipping: false
 };
 
 export default (state = initialState, action) => {
@@ -48,9 +48,10 @@ export default (state = initialState, action) => {
       });
 
     case UPDATE_CURRENT_SONG:
+      // check if the state is curently waiting for a new song
       if (state.skipping) {
         // play the new song using the spotify client
-        if (action.payload.currentUri) {
+        if (action.payload && action.payload.spotifyUri) {
           spotifyClient.play({ uris: [action.payload.spotifyUri] });
         }
 

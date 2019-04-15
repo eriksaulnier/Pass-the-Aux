@@ -59,7 +59,9 @@ export class NowPlaying extends Component {
     this.webPlaybackInstance.addListener('ready', data => {
       this.props.playerInitSuccess({
         deviceId: data.device_id,
-        accessToken: this.props.accessToken
+        accessToken: this.props.accessToken,
+        currentSong: this.props.currentSong,
+        songPosition: this.props.songPosition || 0
       });
       // console.log('Ready with Device ID', data.device_id);
     });
@@ -86,7 +88,9 @@ export class NowPlaying extends Component {
 
 const mapStateToProps = state => {
   return {
-    accessToken: state.spotifyReducer.accessToken
+    accessToken: state.spotifyReducer.accessToken,
+    currentSong: state.playbackReducer.currentSong,
+    songPosition: state.playbackReducer.position
   };
 };
 

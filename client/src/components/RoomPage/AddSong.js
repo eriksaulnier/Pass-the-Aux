@@ -22,8 +22,7 @@ export class AddSong extends Component {
 
     if (this.state.query.length > 0) {
       _.debounce(() => {
-        console.log(this.state.query);
-
+        // dispatch search request
         this.props.searchSongs(this.state.query);
 
         // make sure the suggestion dropdown is visible
