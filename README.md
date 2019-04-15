@@ -52,9 +52,7 @@ The `package.json` file in the repository root directory contains all the comman
 
 Alternativly, instead of installing all the dependencies above, you can also use [Docker](https://www.docker.com/) to install and run the application using containers. This will still require you to set up a Spotify Developer Application for authorization but other than that the rest of the installation instructions can be skipped. Here is the official description of Docker from their website:
 
-```
-Docker is a tool designed to make it easier to create, deploy, and run applications by using containers. Containers allow a developer to package up an application with all of the parts it needs, such as libraries and other dependencies, and ship it all out as one package. By doing so, thanks to the container, the developer can rest assured that the application will run on any other Linux machine regardless of any customized settings that machine might have that could differ from the machine used for writing and testing the code.
-```
+> Docker is a tool designed to make it easier to create, deploy, and run applications by using containers. Containers allow a developer to package up an application with all of the parts it needs, such as libraries and other dependencies, and ship it all out as one package. By doing so, thanks to the container, the developer can rest assured that the application will run on any other Linux machine regardless of any customized settings that machine might have that could differ from the machine used for writing and testing the code.
 
 To run the application:
 
