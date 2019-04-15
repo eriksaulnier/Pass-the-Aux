@@ -12,7 +12,7 @@ Developed using the MERN stack which is a combination of:
 
 ### Dependencies
 1. [NodeJS](https://nodejs.org/en/): Pass The Aux uses the default package manager that ships with NodeJS for installing node modules.
-2. [MongoDB](https://www.mongodb.com/): Pass The Aux uses a MongoDB database for room storing data.
+2. [MongoDB](https://www.mongodb.com/): Pass The Aux uses a MongoDB database for storing room data.
 3. [Spotify](https://developer.spotify.com/): Pass The Aux plays music using the Spotify API and Playback SDK. You will need to set up a Spotify Developer Application (requires a Spotify Premium account) and configure the OAuth redirect URL in order to run the app on your local host. The redirect URL for a development environemnt is usually `http://localhost:3000/` unless you have changed the default port for the application.
 
 ### Environment Files
