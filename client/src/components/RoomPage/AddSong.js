@@ -20,7 +20,7 @@ export class AddSong extends Component {
     this.setState({ query: event.target.value });
 
     if (this.state.query.length > 0) {
-      this.props.searchSongs(this.state.query, this.props.accessToken);
+      this.props.searchSongs(this.state.query);
 
       // make sure the suggestion dropdown is visible
       if (!this.state.displayResults) {
@@ -90,7 +90,6 @@ export class AddSong extends Component {
 
 const mapStateToProps = state => {
   return {
-    accessToken: state.spotifyReducer.accessToken,
     searchResults: state.spotifyReducer.searchResults
   };
 };

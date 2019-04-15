@@ -8,7 +8,19 @@ import SpotifyPlayer from './SpotifyPlayer';
 export class NowPlaying extends Component {
   // handler for skipping the current song
   skipSong = () => {
-    this.props.skipSong();
+    if (this.isOwner()) {
+      this.props.skipSong();
+    }
+  };
+
+  togglePlaying = () => {
+    if (this.isOwner()) {
+      if (this.props.isPlaying) {
+        this.props.pauseSong();
+      } else {
+        this.props.playSong();
+      }
+    }
   };
 
   // checks if the current user is owner
@@ -38,23 +50,11 @@ export class NowPlaying extends Component {
               </div>
 
               <div className="song-voting">
-                <Button
-                  color="primary"
-                  className="btn-play"
-                  onClick={
-                    this.props.isPlaying && this.isOwner()
-                      ? () => this.props.pauseSong(this.props.currentSong._id)
-                      : () => this.props.playSong(this.props.currentSong._id)
-                  }
-                >
+                <Button color="primary" className="btn-play" onClick={this.togglePlaying}>
                   {this.props.isPlaying ? <MdPause size="1.4em" /> : <MdPlayArrow size="1.4em" />}
                 </Button>
 
-                <Button
-                  className="ml-3"
-                  color="secondary"
-                  onClick={this.isOwner() ? () => this.props.skipSong(this.props.currentSong._id) : null}
-                >
+                <Button className="ml-3" color="secondary" onClick={this.skipSong}>
                   <MdSkipNext size="1.4em" />
                 </Button>
               </div>

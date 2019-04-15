@@ -1,8 +1,21 @@
-import { ROOM_INFO, RESET_QUEUE, PLAY_SONG, PAUSE_SONG, SKIP_SONG, UPDATE_CURRENT_SONG } from '../actions/Types';
+import {
+  ROOM_INFO,
+  RESET_QUEUE,
+  PLAY_SONG,
+  PAUSE_SONG,
+  SKIP_SONG,
+  UPDATE_CURRENT_SONG,
+  UPDATE_PLAYBACK_STATE
+} from '../actions/Types';
+import { spotifyClient } from '../utils/SpotifyClient';
 
 const initialState = {
   currentSong: null,
-  isPlaying: false
+  isPlaying: false,
+  duration: 0,
+  position: 0,
+  connected: false,
+  skipping: true
 };
 
 export default (state = initialState, action) => {
@@ -30,13 +43,38 @@ export default (state = initialState, action) => {
 
     case SKIP_SONG:
       return Object.assign({}, state, {
-        currentSong: null
+        currentSong: null,
+        skipping: true
       });
 
     case UPDATE_CURRENT_SONG:
-      return Object.assign({}, state, {
-        currentSong: action.payload
-      });
+      if (state.skipping) {
+        // play the new song using the spotify client
+        spotifyClient.play({ uris: [action.payload.spotifyUri] });
+
+        return Object.assign({}, state, {
+          currentSong: action.payload,
+          skipping: false
+        });
+      } else {
+        return Object.assign({}, state, {
+          currentSong: action.payload
+        });
+      }
+
+    case UPDATE_PLAYBACK_STATE:
+      if (action.payload) {
+        return Object.assign({}, state, {
+          isPlaying: !action.payload.paused,
+          duration: action.payload.duration,
+          position: action.payload.position,
+          connected: false
+        });
+      } else {
+        return Object.assign({}, state, {
+          connected: true
+        });
+      }
 
     default:
       return state;

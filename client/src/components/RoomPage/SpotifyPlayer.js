@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Script from 'react-load-script';
+import { playerInitSuccess, playerInitError } from '../../actions/SpotifyActions';
+import { updatePlaybackState } from '../../actions/PlaybackActions';
 
 export class NowPlaying extends Component {
   webPlaybackInstance = null;
@@ -36,31 +38,33 @@ export class NowPlaying extends Component {
 
     // error handling listeners
     this.webPlaybackInstance.addListener('initialization_error', ({ message }) => {
-      console.error(message);
+      this.props.playerInitError(message);
     });
     this.webPlaybackInstance.addListener('authentication_error', ({ message }) => {
-      console.error(message);
+      this.props.playerInitError(message);
     });
     this.webPlaybackInstance.addListener('account_error', ({ message }) => {
-      console.error(message);
+      this.props.playerInitError(message);
     });
     this.webPlaybackInstance.addListener('playback_error', ({ message }) => {
-      console.error(message);
+      this.props.playerInitError(message);
     });
 
-    // playback status updates listeners
+    // playback status listener
     this.webPlaybackInstance.addListener('player_state_changed', state => {
-      console.log(state);
+      this.props.updatePlaybackState(state);
     });
 
-    // ready listener
-    this.webPlaybackInstance.addListener('ready', ({ device_id }) => {
-      console.log('Ready with Device ID', device_id);
+    // player init listeners
+    this.webPlaybackInstance.addListener('ready', data => {
+      this.props.playerInitSuccess({
+        deviceId: data.device_id,
+        accessToken: this.props.accessToken
+      });
+      // console.log('Ready with Device ID', data.device_id);
     });
-
-    // not ready listener
-    this.webPlaybackInstance.addListener('not_ready', ({ device_id }) => {
-      console.log('Device ID has gone offline', device_id);
+    this.webPlaybackInstance.addListener('not_ready', data => {
+      console.log('Device ID has gone offline', data.device_id);
     });
 
     // connect to the player
@@ -82,16 +86,14 @@ export class NowPlaying extends Component {
 
 const mapStateToProps = state => {
   return {
-    currentSong: state.playbackReducer.currentSong,
-    isPlaying: state.playbackReducer.isPlaying,
     accessToken: state.spotifyReducer.accessToken
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  //   playSong: songId => dispatch(playSong(songId)),
-  //   pauseSong: songId => dispatch(pauseSong(songId)),
-  //   skipSong: songId => dispatch(skipSong(songId))
+  playerInitSuccess: deviceId => dispatch(playerInitSuccess(deviceId)),
+  playerInitError: error => dispatch(playerInitError(error)),
+  updatePlaybackState: state => dispatch(updatePlaybackState(state))
 });
 
 export default connect(

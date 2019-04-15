@@ -1,4 +1,3 @@
-import SpotifyAPI from 'spotify-web-api-js';
 import {
   SPOTIFY_REQUEST_TOKEN,
   SPOTIFY_SEARCH_SUCCESS,
@@ -6,8 +5,11 @@ import {
   SPOTIFY_TOKEN_SUCCESS,
   SPOTIFY_REFRESH_TOKEN,
   SPOTIFY_USER_SUCCESS,
-  SPOTIFY_USER_ERROR
+  SPOTIFY_USER_ERROR,
+  SPOTIFY_PLAYER_SUCCESS,
+  SPOTIFY_PLAYER_ERROR
 } from './Types';
+import { spotifyClient } from '../utils/SpotifyClient';
 import { emit } from '../utils/Socket';
 
 // fetches a new access token from the server using optional auth code
@@ -34,44 +36,46 @@ export const updateTokenStorage = payload => {
   };
 };
 
-// use the spotify api to search for songs
-export const searchSongs = (query, token) => {
+// callback function for when the spotify player has successfully initialized
+export const playerInitSuccess = payload => {
   return dispatch => {
-    // create the spotify client
-    const spotify = new SpotifyAPI();
+    // set the spotify api client's access token
+    spotifyClient.setAccessToken(payload.accessToken);
 
-    // set access token
-    spotify.setAccessToken(token);
-
-    // use api to search for tracks
-    spotify.searchTracks(query, { limit: 6 }, (err, res) => {
-      // dispatch search results
-      if (!err && res.tracks.items.length > 0) {
+    // transfer the user's account playback to the app
+    spotifyClient.transferMyPlayback([payload.deviceId], null, (err, res) => {
+      if (err) {
+        // dispatch any errors
         dispatch({
-          type: SPOTIFY_SEARCH_SUCCESS,
-          payload: res.tracks.items
+          type: SPOTIFY_PLAYER_ERROR,
+          payload: err
         });
       } else {
+        // otherwise dispatch success
         dispatch({
-          type: SPOTIFY_SEARCH_ERROR,
-          payload: err
+          type: SPOTIFY_PLAYER_SUCCESS,
+          payload: payload.deviceId
         });
       }
     });
   };
 };
 
-// fetches info for the currently authenticated user
-export const getCurrentUser = token => {
+// callback function for when the spotify player fails to initialize
+export const playerInitError = err => {
   return dispatch => {
-    // create the spotify client
-    const spotify = new SpotifyAPI();
+    dispatch({
+      type: SPOTIFY_PLAYER_ERROR,
+      payload: err
+    });
+  };
+};
 
-    // set access token
-    spotify.setAccessToken(token);
-
+// fetches profile info for the currently authenticated user
+export const getCurrentUser = () => {
+  return dispatch => {
     // fetch current user info
-    spotify.getMe().then(
+    spotifyClient.getMe().then(
       res => {
         dispatch({
           type: SPOTIFY_USER_SUCCESS,
@@ -85,5 +89,26 @@ export const getCurrentUser = token => {
         });
       }
     );
+  };
+};
+
+// use the spotify api to search for songs
+export const searchSongs = query => {
+  return dispatch => {
+    // use api to search for tracks
+    spotifyClient.searchTracks(query, { limit: 6 }, (err, res) => {
+      // dispatch search results
+      if (!err && res.tracks.items.length > 0) {
+        dispatch({
+          type: SPOTIFY_SEARCH_SUCCESS,
+          payload: res.tracks.items
+        });
+      } else {
+        dispatch({
+          type: SPOTIFY_SEARCH_ERROR,
+          payload: err
+        });
+      }
+    });
   };
 };

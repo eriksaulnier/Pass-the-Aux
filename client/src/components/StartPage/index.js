@@ -118,8 +118,7 @@ class StartPage extends Component {
 const mapStateToProps = state => {
   return {
     room: state.roomReducer.room,
-    userId: state.spotifyReducer.userId,
-    accessToken: state.spotifyReducer.accessToken
+    userId: state.spotifyReducer.userId
   };
 };
 
