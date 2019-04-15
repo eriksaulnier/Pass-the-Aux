@@ -5,7 +5,8 @@ import {
   PAUSE_SONG,
   SKIP_SONG,
   UPDATE_CURRENT_SONG,
-  UPDATE_PLAYBACK_STATE
+  UPDATE_PLAYBACK_STATE,
+  LEAVE_ROOM
 } from '../actions/Types';
 import { spotifyClient } from '../utils/SpotifyClient';
 
@@ -27,8 +28,12 @@ export default (state = initialState, action) => {
       });
 
     case RESET_QUEUE:
+      // pause spotify client playback
+      spotifyClient.pause();
+
       return Object.assign({}, state, {
-        queue: []
+        currentSong: null,
+        skipping: true
       });
 
     case PLAY_SONG:
@@ -89,6 +94,12 @@ export default (state = initialState, action) => {
           connected: true
         });
       }
+
+    case LEAVE_ROOM:
+      // pause spotify client playback
+      spotifyClient.pause();
+
+      return initialState;
 
     default:
       return state;
