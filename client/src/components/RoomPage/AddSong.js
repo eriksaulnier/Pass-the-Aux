@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Input, Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Badge } from 'reactstrap';
 import * as _ from 'lodash';
+import { Input, Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Badge } from 'reactstrap';
 import { addSong } from '../../actions/QueueActions';
 import { searchSongs } from '../../actions/SpotifyActions';
 
@@ -21,6 +21,7 @@ export class AddSong extends Component {
     this.setState({ query: event.target.value });
 
     if (this.state.query.length > 0) {
+      // throttle search requests to prevent timeout
       _.debounce(() => {
         // dispatch search request
         this.props.searchSongs(this.state.query);
@@ -58,6 +59,7 @@ export class AddSong extends Component {
     }));
   };
 
+  // toggles between showing and hiding the search results
   toggleResultsDisplay = () => {
     this.setState(prevState => ({
       displayResults: !prevState.displayResults

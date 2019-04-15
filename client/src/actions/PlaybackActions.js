@@ -7,8 +7,10 @@ export const playSong = () => {
   return dispatch => {
     spotifyClient.play().then(
       () => {
+        // emit event to server
         emit(PLAY_SONG);
 
+        // dispatch event to app
         dispatch({
           type: PLAY_SONG
         });
@@ -26,8 +28,10 @@ export const pauseSong = () => {
     // pause spotify playback
     spotifyClient.pause().then(
       () => {
+        // emit event to server
         emit(PAUSE_SONG);
 
+        // dispatch event to app
         dispatch({
           type: PAUSE_SONG
         });
@@ -39,11 +43,13 @@ export const pauseSong = () => {
   };
 };
 
-// dispatch skip event
+// emit and dispatch skip event
 export const skipSong = () => {
   return dispatch => {
+    // emit event to server
     emit(SKIP_SONG);
 
+    // dispatch event to app
     dispatch({
       type: SKIP_SONG
     });
@@ -53,6 +59,7 @@ export const skipSong = () => {
 // dispatch the new playback state
 export const updatePlaybackState = state => {
   return dispatch => {
+    // dispatch event to app
     dispatch({
       type: UPDATE_PLAYBACK_STATE,
       payload: state

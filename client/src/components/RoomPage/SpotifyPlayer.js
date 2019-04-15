@@ -7,6 +7,7 @@ import { updatePlaybackState } from '../../actions/PlaybackActions';
 export class NowPlaying extends Component {
   webPlaybackInstance = null;
 
+  // setup callback for when the spotify sdk has finished loading
   componentDidMount = () => {
     // setup callback for sdk ready event
     window.onSpotifyWebPlaybackSDKReady = () => {
@@ -14,6 +15,7 @@ export class NowPlaying extends Component {
     };
   };
 
+  // remove all event listeners when this component is unmounting
   componentWillUnmount = () => {
     // if the player is defined remove all event listeners
     if (this.webPlaybackInstance) {
@@ -27,6 +29,7 @@ export class NowPlaying extends Component {
     }
   };
 
+  // handle successful load of spotify sdk
   handleLoadSuccess = () => {
     // create a new instance of the spotify player
     this.webPlaybackInstance = new window.Spotify.Player({
@@ -57,13 +60,13 @@ export class NowPlaying extends Component {
 
     // player init listeners
     this.webPlaybackInstance.addListener('ready', data => {
+      // console.log('Ready with Device ID', data.device_id);
       this.props.playerInitSuccess({
         deviceId: data.device_id,
         accessToken: this.props.accessToken,
         currentSong: this.props.currentSong,
         songPosition: this.props.songPosition || 0
       });
-      // console.log('Ready with Device ID', data.device_id);
     });
     this.webPlaybackInstance.addListener('not_ready', data => {
       console.log('Device ID has gone offline', data.device_id);
