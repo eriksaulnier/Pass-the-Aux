@@ -1,6 +1,7 @@
 # Pass The Aux
 
 ## Overview
+Many of us have had the responsibility of playing music at a party, sometimes the music you choose is not a hit with anyone and just the act of choosing is sapping all of your time. Pass the Aux is an application that allows guests at a party to select the music that they want to hear and allows the host to have a better time at their own party.
 
 Developed using the MERN stack which is a combination of:  
 - [MongoDB](https://www.mongodb.com/)
