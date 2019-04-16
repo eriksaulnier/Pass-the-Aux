@@ -37,7 +37,7 @@ export default (state = initialState, action) => {
 
     case SPOTIFY_TOKEN_ERROR:
       // handle error
-      console.error('Error refreshing access token');
+      alert(action.payload);
       return Object.assign({}, state, {
         loggedIn: false
       });
@@ -61,7 +61,7 @@ export default (state = initialState, action) => {
 
     case SPOTIFY_USER_ERROR:
       // handle error
-      console.error('Error fetching current user info');
+      alert(action.payload);
       return state;
 
     case SPOTIFY_SEARCH_SUCCESS:
