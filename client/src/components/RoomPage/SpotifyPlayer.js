@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Script from 'react-load-script';
 import { playerInitSuccess, playerInitError } from '../../actions/SpotifyActions';
-import { updatePlaybackState } from '../../actions/PlaybackActions';
+import { updatePlaybackState, skipSong } from '../../actions/PlaybackActions';
 
 export class NowPlaying extends Component {
   webPlaybackInstance = null;
@@ -55,17 +55,32 @@ export class NowPlaying extends Component {
 
     // playback status listener
     this.webPlaybackInstance.addListener('player_state_changed', state => {
+      // check to see if the song has finished playback and should be skipped
+      if (
+        this.props.currentSong &&
+        state.paused &&
+        state.position === 0 &&
+        state.restrictions.disallow_resuming_reasons &&
+        state.restrictions.disallow_resuming_reasons[0] === 'not_paused' &&
+        state.track_window.current_track.id === this.props.currentSong.spotifyId
+      ) {
+        // skip to the next song
+        this.props.skipSong();
+      }
+
+      // call playback update state action
       this.props.updatePlaybackState(state);
     });
 
     // player init listeners
     this.webPlaybackInstance.addListener('ready', data => {
-      // console.log('Ready with Device ID', data.device_id);
+      console.log('Ready with Device ID', data.device_id);
+
       this.props.playerInitSuccess({
         deviceId: data.device_id,
         accessToken: this.props.accessToken,
         currentSong: this.props.currentSong,
-        songPosition: this.props.songPosition || 0
+        position: this.props.position || 0
       });
     });
     this.webPlaybackInstance.addListener('not_ready', data => {
@@ -93,14 +108,16 @@ const mapStateToProps = state => {
   return {
     accessToken: state.spotifyReducer.accessToken,
     currentSong: state.playbackReducer.currentSong,
-    songPosition: state.playbackReducer.position
+    position: state.playbackReducer.position,
+    isPlaying: state.playbackReducer.isPlaying
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   playerInitSuccess: deviceId => dispatch(playerInitSuccess(deviceId)),
   playerInitError: error => dispatch(playerInitError(error)),
-  updatePlaybackState: state => dispatch(updatePlaybackState(state))
+  updatePlaybackState: state => dispatch(updatePlaybackState(state)),
+  skipSong: () => dispatch(skipSong())
 });
 
 export default connect(

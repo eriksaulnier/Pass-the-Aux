@@ -48,6 +48,7 @@ export class AddSong extends Component {
       title: songData.name,
       artist: songData.artists[0] ? songData.artists[0].name : null,
       artwork: songData.album ? songData.album.images[0].url : null,
+      spotifyId: songData.id,
       spotifyUri: songData.uri,
       explicit: songData.explicit
     });
