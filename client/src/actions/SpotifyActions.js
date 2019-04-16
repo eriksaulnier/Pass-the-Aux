@@ -55,9 +55,8 @@ export const playerInitSuccess = payload => {
         });
       } else {
         // play the new song using the spotify client
-        // TODO: this doesn't currently work
         if (payload.currentSong) {
-          spotifyClient.play({ uris: [payload.currentSong.spotifyUri] });
+          spotifyClient.play({ uris: [payload.currentSong.spotifyUri], device_id: payload.deviceId });
         }
 
         // dispatch success to app
