@@ -9,6 +9,7 @@ import { getAccessToken } from '../../actions/SpotifyActions';
 import JoinRoomComponent from './JoinRoom';
 import CreateRoomComponent from './CreateRoom';
 import { history } from '../../store';
+import packageJson from '../../../package.json';
 
 class StartPage extends Component {
   constructor(props) {
@@ -108,6 +109,9 @@ class StartPage extends Component {
                 )}
               </div>
             )}
+            <p className="mt-4">
+              <i>{`Version: ${packageJson.version}`}</i>
+            </p>
           </Col>
         </Row>
       </Container>
