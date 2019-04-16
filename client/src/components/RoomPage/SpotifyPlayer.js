@@ -55,11 +55,12 @@ export class NowPlaying extends Component {
 
     // playback status listener
     this.webPlaybackInstance.addListener('player_state_changed', state => {
-      // check to see if the song has finished playback and should be skipped
+      // check to see if the current song has finished playback and should be skipped
       if (
-        this.props.currentSong &&
+        state &&
         state.paused &&
         state.position === 0 &&
+        this.props.currentSong &&
         state.restrictions.disallow_resuming_reasons &&
         state.restrictions.disallow_resuming_reasons[0] === 'not_paused' &&
         state.track_window.current_track.id === this.props.currentSong.spotifyId
