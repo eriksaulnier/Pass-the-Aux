@@ -6,16 +6,17 @@
   "engines": {
     "node": ">=7.0.0"
   },
-  "dependencies": {
-    "concurrently": "^4.1.0"
-  },
   "scripts": {
-    "start": "npm start --prefix server",
-    "client": "npm start --prefix client",
-    "server": "npm run dev --prefix server",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "postinstall": "(cd client && npm install) && (cd ../server && npm install) && cd ../",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build --prefix client"
+    "install": "npm run install:client && npm run install:server",
+    "install:client": "(cd ./client && npm install)",
+    "install:server": "(cd ./server && npm install)",
+    "build": "npm run build:client",
+    "build:client": "(cd ./client && npm run build)",
+    "start": "npm run start:prod",
+    "start:prod": "(cd ./server && npm run start)",
+    "start:dev": "npm run start:client & npm run start:server",
+    "start:client": "(cd ./client && npm run start)",
+    "start:server": "(cd ./server && npm run dev)"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
