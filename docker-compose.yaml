@@ -1,18 +1,18 @@
-version: "2"
+version: '2'
 
 services:
   app:
     image: node:7
-    command: npm run dev
+    command: npm run start:dev
     working_dir: /app
     volumes:
       - .:/app
     ports:
-      - "3000:3000"
-      - "5000:5000"
+      - '3000:3000'
+      - '5000:5000'
     links:
       - mongo
   mongo:
     image: mongo
     ports:
-      - "27017:27017"
+      - '27017:27017'
