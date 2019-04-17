@@ -2,6 +2,9 @@
   "name": "pass-the-aux-client",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=7.0.0"
+  },
   "dependencies": {
     "bootstrap": "^4.3.1",
     "connected-react-router": "^6.3.2",

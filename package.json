@@ -15,7 +15,7 @@
     "server": "npm run dev --prefix server",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "postinstall": "(cd client && npm install) && (cd ../server && npm install) && cd ../",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=true npm run build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build --prefix client"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
