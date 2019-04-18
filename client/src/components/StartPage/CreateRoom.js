@@ -34,7 +34,7 @@ class CreateRoom extends Component {
 
     // join the room
     this.props.createRoom({
-      joinCode: this.state.joinCode,
+      joinCode: this.state.joinCode.toUpperCase(),
       owner: this.props.userId
     });
   };

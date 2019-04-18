@@ -33,7 +33,7 @@ class JoinRoom extends Component {
     }
 
     // join the room
-    this.props.joinRoom(this.state.joinCode);
+    this.props.joinRoom(this.state.joinCode.toUpperCase());
   };
 
   render() {
