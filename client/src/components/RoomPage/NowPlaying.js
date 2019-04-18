@@ -60,7 +60,7 @@ export class NowPlaying extends Component {
               </div>
 
               <div className="song-voting">
-                <Button color="primary" className="btn-play" onClick={this.togglePlaying}>
+                <Button color="primary" className="btn-play" onClick={this.togglePlaying} disabled={!this.isOwner()}>
                   {this.props.isPlaying ? <MdPause size="1.4em" /> : <MdPlayArrow size="1.4em" />}
                 </Button>
 
