@@ -9,6 +9,7 @@ import AuthGuard from '../../guards/AuthGuard';
 import SongQueueComponent from './SongQueue';
 import AddSongComponent from './AddSong';
 import NowPlayingComponent from './NowPlaying';
+import FullScreenView from './FullScreenView';
 import './RoomPage.css';
 
 class RoomPage extends Component {
@@ -24,6 +25,11 @@ class RoomPage extends Component {
     if (!props.room) {
       this.props.route('/');
     }
+
+    // initialize component state
+    this.state = {
+      fullscreen: false
+    };
   }
 
   // handles leaving the room
@@ -35,6 +41,11 @@ class RoomPage extends Component {
   // handles reseting the queue
   resetQueue = () => {
     this.props.resetQueue();
+  };
+
+  // triggers full screen mode with the provided value
+  triggerFullscreen = value => {
+    this.setState({ fullscreen: value });
   };
 
   render() {
@@ -52,6 +63,8 @@ class RoomPage extends Component {
             <Button color="danger" onClick={this.resetQueue}>
               Reset Queue
             </Button>
+            <Button onClick={() => this.triggerFullscreen(true)}>Full Screen</Button>
+            <FullScreenView fullscreen={this.state.fullscreen} closeCallback={() => this.triggerFullscreen(false)} />
           </AuthGuard>
         </div>
         <AddSongComponent />
