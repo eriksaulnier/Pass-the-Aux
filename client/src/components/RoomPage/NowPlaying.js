@@ -8,6 +8,7 @@ import SpotifyPlayer from './SpotifyPlayer';
 export class NowPlaying extends Component {
   // handler for skipping the current song
   skipSong = () => {
+    // make sure the user is the room owner
     if (this.isOwner()) {
       this.props.skipSong();
     }
@@ -15,6 +16,7 @@ export class NowPlaying extends Component {
 
   // toggles between play and pause actions
   togglePlaying = () => {
+    // make sure the user is the room owner
     if (this.isOwner()) {
       if (this.props.isPlaying) {
         this.props.pauseSong();

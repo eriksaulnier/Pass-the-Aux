@@ -13,6 +13,7 @@
     "js-cookie": "^2.2.0",
     "lodash": "^4.17.11",
     "react": "^16.8.2",
+    "react-device-detect": "^1.6.2",
     "react-dom": "^16.8.2",
     "react-icons": "^3.5.0",
     "react-load-script": "0.0.6",

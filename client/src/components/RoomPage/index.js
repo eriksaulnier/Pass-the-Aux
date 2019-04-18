@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Container, Button } from 'reactstrap';
+import { isMobile } from 'react-device-detect';
 import { leaveRoom } from '../../actions/RoomActions';
 import { resetQueue } from '../../actions/QueueActions';
 import { getAccessToken } from '../../actions/SpotifyActions';
@@ -45,7 +46,12 @@ class RoomPage extends Component {
 
   // triggers full screen mode with the provided value
   triggerFullscreen = value => {
-    this.setState({ fullscreen: value });
+    // only allow fullscreen mode on non-mobile devices
+    if (isMobile) {
+      alert('Fullscreen mode is not available on mobile');
+    } else {
+      this.setState({ fullscreen: value });
+    }
   };
 
   render() {
@@ -63,7 +69,7 @@ class RoomPage extends Component {
             <Button color="danger" onClick={this.resetQueue}>
               Reset Queue
             </Button>
-            <Button onClick={() => this.triggerFullscreen(true)}>Full Screen</Button>
+            <Button onClick={() => this.triggerFullscreen(true)}>Fullscreen</Button>
             <FullScreenView fullscreen={this.state.fullscreen} closeCallback={() => this.triggerFullscreen(false)} />
           </AuthGuard>
         </div>
