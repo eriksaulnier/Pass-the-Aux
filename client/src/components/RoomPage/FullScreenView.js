@@ -4,21 +4,29 @@ import { connect } from 'react-redux';
 
 class FullScreenView extends Component {
   componentDidMount() {
-    // Add an event listener that calls the close event everytime a key is pressed
-    document.addEventListener('keydown', this.closeEvent, false);
+    // Add an event listener that calls the click callbck everytime a key is pressed
+    document.addEventListener('keydown', this.clickEvent, false);
   }
 
   componentWillUnmount() {
     // Remove the keydown event listener
-    document.removeEventListener('keydown', this.closeEvent, false);
+    document.removeEventListener('keydown', this.clickEvent, false);
   }
 
   // Handles the event that a key was pressed
-  closeEvent = e => {
-    // Check if the key that was pressed was the escape key
-    if (e.keyCode === 27) {
-      // Call the close callback event that was provided by the parent
-      this.props.closeCallback();
+  clickEvent = e => {
+    if (this.props.fullscreen) {
+      // Escape key event
+      if (e.keyCode === 27) {
+        // Call the close callback event that was provided by the parent
+        this.props.closeCallback();
+      }
+
+      // Space bar event
+      // else if (e.keyCode === 32) {
+      //   // Toggle the play state
+      //   this.togglePlaying();
+      // }
     }
   };
 
