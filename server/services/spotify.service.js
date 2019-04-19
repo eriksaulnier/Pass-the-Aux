@@ -31,9 +31,7 @@ module.exports = {
       'user-read-playback-state',
       'user-read-birthdate',
       'user-read-email',
-      'user-read-private',
-      'playlist-read-collaborative',
-      'playlist-read-private'
+      'user-read-private'
     ];
 
     // generate authorization url
@@ -95,13 +93,15 @@ module.exports = {
     });
   },
 
-  refreshAccessToken(socket, refreshToken) {
+  refreshAccessToken(socket, payload) {
     return new Promise((resolve, reject) => {
-      spotifyApi.setRefreshToken(refreshToken);
+      console.log(payload);
+      spotifyApi.setAccessToken(payload.accessToken);
+      spotifyApi.setRefreshToken(payload.refreshToken);
       spotifyApi.refreshAccessToken().then(
         res => {
           // if successful, return response back to client
-          socket.emit('SPOTIFY_TOKEN_SUCCESS', res);
+          socket.emit('SPOTIFY_TOKEN_SUCCESS', res.body);
           resolve(res.body);
         },
         err => {

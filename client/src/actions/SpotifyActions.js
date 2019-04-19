@@ -9,7 +9,7 @@ import {
   SPOTIFY_PLAYER_SUCCESS,
   SPOTIFY_PLAYER_ERROR
 } from './Types';
-import { spotifyClient, setAccessToken } from '../utils/SpotifyClient';
+import { spotifyClient } from '../utils/SpotifyClient';
 import { emit } from '../utils/Socket';
 
 // fetches a new access token from the server using optional auth code
@@ -21,10 +21,13 @@ export const getAccessToken = authCode => {
 };
 
 // refreshes the current access token using the refresh token
-export const refreshAccessToken = refreshToken => {
+export const refreshAccessToken = (accessToken, refreshToken) => {
   return () => {
     // emit event to server
-    emit(SPOTIFY_REFRESH_TOKEN, refreshToken);
+    emit(SPOTIFY_REFRESH_TOKEN, {
+      accessToken,
+      refreshToken
+    });
   };
 };
 
@@ -43,7 +46,7 @@ export const updateTokenStorage = payload => {
 export const playerInitSuccess = payload => {
   return dispatch => {
     // set the spotify api client's access token
-    setAccessToken(payload.accessToken);
+    spotifyClient.setAccessToken(payload.accessToken);
 
     // transfer the user's account playback to the app
     spotifyClient.transferMyPlayback([payload.deviceId], null, (err, res) => {

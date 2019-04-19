@@ -14,9 +14,9 @@ module.exports = socket => {
     );
   });
 
-  socket.on('SPOTIFY_REFRESH_TOKEN', refreshToken => {
+  socket.on('SPOTIFY_REFRESH_TOKEN', payload => {
     // refresh the spotify api access token
-    spotifyService.refreshAccessToken(socket, refreshToken).then(
+    spotifyService.refreshAccessToken(socket, payload).then(
       res => {
         //
       },

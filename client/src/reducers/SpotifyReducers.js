@@ -14,7 +14,7 @@ import { spotifyClient } from '../utils/SpotifyClient';
 const initialState = {
   accessToken: null,
   refreshToken: null,
-  expiresEpoch: null,
+  expires: null,
   userId: null,
   deviceId: null,
   searchResults: [],
@@ -27,19 +27,23 @@ export default (state = initialState, action) => {
       // update the spotify client's access token
       spotifyClient.setAccessToken(action.payload.access_token);
 
+      // check if the user is logged into their own account
+      const isLoggedIn = action.payload.token_type === 'Bearer';
+
       // update token info in store
       return Object.assign({}, state, {
-        loggedIn: true,
+        loggedIn: isLoggedIn,
         accessToken: action.payload.access_token,
-        refreshToken: action.payload.refresh_token,
-        expiresEpoch: new Date().getTime() / 1000 + parseInt(action.payload.expires_in)
+        refreshToken: isLoggedIn ? state.refreshToken || action.payload.refresh_token : null,
+        expires: new Date(Date.now() + 1000 * parseInt(action.payload.expires_in))
       });
 
     case SPOTIFY_TOKEN_ERROR:
       // handle error
       alert(action.payload);
       return Object.assign({}, state, {
-        loggedIn: false
+        loggedIn: false,
+        userId: null
       });
 
     case SPOTIFY_PLAYER_SUCCESS:
@@ -50,7 +54,7 @@ export default (state = initialState, action) => {
 
     case SPOTIFY_PLAYER_ERROR:
       // handle error
-      console.error(action.payload);
+      alert(action.payload);
       return state;
 
     case SPOTIFY_USER_SUCCESS:
