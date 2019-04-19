@@ -21,7 +21,7 @@ export class NowPlaying extends Component {
       if (this.props.isPlaying) {
         this.props.pauseSong();
       } else {
-        this.props.playSong();
+        this.props.playSong(this.props.deviceId, this.props.currentSong);
       }
     }
   };
@@ -85,14 +85,15 @@ const mapStateToProps = state => {
     duration: state.playbackReducer.duration,
     position: state.playbackReducer.position,
     ownerId: state.roomReducer.ownerId,
-    userId: state.spotifyReducer.userId
+    userId: state.spotifyReducer.userId,
+    deviceId: state.spotifyReducer.deviceId
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  playSong: songId => dispatch(playSong(songId)),
-  pauseSong: songId => dispatch(pauseSong(songId)),
-  skipSong: songId => dispatch(skipSong(songId))
+  playSong: (deviceId, currentSong) => dispatch(playSong(deviceId, currentSong)),
+  pauseSong: () => dispatch(pauseSong()),
+  skipSong: () => dispatch(skipSong())
 });
 
 export default connect(

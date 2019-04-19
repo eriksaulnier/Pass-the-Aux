@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongoose').Types;
 const Room = require('../models/room');
 const roomService = require('../services/room.service');
+const playbackService = require('../services/playback.service');
 
 module.exports = {
   addSong(io, socket, songData) {
@@ -15,14 +16,13 @@ module.exports = {
           Room.findOneAndUpdate({ _id: room._id }, { $push: { queue: song } }, { new: true }, (err, doc) => {
             if (err) reject(err);
 
-            // if the queue is empty, set this song to the current song
-            if (!doc.currentSong) {
-              doc.nextSong();
-              io.sockets.in(room.joinCode).emit('UPDATE_CURRENT_SONG', doc.currentSong);
-            }
-
             // emit the updated queue to the room
             io.sockets.in(room.joinCode).emit('UPDATE_QUEUE', doc.getSortedQueue());
+
+            // if there is no current song trigger the skip action
+            if (!doc.currentSong) {
+              playbackService.skipSong(io, socket);
+            }
 
             resolve(doc);
           });

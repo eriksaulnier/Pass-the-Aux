@@ -55,7 +55,7 @@ export default (state = initialState, action) => {
 
     case UPDATE_CURRENT_SONG:
       // check if the state is curently waiting for a new song
-      if (state.skipping) {
+      if (state.skipping || !state.currentSong) {
         // check if a new song was provided
         if (action.payload) {
           // play the new song using the spotify client

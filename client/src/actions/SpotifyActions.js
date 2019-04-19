@@ -48,27 +48,31 @@ export const playerInitSuccess = payload => {
     // set the spotify api client's access token
     spotifyClient.setAccessToken(payload.accessToken);
 
-    // transfer the user's account playback to the app
-    spotifyClient.transferMyPlayback([payload.deviceId], null, (err, res) => {
-      if (err) {
-        // dispatch any errors to app
-        dispatch({
-          type: SPOTIFY_PLAYER_ERROR,
-          payload: err
-        });
-      } else {
-        // play the new song using the spotify client
-        if (payload.currentSong) {
-          spotifyClient.play({ uris: [payload.currentSong.spotifyUri], device_id: payload.deviceId });
-        }
+    // either transfer by playing the current song or by moving playback to app
+    let transferMethod = null;
+    if (payload.currentSong) {
+      transferMethod = spotifyClient.play({ uris: [payload.currentSong.spotifyUri], device_id: payload.deviceId });
+    } else {
+      transferMethod = spotifyClient.transferMyPlayback([payload.deviceId], { play: false });
+    }
 
+    // call the transfer request
+    transferMethod.then(
+      () => {
         // dispatch success to app
         dispatch({
           type: SPOTIFY_PLAYER_SUCCESS,
           payload: payload.deviceId
         });
+      },
+      err => {
+        // dispatch any errors to app
+        dispatch({
+          type: SPOTIFY_PLAYER_ERROR,
+          payload: err
+        });
       }
-    });
+    );
   };
 };
 
