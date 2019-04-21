@@ -85,10 +85,14 @@ export default (state = initialState, action) => {
     case UPDATE_PLAYBACK_STATE:
       if (action.payload) {
         return Object.assign({}, state, {
-          isPlaying: !action.payload.paused,
-          duration: action.payload.duration,
           position: action.payload.position,
-          connected: false
+          connected: false,
+          ...(action.payload.paused
+            ? {
+                isPlaying: !action.payload.paused,
+                duration: action.payload.duration
+              }
+            : null)
         });
       } else {
         return Object.assign({}, state, {

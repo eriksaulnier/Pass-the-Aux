@@ -2,10 +2,33 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, ListGroup, ListGroupItem, Badge, Progress } from 'reactstrap';
 import { MdPlayArrow, MdPause, MdSkipNext } from 'react-icons/md';
-import { playSong, pauseSong, skipSong } from '../../actions/PlaybackActions';
+import { playSong, pauseSong, skipSong, updatePlaybackState } from '../../actions/PlaybackActions';
 import SpotifyPlayer from './SpotifyPlayer';
+import { spotifyClient } from '../../utils/SpotifyClient';
 
 export class NowPlaying extends Component {
+  componentDidMount = () => {
+    // set up an interval for updating the playback state
+    this.updateInterval = setInterval(() => {
+      spotifyClient.getMyCurrentPlaybackState().then(
+        res => {
+          this.props.updatePlaybackState({
+            position: res.progress_ms,
+            isPlaying: res.is_playing
+          });
+        },
+        err => {
+          console.error(err);
+        }
+      );
+    }, 1000);
+  };
+
+  componentWillUnmount = () => {
+    // remove the playback update interval
+    clearInterval(this.updateInterval);
+  };
+
   // handler for skipping the current song
   skipSong = () => {
     // make sure the user is the room owner
@@ -93,7 +116,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   playSong: (deviceId, currentSong) => dispatch(playSong(deviceId, currentSong)),
   pauseSong: () => dispatch(pauseSong()),
-  skipSong: () => dispatch(skipSong())
+  skipSong: () => dispatch(skipSong()),
+  updatePlaybackState: state => dispatch(updatePlaybackState(state))
 });
 
 export default connect(
