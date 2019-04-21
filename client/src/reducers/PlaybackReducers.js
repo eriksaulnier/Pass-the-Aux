@@ -87,7 +87,7 @@ export default (state = initialState, action) => {
         return Object.assign({}, state, {
           position: action.payload.position,
           connected: false,
-          ...(action.payload.paused
+          ...(action.payload.duration
             ? {
                 isPlaying: !action.payload.paused,
                 duration: action.payload.duration

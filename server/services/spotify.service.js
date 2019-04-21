@@ -95,7 +95,6 @@ module.exports = {
 
   refreshAccessToken(socket, payload) {
     return new Promise((resolve, reject) => {
-      console.log(payload);
       spotifyApi.setAccessToken(payload.accessToken);
       spotifyApi.setRefreshToken(payload.refreshToken);
       spotifyApi.refreshAccessToken().then(
