@@ -12,13 +12,13 @@ import { spotifyClient } from '../utils/SpotifyClient';
 
 // the initial state for the reducer
 const initialState = {
+  loggedIn: false,
   accessToken: null,
   refreshToken: null,
   expires: null,
   userId: null,
   deviceId: null,
-  searchResults: [],
-  loggedIn: false
+  searchResults: []
 };
 
 export default (state = initialState, action) => {

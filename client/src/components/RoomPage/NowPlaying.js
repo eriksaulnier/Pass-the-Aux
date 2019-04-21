@@ -11,7 +11,6 @@ export class NowPlaying extends Component {
     // make sure the user is the room owner
     if (this.isOwner()) {
       this.props.skipSong();
-      console.log('skipping');
     }
   };
 
