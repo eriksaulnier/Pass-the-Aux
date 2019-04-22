@@ -53,7 +53,7 @@ export class NowPlaying extends Component {
   handleLoadSuccess = () => {
     // create a new instance of the spotify player
     this.webPlaybackInstance = new window.Spotify.Player({
-      name: 'Pass The Aux',
+      name: 'Pass the Aux',
       getOAuthToken: cb => {
         cb(this.props.accessToken);
       }

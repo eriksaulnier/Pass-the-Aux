@@ -54,7 +54,7 @@ module.exports = {
               result => {
                 // make sure the user's spotify account is not free (playback will not work)
                 if (result.body.product === 'open' || result.body.product === 'free') {
-                  socket.emit('SPOTIFY_USER_ERROR', 'Pass The Aux does not work with non-premium Spotify accounts :(');
+                  socket.emit('SPOTIFY_USER_ERROR', 'Pass the Aux does not work with non-premium Spotify accounts :(');
                   reject();
                 } else {
                   // otherwise return response back to client

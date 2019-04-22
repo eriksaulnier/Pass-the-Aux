@@ -1,4 +1,4 @@
-# Pass The Aux
+# Pass the Aux
 
 ## Overview
 
@@ -15,13 +15,13 @@ Developed using the MERN stack which is a combination of:
 
 ### Dependencies
 
-1. [NodeJS](https://nodejs.org/en/): Pass The Aux uses the default package manager that ships with NodeJS for installing node modules.
-2. [MongoDB](https://www.mongodb.com/): Pass The Aux uses a MongoDB database for storing room data.
-3. [Spotify](https://developer.spotify.com/): Pass The Aux plays music using the Spotify API and Playback SDK. You will need to set up a Spotify Developer Application (requires a Spotify Premium account) and configure the OAuth redirect URL in order to run the app on your local host. The redirect URL for a development environemnt is usually `http://localhost:3000/` unless you have changed the default port for the application.
+1. [NodeJS](https://nodejs.org/en/): Pass the Aux uses the default package manager that ships with NodeJS for installing node modules.
+2. [MongoDB](https://www.mongodb.com/): Pass the Aux uses a MongoDB database for storing room data.
+3. [Spotify](https://developer.spotify.com/): Pass the Aux plays music using the Spotify API and Playback SDK. You will need to set up a Spotify Developer Application (requires a Spotify Premium account) and configure the OAuth redirect URL in order to run the app on your local host. The redirect URL for a development environemnt is usually `http://localhost:3000/` unless you have changed the default port for the application.
 
 ### Environment Files
 
-Pass The Aux loads configuration variables from two different locations, one for the client and another for the server. The following paths are relative to the repository root directory:
+Pass the Aux loads configuration variables from two different locations, one for the client and another for the server. The following paths are relative to the repository root directory:
 
 - `server/.env`: This file includes all of the configuration values for the server side of the application. There is an example file located at `server/.env.example` which looks like this:
 
@@ -36,13 +36,13 @@ Pass The Aux loads configuration variables from two different locations, one for
 - `client/.env`: This file includes all of the configuration values for the client side of the application. There is an example file located at `client/.env.example` which looks like this:
 
   ```js
-  REACT_APP_NAME=Pass The Aux
+  REACT_APP_NAME=Pass the Aux
   SKIP_PREFLIGHT_CHECK=true
   ```
 
 ### Building and Serving
 
-The `package.json` file in the repository root directory contains all the commands necessary for building and serving Pass The Aux. The commands can be run by entering `npm run <command name>`, with command name replaced with one of following commands:
+The `package.json` file in the repository root directory contains all the commands necessary for building and serving Pass the Aux. The commands can be run by entering `npm run <command name>`, with command name replaced with one of following commands:
 
 - `install`: Installs package dependencies for the root directory, client directory, and server directory.
 - `build`: Builds the client to prepare it for deployment.
