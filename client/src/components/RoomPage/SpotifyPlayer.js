@@ -3,21 +3,36 @@ import { connect } from 'react-redux';
 import Script from 'react-load-script';
 import { playerInitSuccess, playerInitError } from '../../actions/SpotifyActions';
 import { updatePlaybackState, skipSong } from '../../actions/PlaybackActions';
+import { spotifyClient } from '../../utils/SpotifyClient';
 
 export class NowPlaying extends Component {
-  webPlaybackInstance = null;
-
-  // setup callback for when the spotify sdk has finished loading
   componentDidMount = () => {
-    // setup callback for sdk ready event
+    // setup callback for when the spotify sdk has finished loading
     window.onSpotifyWebPlaybackSDKReady = () => {
+      // call successful load event
       this.handleLoadSuccess();
+
+      // set up an interval for updating the playback state
+      this.updateInterval = setInterval(() => {
+        // request the current playback state to update progress
+        spotifyClient.getMyCurrentPlaybackState().then(
+          res => {
+            // update the progress value stored in state
+            this.props.updatePlaybackState({
+              position: res.progress_ms
+            });
+          },
+          err => {
+            console.error(err);
+          }
+        );
+      }, 1000);
     };
   };
 
   // remove all event listeners when this component is unmounting
   componentWillUnmount = () => {
-    // if the player is defined remove all event listeners
+    // if the player is defined remove all the event listeners
     if (this.webPlaybackInstance) {
       this.webPlaybackInstance.removeListener('initialization_error');
       this.webPlaybackInstance.removeListener('authentication_error');
@@ -27,13 +42,18 @@ export class NowPlaying extends Component {
       this.webPlaybackInstance.removeListener('ready');
       this.webPlaybackInstance.removeListener('not_ready');
     }
+
+    // clear the update interval if it is defined
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
   };
 
   // handle successful load of spotify sdk
   handleLoadSuccess = () => {
     // create a new instance of the spotify player
     this.webPlaybackInstance = new window.Spotify.Player({
-      name: 'Pass The Aux',
+      name: 'Pass the Aux',
       getOAuthToken: cb => {
         cb(this.props.accessToken);
       }
@@ -65,8 +85,17 @@ export class NowPlaying extends Component {
         state.restrictions.disallow_resuming_reasons[0] === 'not_paused' &&
         state.track_window.current_track.id === this.props.currentSong.spotifyId
       ) {
-        // skip to the next song
-        this.props.skipSong();
+        // check if the song has already been marked as ended
+        if (this.songEnded) {
+          // skip to the next song
+          this.props.skipSong();
+
+          delete this.songEnded;
+        } else {
+          this.songEnded = true;
+        }
+      } else {
+        delete this.songEnded;
       }
 
       // call playback update state action
@@ -97,11 +126,7 @@ export class NowPlaying extends Component {
   };
 
   render() {
-    return (
-      <div>
-        <Script url="https://sdk.scdn.co/spotify-player.js" />
-      </div>
-    );
+    return <Script url="https://sdk.scdn.co/spotify-player.js" />;
   }
 }
 

@@ -66,7 +66,9 @@
   width: 400px;
   height: 400px;
   margin-bottom: 30px;
-  box-shadow: 0px 0px 20px 10px rgba(255, 255, 255, 0.2);
+  border: 6px solid;
+  border-image-source: linear-gradient(45deg, #72afd3, #37ecba);
+  border-image-slice: 1;
 }
 .fullscreen-view .fullscreen-song .song-info {
   margin-bottom: 70px;

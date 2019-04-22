@@ -84,7 +84,8 @@ class RoomPage extends Component {
 const mapStateToProps = state => {
   return {
     room: state.roomReducer.room,
-    loggedIn: state.spotifyReducer.loggedIn
+    loggedIn: state.spotifyReducer.loggedIn,
+    isRoomOwner: state.spotifyReducer.isRoomOwner
   };
 };
 

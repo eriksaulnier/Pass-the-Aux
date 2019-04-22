@@ -31,9 +31,7 @@ module.exports = {
       'user-read-playback-state',
       'user-read-birthdate',
       'user-read-email',
-      'user-read-private',
-      'playlist-read-collaborative',
-      'playlist-read-private'
+      'user-read-private'
     ];
 
     // generate authorization url
@@ -56,7 +54,7 @@ module.exports = {
               result => {
                 // make sure the user's spotify account is not free (playback will not work)
                 if (result.body.product === 'open' || result.body.product === 'free') {
-                  socket.emit('SPOTIFY_USER_ERROR', 'Pass The Aux does not work with non-premium Spotify accounts :(');
+                  socket.emit('SPOTIFY_USER_ERROR', 'Pass the Aux does not work with non-premium Spotify accounts :(');
                   reject();
                 } else {
                   // otherwise return response back to client
@@ -95,13 +93,14 @@ module.exports = {
     });
   },
 
-  refreshAccessToken(socket, refreshToken) {
+  refreshAccessToken(socket, payload) {
     return new Promise((resolve, reject) => {
-      spotifyApi.setRefreshToken(refreshToken);
+      spotifyApi.setAccessToken(payload.accessToken);
+      spotifyApi.setRefreshToken(payload.refreshToken);
       spotifyApi.refreshAccessToken().then(
         res => {
           // if successful, return response back to client
-          socket.emit('SPOTIFY_TOKEN_SUCCESS', res);
+          socket.emit('SPOTIFY_TOKEN_SUCCESS', res.body);
           resolve(res.body);
         },
         err => {

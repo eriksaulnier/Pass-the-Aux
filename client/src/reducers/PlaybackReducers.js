@@ -55,7 +55,7 @@ export default (state = initialState, action) => {
 
     case UPDATE_CURRENT_SONG:
       // check if the state is curently waiting for a new song
-      if (state.skipping) {
+      if (state.skipping || !state.currentSong) {
         // check if a new song was provided
         if (action.payload) {
           // play the new song using the spotify client
@@ -83,24 +83,40 @@ export default (state = initialState, action) => {
       }
 
     case UPDATE_PLAYBACK_STATE:
+      // if there is an update update the state
       if (action.payload) {
+        if (action.payload.track_window && state.currentSong) {
+          // check if the payload track and current song match
+          if (action.payload.track_window.current_track.id !== state.currentSong.spotifyId) {
+            // if they don't match switch to play the correct song
+            spotifyClient.play({ uris: [state.currentSong.spotifyUri] });
+          }
+        }
+
         return Object.assign({}, state, {
-          isPlaying: !action.payload.paused,
-          duration: action.payload.duration,
           position: action.payload.position,
-          connected: false
+          connected: true,
+          // if duration is supplied then it is a full update from the player
+          ...(action.payload.duration
+            ? {
+                isPlaying: !action.payload.paused,
+                duration: action.payload.duration
+              }
+            : null)
         });
       } else {
         return Object.assign({}, state, {
-          connected: true
+          connected: false
         });
       }
 
     case LEAVE_ROOM:
       // pause spotify client playback
-      spotifyClient.pause();
+      if (state.isPlaying) {
+        spotifyClient.pause();
+      }
 
-      return initialState;
+      return Object.assign({}, state, initialState);
 
     default:
       return state;

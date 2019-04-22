@@ -4,18 +4,19 @@ import { createBrowserHistory } from 'history';
 import thunk from 'redux-thunk';
 import createRootReducer from './reducers';
 import { loadSessionState, saveSessionState } from './utils/SessionStorage';
-// import { loadLocalState, saveLocalState } from './utils/LocalStorage';
+import { loadLocalState, saveLocalState } from './utils/LocalStorage';
 
 export const history = createBrowserHistory();
 
 export default function configureStore() {
   // load the saved local and session state
   const persistedSessionState = loadSessionState();
+  const persistedLocalState = loadLocalState();
 
   // create the store
   const store = createStore(
     createRootReducer(history),
-    persistedSessionState,
+    { ...persistedSessionState, ...persistedLocalState },
     compose(applyMiddleware(routerMiddleware(history), thunk))
   );
 
@@ -30,11 +31,15 @@ export default function configureStore() {
       },
       queueReducer: {
         votes: state.queueReducer.votes
-      },
+      }
+    });
+
+    // save the local state
+    saveLocalState({
       spotifyReducer: {
         accessToken: state.spotifyReducer.accessToken,
-        refreshToken: state.spotifyReducer.accessToken,
-        expiresEpoch: state.spotifyReducer.expiresEpoch,
+        refreshToken: state.spotifyReducer.refreshToken,
+        expires: state.spotifyReducer.expires,
         userId: state.spotifyReducer.userId,
         loggedIn: state.spotifyReducer.loggedIn
       }

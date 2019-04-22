@@ -3,12 +3,9 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Container, Row, Col, Button } from 'reactstrap';
 import { FaSpotify } from 'react-icons/fa';
-import Cookie from 'js-cookie';
 import { joinRoom } from '../../actions/RoomActions';
-import { getAccessToken } from '../../actions/SpotifyActions';
 import JoinRoomComponent from './JoinRoom';
 import CreateRoomComponent from './CreateRoom';
-import { history } from '../../store';
 import packageJson from '../../../package.json';
 
 class StartPage extends Component {
@@ -21,27 +18,6 @@ class StartPage extends Component {
     // if there is a room already in the store, attempt to join it
     if (this.props.room) {
       this.props.joinRoom(this.props.room);
-    }
-
-    // check if there is a query in the url
-    let query = history.location.search;
-    if (query) {
-      // parse the query to get parameters
-      query = query.substr(1);
-      const result = {};
-      query.split('&').forEach(function(part) {
-        const item = part.split('=');
-        result[item[0]] = decodeURIComponent(item[1]);
-      });
-
-      // if there is a code present use it for auth
-      if (result.code && result.state === Cookie.get('spotify_auth_state')) {
-        Cookie.remove('spotify_auth_state');
-        this.props.getAccessToken(result.code);
-      }
-
-      // reset the url path
-      history.push('/');
     }
   }
 
@@ -128,8 +104,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   route: path => dispatch(push(path)),
-  joinRoom: room => dispatch(joinRoom(room)),
-  getAccessToken: authCode => dispatch(getAccessToken(authCode))
+  joinRoom: room => dispatch(joinRoom(room))
 });
 
 export default connect(
