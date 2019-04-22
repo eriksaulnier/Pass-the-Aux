@@ -22,6 +22,8 @@ export class NowPlaying extends Component {
                 // update the progress value stored in state
                 this.props.updatePlaybackState({
                   position: res.progress_ms,
+                  duration: res.item.duration_ms,
+                  paused: !res.is_playing,
                   track_window: {
                     current_track: res.item
                   }
