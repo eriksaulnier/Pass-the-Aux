@@ -18,7 +18,7 @@ class RoomPage extends Component {
     super(props);
 
     // setup spotify api connection if no access code is present
-    if (!this.props.isRoomOwner) {
+    if (!this.props.loggedIn) {
       this.props.connectSpotify();
     }
 
@@ -84,6 +84,7 @@ class RoomPage extends Component {
 const mapStateToProps = state => {
   return {
     room: state.roomReducer.room,
+    loggedIn: state.spotifyReducer.loggedIn,
     isRoomOwner: state.spotifyReducer.isRoomOwner
   };
 };
