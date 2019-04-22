@@ -86,7 +86,8 @@ export default (state = initialState, action) => {
       if (action.payload) {
         return Object.assign({}, state, {
           position: action.payload.position,
-          connected: false,
+          connected: true,
+          // if duration is supplied then it is a full update from the player
           ...(action.payload.duration
             ? {
                 isPlaying: !action.payload.paused,
@@ -102,7 +103,9 @@ export default (state = initialState, action) => {
 
     case LEAVE_ROOM:
       // pause spotify client playback
+      if (state.isPlaying) {
       spotifyClient.pause();
+      }
 
       return initialState;
 

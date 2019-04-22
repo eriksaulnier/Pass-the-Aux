@@ -6,7 +6,9 @@ import {
   SPOTIFY_USER_SUCCESS,
   SPOTIFY_USER_ERROR,
   SPOTIFY_PLAYER_SUCCESS,
-  SPOTIFY_PLAYER_ERROR
+  SPOTIFY_PLAYER_ERROR,
+  ROOM_INFO,
+  LEAVE_ROOM
 } from '../actions/Types';
 import { spotifyClient } from '../utils/SpotifyClient';
 
@@ -18,6 +20,7 @@ const initialState = {
   expires: null,
   userId: null,
   deviceId: null,
+  isRoomOwner: false,
   searchResults: []
 };
 
@@ -78,6 +81,19 @@ export default (state = initialState, action) => {
       // handle error
       console.error('Error loading search results');
       return state;
+
+    case ROOM_INFO:
+      // update the isRoomOwner flag
+      return Object.assign({}, state, {
+        isRoomOwner: state.userId === action.payload.owner
+      });
+
+    case LEAVE_ROOM:
+      // reset back to the initial state
+      return Object.assign({}, state, {
+        isRoomOwner: false,
+        searchResults: []
+      });
 
     default:
       return state;

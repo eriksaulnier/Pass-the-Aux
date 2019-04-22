@@ -45,7 +45,7 @@ class FullScreenView extends Component {
                     <h1>
                       {song.title}
                       {song.explicit ? (
-                        <Badge className="ml-2" color="dark">
+                          <Badge className="ml-2" color="dark">
                           EXPLICIT
                         </Badge>
                       ) : null}
