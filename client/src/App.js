@@ -37,9 +37,16 @@ class App extends Component {
     this.refreshAccessToken();
 
     // set the interval for refreshing the access token
-    setInterval(() => {
+    this.updateInterval = setInterval(() => {
       this.refreshAccessToken();
     }, 1000 * 60); // *60
+  }
+
+  componentWillUnmount() {
+    // clear the update interval if it is defined
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
   }
 
   // refreshes the Spotify access token
