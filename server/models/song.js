@@ -7,6 +7,7 @@ const SongSchema = new Schema({
   title: { type: Schema.Types.String, required: true },
   artist: Schema.Types.String,
   artwork: Schema.Types.String,
+  spotifyId: { type: Schema.Types.String, required: true },
   spotifyUri: { type: Schema.Types.String, required: true },
   currentVote: { type: Schema.Types.Number, default: 0 },
   explicit: { type: Schema.Types.Boolean, required: true },

@@ -6,22 +6,22 @@ module.exports = socket => {
     // generate a new spotify api access token using client credentials
     spotifyService.generateAccessToken(socket, authCode).then(
       res => {
-        socket.emit('SPOTIFY_TOKEN_SUCCESS', res);
+        //
       },
       err => {
-        socket.emit('SPOTIFY_TOKEN_ERROR', err);
+        console.error(err);
       }
     );
   });
 
-  socket.on('SPOTIFY_REFRESH_TOKEN', refreshToken => {
+  socket.on('SPOTIFY_REFRESH_TOKEN', payload => {
     // refresh the spotify api access token
-    spotifyService.refreshAccessToken(refreshToken).then(
+    spotifyService.refreshAccessToken(socket, payload).then(
       res => {
-        socket.emit('SPOTIFY_TOKEN_SUCCESS', res);
+        //
       },
       err => {
-        socket.emit('SPOTIFY_TOKEN_ERROR', err);
+        console.error(err);
       }
     );
   });

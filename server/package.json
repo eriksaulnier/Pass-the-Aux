@@ -1,8 +1,11 @@
 {
   "name": "pass-the-aux-server",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "node": ">=7.0.0"
+  },
   "dependencies": {
     "cookie-parser": "^1.4.4",
     "dotenv": "^6.2.0",

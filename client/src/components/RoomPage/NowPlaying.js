@@ -8,18 +8,20 @@ import SpotifyPlayer from './SpotifyPlayer';
 export class NowPlaying extends Component {
   // handler for skipping the current song
   skipSong = () => {
-    if (this.isOwner()) {
+    // make sure the user is the room owner
+    if (this.props.isRoomOwner) {
       this.props.skipSong();
     }
   };
 
   // toggles between play and pause actions
   togglePlaying = () => {
-    if (this.isOwner()) {
+    // make sure the user is the room owner
+    if (this.props.isRoomOwner) {
       if (this.props.isPlaying) {
         this.props.pauseSong();
       } else {
-        this.props.playSong();
+        this.props.playSong(this.props.deviceId, this.props.currentSong);
       }
     }
   };
@@ -27,11 +29,6 @@ export class NowPlaying extends Component {
   // returns the current progress of the track as a percent
   playbackProgressPercent = () => {
     return this.props.position ? (this.props.position / this.props.duration) * 100 : 0;
-  };
-
-  // checks if the current user is owner
-  isOwner = () => {
-    return this.props.userId === this.props.ownerId;
   };
 
   render() {
@@ -58,7 +55,7 @@ export class NowPlaying extends Component {
               </div>
 
               <div className="song-voting">
-                <Button color="primary" className="btn-play" onClick={this.togglePlaying}>
+                <Button color="primary" className="btn-play" onClick={this.togglePlaying} disabled={!this.props.isRoomOwner}>
                   {this.props.isPlaying ? <MdPause size="1.4em" /> : <MdPlayArrow size="1.4em" />}
                 </Button>
 
@@ -70,7 +67,7 @@ export class NowPlaying extends Component {
           </ListGroup>
         )}
 
-        {this.isOwner() && <SpotifyPlayer />}
+        {this.props.isRoomOwner && <SpotifyPlayer />}
       </div>
     );
   }
@@ -82,15 +79,15 @@ const mapStateToProps = state => {
     isPlaying: state.playbackReducer.isPlaying,
     duration: state.playbackReducer.duration,
     position: state.playbackReducer.position,
-    ownerId: state.roomReducer.ownerId,
-    userId: state.spotifyReducer.userId
+    deviceId: state.spotifyReducer.deviceId,
+    isRoomOwner: state.spotifyReducer.isRoomOwner
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  playSong: songId => dispatch(playSong(songId)),
-  pauseSong: songId => dispatch(pauseSong(songId)),
-  skipSong: songId => dispatch(skipSong(songId))
+  playSong: (deviceId, currentSong) => dispatch(playSong(deviceId, currentSong)),
+  pauseSong: () => dispatch(pauseSong()),
+  skipSong: () => dispatch(skipSong())
 });
 
 export default connect(

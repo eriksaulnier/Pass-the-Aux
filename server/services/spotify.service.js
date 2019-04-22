@@ -31,9 +31,7 @@ module.exports = {
       'user-read-playback-state',
       'user-read-birthdate',
       'user-read-email',
-      'user-read-private',
-      'playlist-read-collaborative',
-      'playlist-read-private'
+      'user-read-private'
     ];
 
     // generate authorization url
@@ -54,18 +52,26 @@ module.exports = {
             // fetch the user's info and send it back to the client
             spotifyApi.getMe().then(
               result => {
-                socket.emit('SPOTIFY_USER_SUCCESS', result.body);
+                // make sure the user's spotify account is not free (playback will not work)
+                if (result.body.product === 'open' || result.body.product === 'free') {
+                  socket.emit('SPOTIFY_USER_ERROR', 'Pass the Aux does not work with non-premium Spotify accounts :(');
+                  reject();
+                } else {
+                  // otherwise return response back to client
+                  socket.emit('SPOTIFY_USER_SUCCESS', result.body);
+                  socket.emit('SPOTIFY_TOKEN_SUCCESS', res.body);
+                  resolve(res.body);
+                }
               },
               error => {
-                socket.emit('SPOTIFY_USER_ERROR', error);
+                socket.emit('SPOTIFY_USER_ERROR', 'There was an error fetching your Spotify account');
+                reject(error);
               }
             );
-
-            // if successful, return response back to client
-            resolve(res.body);
           },
           err => {
-            // otherwise send error
+            // otherwise send token error
+            socket.emit('SPOTIFY_TOKEN_ERROR', 'There was an error authenticating with Spotify');
             reject(err);
           }
         );
@@ -74,10 +80,12 @@ module.exports = {
         spotifyApi.clientCredentialsGrant().then(
           res => {
             // if successful, return response back to client
+            socket.emit('SPOTIFY_TOKEN_SUCCESS', res.body);
             resolve(res.body);
           },
           err => {
             // otherwise send error
+            socket.emit('SPOTIFY_TOKEN_ERROR', 'There was an error authenticating with Spotify');
             reject(err);
           }
         );
@@ -85,14 +93,19 @@ module.exports = {
     });
   },
 
-  refreshAccessToken(refreshToken) {
+  refreshAccessToken(socket, payload) {
     return new Promise((resolve, reject) => {
-      spotifyApi.setRefreshToken(refreshToken);
+      spotifyApi.setAccessToken(payload.accessToken);
+      spotifyApi.setRefreshToken(payload.refreshToken);
       spotifyApi.refreshAccessToken().then(
         res => {
+          // if successful, return response back to client
+          socket.emit('SPOTIFY_TOKEN_SUCCESS', res.body);
           resolve(res.body);
         },
         err => {
+          // otherwise send error
+          socket.emit('SPOTIFY_TOKEN_ERROR', 'There was an error authenticating with Spotify');
           reject(err);
         }
       );

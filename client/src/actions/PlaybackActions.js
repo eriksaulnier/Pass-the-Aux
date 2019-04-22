@@ -3,9 +3,9 @@ import { spotifyClient } from '../utils/SpotifyClient';
 import { emit } from '../utils/Socket';
 
 // resume playback using spotify api and dispatch event
-export const playSong = () => {
+export const playSong = (deviceId, currentSong) => {
   return dispatch => {
-    spotifyClient.play().then(
+    spotifyClient.play({ device_id: deviceId }).then(
       () => {
         // emit event to server
         emit(PLAY_SONG);

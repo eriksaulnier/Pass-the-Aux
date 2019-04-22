@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Container, Button } from 'reactstrap';
+import { isMobile } from 'react-device-detect';
 import { leaveRoom } from '../../actions/RoomActions';
 import { resetQueue } from '../../actions/QueueActions';
 import { getAccessToken } from '../../actions/SpotifyActions';
@@ -9,6 +10,7 @@ import AuthGuard from '../../guards/AuthGuard';
 import SongQueueComponent from './SongQueue';
 import AddSongComponent from './AddSong';
 import NowPlayingComponent from './NowPlaying';
+import FullScreenView from './FullScreenView';
 import './RoomPage.css';
 
 class RoomPage extends Component {
@@ -24,6 +26,11 @@ class RoomPage extends Component {
     if (!props.room) {
       this.props.route('/');
     }
+
+    // initialize component state
+    this.state = {
+      fullscreen: false
+    };
   }
 
   // handles leaving the room
@@ -35,6 +42,16 @@ class RoomPage extends Component {
   // handles reseting the queue
   resetQueue = () => {
     this.props.resetQueue();
+  };
+
+  // triggers full screen mode with the provided value
+  triggerFullscreen = value => {
+    // only allow fullscreen mode on non-mobile devices
+    if (isMobile) {
+      alert('Fullscreen mode is not available on mobile');
+    } else {
+      this.setState({ fullscreen: value });
+    }
   };
 
   render() {
@@ -52,6 +69,8 @@ class RoomPage extends Component {
             <Button color="danger" onClick={this.resetQueue}>
               Reset Queue
             </Button>
+            <Button onClick={() => this.triggerFullscreen(true)}>Fullscreen</Button>
+            <FullScreenView fullscreen={this.state.fullscreen} closeCallback={() => this.triggerFullscreen(false)} />
           </AuthGuard>
         </div>
         <AddSongComponent />
@@ -65,7 +84,8 @@ class RoomPage extends Component {
 const mapStateToProps = state => {
   return {
     room: state.roomReducer.room,
-    loggedIn: state.spotifyReducer.loggedIn
+    loggedIn: state.spotifyReducer.loggedIn,
+    isRoomOwner: state.spotifyReducer.isRoomOwner
   };
 };
 
