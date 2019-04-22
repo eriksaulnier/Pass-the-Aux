@@ -8,26 +8,33 @@ import { spotifyClient } from '../../utils/SpotifyClient';
 export class NowPlaying extends Component {
   componentDidMount = () => {
     // setup callback for when the spotify sdk has finished loading
-    window.onSpotifyWebPlaybackSDKReady = () => {
+    this.waitForSpotify().then(() => {
       // call successful load event
       this.handleLoadSuccess();
 
       // set up an interval for updating the playback state
       this.updateInterval = setInterval(() => {
-        // request the current playback state to update progress
-        spotifyClient.getMyCurrentPlaybackState().then(
-          res => {
-            // update the progress value stored in state
-            this.props.updatePlaybackState({
-              position: res.progress_ms
-            });
-          },
-          err => {
-            console.error(err);
-          }
-        );
+        if (this.props.isRoomOwner) {
+          // request the current playback state to send update event
+          spotifyClient.getMyCurrentPlaybackState().then(
+            res => {
+              if (res) {
+                // update the progress value stored in state
+                this.props.updatePlaybackState({
+                  position: res.progress_ms,
+                  track_window: {
+                    current_track: res.item
+                  }
+                });
+              }
+            },
+            err => {
+              console.error(err);
+            }
+          );
+        }
       }, 1000);
-    };
+    });
   };
 
   // remove all event listeners when this component is unmounting
@@ -42,11 +49,23 @@ export class NowPlaying extends Component {
       this.webPlaybackInstance.removeListener('ready');
       this.webPlaybackInstance.removeListener('not_ready');
     }
-
     // clear the update interval if it is defined
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
     }
+  };
+
+  // returns a promise that waits until the spotify playback sdk has loaded
+  waitForSpotify = () => {
+    return new Promise(resolve => {
+      if ('Spotify' in window) {
+        resolve();
+      } else {
+        window.onSpotifyWebPlaybackSDKReady = () => {
+          resolve();
+        };
+      }
+    });
   };
 
   // handle successful load of spotify sdk
@@ -75,27 +94,27 @@ export class NowPlaying extends Component {
 
     // playback status listener
     this.webPlaybackInstance.addListener('player_state_changed', state => {
-      // check to see if the current song has finished playback and should be skipped
-      if (
-        state &&
-        state.paused &&
-        state.position === 0 &&
-        this.props.currentSong &&
-        state.restrictions.disallow_resuming_reasons &&
-        state.restrictions.disallow_resuming_reasons[0] === 'not_paused' &&
-        state.track_window.current_track.id === this.props.currentSong.spotifyId
-      ) {
-        // check if the song has already been marked as ended
-        if (this.songEnded) {
-          // skip to the next song
-          this.props.skipSong();
+      if (state && this.props.currentSong) {
+        // check to see if the current song has finished playback and should be skipped
+        if (
+          state.paused &&
+          state.position === 0 &&
+          state.restrictions.disallow_resuming_reasons &&
+          state.restrictions.disallow_resuming_reasons[0] === 'not_paused' &&
+          state.track_window.current_track.id === this.props.currentSong.spotifyId
+        ) {
+          // check if the song has already been marked as ended
+          if (this.songEnded) {
+            // skip to the next song if song is marked as ended
+            this.props.skipSong();
 
-          delete this.songEnded;
+            delete this.songEnded;
+          } else {
+            this.songEnded = true;
+          }
         } else {
-          this.songEnded = true;
+          delete this.songEnded;
         }
-      } else {
-        delete this.songEnded;
       }
 
       // call playback update state action
@@ -106,6 +125,7 @@ export class NowPlaying extends Component {
     this.webPlaybackInstance.addListener('ready', data => {
       console.log('Ready with Device ID', data.device_id);
 
+      // send initialization data
       this.props.playerInitSuccess({
         deviceId: data.device_id,
         accessToken: this.props.accessToken,
@@ -135,7 +155,8 @@ const mapStateToProps = state => {
     accessToken: state.spotifyReducer.accessToken,
     currentSong: state.playbackReducer.currentSong,
     position: state.playbackReducer.position,
-    isPlaying: state.playbackReducer.isPlaying
+    isPlaying: state.playbackReducer.isPlaying,
+    isRoomOwner: state.spotifyReducer.isRoomOwner
   };
 };
 
