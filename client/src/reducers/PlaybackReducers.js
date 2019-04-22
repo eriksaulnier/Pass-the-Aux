@@ -116,7 +116,7 @@ export default (state = initialState, action) => {
         spotifyClient.pause();
       }
 
-      return Object.assign({}, state, initialState);
+      return initialState;
 
     default:
       return state;
