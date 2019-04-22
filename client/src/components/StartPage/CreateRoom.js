@@ -14,7 +14,7 @@ class CreateRoom extends Component {
   // handle input change event
   handleInputChange = event => {
     const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const value = target.type === 'checkbox' ? target.checked : target.value.toUpperCase();
     const name = target.name;
 
     this.setState({
@@ -34,7 +34,7 @@ class CreateRoom extends Component {
 
     // join the room
     this.props.createRoom({
-      joinCode: this.state.joinCode.toUpperCase(),
+      joinCode: this.state.joinCode,
       owner: this.props.userId
     });
   };

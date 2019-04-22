@@ -95,14 +95,9 @@ export default (state = initialState, action) => {
 
         return Object.assign({}, state, {
           position: action.payload.position,
-          connected: true,
-          // if duration is supplied then it is a full update from the player
-          ...(action.payload.duration
-            ? {
-                isPlaying: !action.payload.paused,
-                duration: action.payload.duration
-              }
-            : null)
+          duration: action.payload.duration,
+          isPlaying: !action.payload.paused,
+          connected: true
         });
       } else {
         return Object.assign({}, state, {
@@ -116,7 +111,7 @@ export default (state = initialState, action) => {
         spotifyClient.pause();
       }
 
-      return Object.assign({}, state, initialState);
+      return initialState;
 
     default:
       return state;
