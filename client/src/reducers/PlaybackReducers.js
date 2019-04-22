@@ -83,7 +83,16 @@ export default (state = initialState, action) => {
       }
 
     case UPDATE_PLAYBACK_STATE:
+      // if there is an update update the state
       if (action.payload) {
+        if (action.payload.track_window && state.currentSong) {
+          // check if the payload track and current song match
+          if (action.payload.track_window.current_track.id !== state.currentSong.spotifyId) {
+            // if they don't match switch to play the correct song
+            spotifyClient.play({ uris: [state.currentSong.spotifyUri] });
+          }
+        }
+
         return Object.assign({}, state, {
           position: action.payload.position,
           connected: true,
@@ -97,17 +106,17 @@ export default (state = initialState, action) => {
         });
       } else {
         return Object.assign({}, state, {
-          connected: true
+          connected: false
         });
       }
 
     case LEAVE_ROOM:
       // pause spotify client playback
       if (state.isPlaying) {
-      spotifyClient.pause();
+        spotifyClient.pause();
       }
 
-      return initialState;
+      return Object.assign({}, state, initialState);
 
     default:
       return state;
