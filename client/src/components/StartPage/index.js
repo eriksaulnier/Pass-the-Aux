@@ -7,8 +7,8 @@ import { joinRoom } from '../../actions/RoomActions';
 import JoinRoomComponent from './JoinRoom';
 import CreateRoomComponent from './CreateRoom';
 import packageJson from '../../../package.json';
-import './StartPage.scss';
 import logo from '../../logo_ondark.svg';
+import './StartPage.scss';
 
 class StartPage extends Component {
   constructor(props) {
@@ -54,45 +54,47 @@ class StartPage extends Component {
 
   render() {
     return (
-      <Container className="v-center">
-        <Row>
-          <Col className="start-page-container" sm="10" md={{ size: 6, offset: 3 }} lg={{ size: 4, offset: 4 }}>
-            <img className="logo" src={logo} alt="Pass the Aux" />
-            {this.state.creatingRoom ? (
-              <div>
-                <CreateRoomComponent />
-                <Button className="mt-3" color="secondary" onClick={this.toggleIsCreating}>
-                  Cancel
-                </Button>
-              </div>
-            ) : (
-              <div>
-                <JoinRoomComponent />
-                <p className="mt-4">OR</p>
-                {this.props.userId ? (
-                  <div>
-                    <Button color="secondary" onClick={this.toggleIsCreating}>
-                      Create a New Room
-                    </Button>
-                    <p className="spotify-text">
-                      Logged in as
-                      <b>{` ${this.props.userId}`}</b>
-                    </p>
-                  </div>
-                ) : (
-                  <Button color="secondary" onClick={this.openSpotifyAuthPopup}>
-                    <FaSpotify className="mr-2" />
-                    Login to Create Room
+      <div className="v-center">
+        <Container>
+          <Row>
+            <Col className="start-page-container" sm="10" md={{ size: 6, offset: 3 }} lg={{ size: 4, offset: 4 }}>
+              <img className="logo" src={logo} alt="Pass the Aux" />
+              {this.state.creatingRoom ? (
+                <div>
+                  <CreateRoomComponent />
+                  <Button className="mt-3" color="secondary" onClick={this.toggleIsCreating}>
+                    Cancel
                   </Button>
-                )}
-              </div>
-            )}
-            <p className="mt-4">
-              <i>{`Version: ${packageJson.version}`}</i>
-            </p>
-          </Col>
-        </Row>
-      </Container>
+                </div>
+              ) : (
+                <div>
+                  <JoinRoomComponent />
+                  <p className="mt-4">OR</p>
+                  {this.props.userId ? (
+                    <div>
+                      <Button color="secondary" onClick={this.toggleIsCreating}>
+                        Create a New Room
+                      </Button>
+                      <p className="spotify-text">
+                        Logged in as
+                        <b>{` ${this.props.userId}`}</b>
+                      </p>
+                    </div>
+                  ) : (
+                    <Button color="secondary" onClick={this.openSpotifyAuthPopup}>
+                      <FaSpotify className="mr-2" />
+                      Login to Create Room
+                    </Button>
+                  )}
+                </div>
+              )}
+              <p className="version-number">
+                <i>{`Version: ${packageJson.version}`}</i>
+              </p>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }
