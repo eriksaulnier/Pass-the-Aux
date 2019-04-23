@@ -46,6 +46,7 @@ class JoinRoom extends Component {
             onChange={this.handleInputChange}
             value={this.state.joinCode}
             placeholder="Enter Room Code Here"
+            autocomplete="off"
           />
         </FormGroup>
         <FormGroup>

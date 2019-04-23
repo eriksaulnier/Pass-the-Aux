@@ -44,7 +44,13 @@ class CreateRoom extends Component {
         <h3>Create Room</h3>
         <FormGroup>
           <Label for="joinCode">Join Code For The Room:</Label>
-          <Input name="joinCode" type="text" onChange={this.handleInputChange} value={this.state.joinCode} />
+          <Input
+            name="joinCode"
+            type="text"
+            onChange={this.handleInputChange}
+            value={this.state.joinCode}
+            autocomplete="off"
+          />
         </FormGroup>
         {/* <FormGroup>
             <Label check>
