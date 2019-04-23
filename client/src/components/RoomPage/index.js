@@ -11,7 +11,7 @@ import SongQueueComponent from './SongQueue';
 import AddSongComponent from './AddSong';
 import NowPlayingComponent from './NowPlaying';
 import FullScreenView from './FullScreenView';
-import './RoomPage.css';
+import './RoomPage.scss';
 
 class RoomPage extends Component {
   constructor(props) {

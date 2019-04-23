@@ -7,8 +7,8 @@ import { joinRoom } from '../../actions/RoomActions';
 import JoinRoomComponent from './JoinRoom';
 import CreateRoomComponent from './CreateRoom';
 import packageJson from '../../../package.json';
+import './StartPage.scss';
 import logo from '../../logo_ondark.svg';
-import "./StartPage.css"
 
 class StartPage extends Component {
   constructor(props) {
@@ -54,10 +54,10 @@ class StartPage extends Component {
 
   render() {
     return (
-      <Container>
+      <Container className="v-center">
         <Row>
-          <Col className="mt-5 text-center" sm="10" md={{ size: 6, offset: 3 }} lg={{ size: 4, offset: 4 }}>
-            <img class="logo" src={logo} />
+          <Col className="start-page-container" sm="10" md={{ size: 6, offset: 3 }} lg={{ size: 4, offset: 4 }}>
+            <img className="logo" src={logo} alt="Pass the Aux" />
             {this.state.creatingRoom ? (
               <div>
                 <CreateRoomComponent />
@@ -71,13 +71,13 @@ class StartPage extends Component {
                 <p className="mt-4">OR</p>
                 {this.props.userId ? (
                   <div>
-                    <p>
-                      Logged in as
-                      <b>{` ${this.props.userId}`}</b>
-                    </p>
                     <Button color="secondary" onClick={this.toggleIsCreating}>
                       Create a New Room
                     </Button>
+                    <p className="spotify-text">
+                      Logged in as
+                      <b>{` ${this.props.userId}`}</b>
+                    </p>
                   </div>
                 ) : (
                   <Button color="secondary" onClick={this.openSpotifyAuthPopup}>

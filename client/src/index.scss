@@ -1,0 +1,29 @@
+// customize bootstrap styles
+// logo colors are #72afd3 and #37ecba
+$theme-colors: (
+  'primary': #37ecba
+);
+
+// import bootstrap styles
+@import '~bootstrap/scss/bootstrap';
+
+// import google font
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+body {
+  margin: 0;
+  padding: 0;
+  color: #ffffff;
+  background-color: #020202;
+  font-family: 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.btn {
+  font-weight: bold;
+}

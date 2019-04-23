@@ -1,0 +1,118 @@
+/* AddSong Component */
+.search-song {
+  .song-dropdown-toggle {
+    display: none;
+  }
+
+  .song-dropdown-menu {
+    transform: none !important;
+    width: 100%;
+    background-color: #e7e7e7;
+  }
+}
+
+/* SongQueue and NowPlaying Components */
+.song-list .song {
+  display: flex;
+  align-items: center;
+  justify-content: justify;
+
+  .song-art {
+    height: 100px;
+  }
+
+  .song-info {
+    display: inline-block;
+  }
+
+  .song-voting {
+    margin-left: auto;
+  }
+
+  .song-progress {
+    height: 6px;
+  }
+
+  button.btn-play {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+  }
+}
+
+/* Full Screen View */
+.fullscreen-view {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  overflow: hidden;
+  background-color: black;
+
+  .fullscreen-bg {
+    width: 120%;
+    height: 120%;
+    margin-left: -10%;
+    margin-top: -10%;
+    opacity: 0.2;
+    filter: blur(10px);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+
+  .fullscreen-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    text-align: center;
+  }
+
+  .fullscreen-song {
+    .song-art {
+      width: 400px;
+      height: 400px;
+      margin-bottom: 30px;
+      border: 6px solid;
+      border-image-source: linear-gradient(45deg, #72afd3, #37ecba);
+      border-image-slice: 1;
+    }
+
+    .song-info {
+      margin-bottom: 70px;
+      color: white;
+
+      h1 {
+        font-size: 35px;
+        font-weight: bold;
+
+        .badge {
+          font-size: 20px;
+          font-weight: normal;
+          vertical-align: middle;
+        }
+      }
+
+      h2 {
+        font-size: 25px;
+      }
+    }
+  }
+
+  .room-info {
+    width: 70%;
+    margin: auto;
+    padding: 15px 10px;
+    font-size: 20px;
+    background-color: white;
+    border-radius: 10px;
+
+    .fullscreen-view .room-info .badge {
+      font-size: inherit;
+    }
+  }
+}

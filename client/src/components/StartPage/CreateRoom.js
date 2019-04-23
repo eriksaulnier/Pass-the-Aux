@@ -40,19 +40,18 @@ class CreateRoom extends Component {
 
   render() {
     return (
-      <Form className="mt-1" onSubmit={this.handleSubmit}>
-        <FormGroup row>
-          <Label for="joinCode">Enter Room Code:</Label>
-          <Input name="joinCode" type="text" onChange={this.handleInputChange} />
+      <Form className="create-room-form" onSubmit={this.handleSubmit}>
+        <h3>Create Room</h3>
+        <FormGroup>
+          <Label for="joinCode">Join Code For The Room:</Label>
+          <Input name="joinCode" type="text" onChange={this.handleInputChange} value={this.state.joinCode} />
         </FormGroup>
-
         {/* <FormGroup>
-                <Label check>
-                    <Input type="checkbox" />{' '}
-                    Block EXPLICIT songs
-                </Label>
-            </FormGroup> */}
-
+            <Label check>
+                <Input type="checkbox" />{' '}
+                Block EXPLICIT songs
+            </Label>
+        </FormGroup> */}
         <Button color="primary" type="submit">
           Create Room
         </Button>

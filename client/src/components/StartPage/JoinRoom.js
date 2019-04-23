@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Form, FormGroup, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Button, Form, FormGroup, Input } from 'reactstrap';
 import { joinRoom } from '../../actions/RoomActions';
 
 class JoinRoom extends Component {
@@ -38,16 +38,20 @@ class JoinRoom extends Component {
 
   render() {
     return (
-      <Form className="mt-4" onSubmit={this.handleSubmit}>
+      <Form className="join-room-form" onSubmit={this.handleSubmit}>
         <FormGroup>
-          <InputGroup>
-            <Input type="text" name="joinCode" onChange={this.handleInputChange} value={this.state.joinCode} placeholder= "Enter Room Code Here"/>
-            <InputGroupAddon addonType="append">
-              <Button color="primary" type="submit">
-                Join Room
-              </Button>
-            </InputGroupAddon>
-          </InputGroup>
+          <Input
+            type="text"
+            name="joinCode"
+            onChange={this.handleInputChange}
+            value={this.state.joinCode}
+            placeholder="Enter Room Code Here"
+          />
+        </FormGroup>
+        <FormGroup>
+          <Button color="primary" type="submit" disabled={!this.state.joinCode}>
+            Join Room
+          </Button>
         </FormGroup>
       </Form>
     );
