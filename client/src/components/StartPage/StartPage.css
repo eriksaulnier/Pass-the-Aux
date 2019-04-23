@@ -1,1 +1,23 @@
 /* Empty... for now */
+/* Empty... for now */
+
+
+img.logo{
+	object-fit: cover;
+    width: 300px;
+    height: 60px;
+}
+
+body {
+	background-color: black;
+	font-family: Montserrat;
+
+}
+
+.joinButton{
+    color: coral !important;
+}
+p,label{
+	color:white;
+	font-family: Montserrat;
+}

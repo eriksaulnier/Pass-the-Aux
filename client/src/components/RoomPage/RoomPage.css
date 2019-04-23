@@ -31,6 +31,15 @@
 .now-playing .song-progress {
   height: 6px;
 }
+h2{
+  color: white;
+}
+h3{
+  color: white;
+}
+h4{
+  color: white;
+}
 
 /* Full Screen View */
 .fullscreen-view {

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Input, Form, FormGroup, Label } from 'reactstrap';
 import { createRoom } from '../../actions/RoomActions';
-
 class CreateRoom extends Component {
   constructor(props) {
     super(props);

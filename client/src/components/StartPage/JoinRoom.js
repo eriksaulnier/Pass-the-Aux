@@ -41,7 +41,7 @@ class JoinRoom extends Component {
       <Form className="mt-4" onSubmit={this.handleSubmit}>
         <FormGroup>
           <InputGroup>
-            <Input type="text" name="joinCode" onChange={this.handleInputChange} value={this.state.joinCode} />
+            <Input type="text" name="joinCode" onChange={this.handleInputChange} value={this.state.joinCode} placeholder= "Enter Room Code Here"/>
             <InputGroupAddon addonType="append">
               <Button color="primary" type="submit">
                 Join Room

@@ -7,6 +7,8 @@ import { joinRoom } from '../../actions/RoomActions';
 import JoinRoomComponent from './JoinRoom';
 import CreateRoomComponent from './CreateRoom';
 import packageJson from '../../../package.json';
+import logo from '../../logo_ondark.svg';
+import "./StartPage.css"
 
 class StartPage extends Component {
   constructor(props) {
@@ -55,7 +57,7 @@ class StartPage extends Component {
       <Container>
         <Row>
           <Col className="mt-5 text-center" sm="10" md={{ size: 6, offset: 3 }} lg={{ size: 4, offset: 4 }}>
-            <h2>Pass the Aux</h2>
+            <img class="logo" src={logo} />
             {this.state.creatingRoom ? (
               <div>
                 <CreateRoomComponent />
