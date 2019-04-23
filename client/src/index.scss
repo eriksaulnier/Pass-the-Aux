@@ -1,7 +1,8 @@
 // customize bootstrap styles
 // logo colors are #72afd3 and #37ecba
 $theme-colors: (
-  'primary': #37ecba
+  'primary': #37ecba,
+  'secondary': #2c3034
 );
 
 // import bootstrap styles
@@ -22,8 +23,4 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
-.btn {
-  font-weight: bold;
 }

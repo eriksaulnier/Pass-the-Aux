@@ -46,4 +46,12 @@
       margin-bottom: 20px;
     }
   }
+
+  // mobile styling
+  @media (max-width: 767px) {
+    .btn {
+      padding: 0.3rem 0.45rem;
+      font-size: 14px;
+    }
+  }
 }

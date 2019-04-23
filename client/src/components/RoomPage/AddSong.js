@@ -70,7 +70,14 @@ export class AddSong extends Component {
   render() {
     return (
       <div className="search-song">
-        <Input type="text" name="query" autoComplete="off" onChange={this.handleInputChange} value={this.state.query} />
+        <Input
+          type="text"
+          name="query"
+          autoComplete="off"
+          onChange={this.handleInputChange}
+          value={this.state.query}
+          placeholder="Search For Songs..."
+        />
         {this.props.searchResults && this.props.searchResults.length > 0 && this.state.query.length > 0 && (
           <Dropdown isOpen={this.state.displayResults} toggle={() => {}}>
             <DropdownToggle className="song-dropdown-toggle" disabled />

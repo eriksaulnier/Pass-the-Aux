@@ -11,6 +11,7 @@ import SongQueueComponent from './SongQueue';
 import AddSongComponent from './AddSong';
 import NowPlayingComponent from './NowPlaying';
 import FullScreenView from './FullScreenView';
+import icon from '../../icon.svg';
 import './RoomPage.scss';
 
 class RoomPage extends Component {
@@ -56,24 +57,30 @@ class RoomPage extends Component {
 
   render() {
     return (
-      <Container>
-        <div className="mb-4">
-          <h2>
-            Current Room:
-            {this.props.room}
-          </h2>
+      <Container className="room-page-container">
+        <div className="room-header">
+          <div className="room-title">
+            <img src={icon} alt="Pass the Aux" />
+            <h2>
+              Current Room:
+              <b>{` ${this.props.room}`}</b>
+            </h2>
+          </div>
           <Button color="secondary" onClick={this.leaveRoom}>
-            Leave Room
+            Leave
           </Button>
-          <AuthGuard>
+        </div>
+        <AddSongComponent />
+        <AuthGuard>
+          <div className="room-controls">
+            <h4>Room Host Controls:</h4>
             <Button color="danger" onClick={this.resetQueue}>
               Reset Queue
             </Button>
             <Button onClick={() => this.triggerFullscreen(true)}>Fullscreen</Button>
             <FullScreenView fullscreen={this.state.fullscreen} closeCallback={() => this.triggerFullscreen(false)} />
-          </AuthGuard>
-        </div>
-        <AddSongComponent />
+          </div>
+        </AuthGuard>
         <NowPlayingComponent />
         <SongQueueComponent />
       </Container>
