@@ -49,7 +49,7 @@ class CreateRoom extends Component {
             type="text"
             onChange={this.handleInputChange}
             value={this.state.joinCode}
-            autocomplete="off"
+            autoComplete="off"
           />
         </FormGroup>
         {/* <FormGroup>
