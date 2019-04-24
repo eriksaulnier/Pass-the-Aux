@@ -55,6 +55,14 @@ module.exports = {
           socket.emit('UPDATE_CURRENT_SONG', room.currentSong);
 
           resolve(room);
+          
+        },
+        people => {
+          //Increment the amount of people in the room
+
+          Room.findOneAndUpdate(
+            {$set : {people: people + 1}}
+          );
         },
         err => {
           reject(err);
@@ -76,10 +84,34 @@ module.exports = {
 
           resolve(room);
         },
+        people => {
+          //decrement the number of people in the room
+          Room.findOneAndUpdate(
+          {$set : {people: people - 1}}
+          );
+        },
         err => {
           reject(err);
         }
       );
     });
+  },
+
+  disconnect(socket){
+    return new Promise((resolve, reject) => {
+      this.findRoom(socket.room).then(
+        people => {
+          console.log("User disconnected");
+          //decrement the number of people in the room
+          Room.findOneAndUpdate(
+          {$set : {people: people - 1}}
+          );
+        },
+        err => {
+          reject(err);
+        }
+     );
+    });
   }
+
 };

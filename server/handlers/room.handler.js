@@ -8,7 +8,7 @@ module.exports = socket => {
       room => {
         if (room) {
           // if it does exist join it
-          roomService.joinRoom(socket, room.joinCode).then(
+          roomService.joinRoom(socket, room.joinCode, socket.people).then(
             res => {
               socket.emit('JOIN_ROOM_SUCCESS', res);
               console.log(`user joined room '${res.joinCode}'`);
@@ -57,7 +57,7 @@ module.exports = socket => {
   socket.on('LEAVE_ROOM', () => {
     // if the socket is in a room, leave the room
     if (socket.room) {
-      roomService.leaveRoom(socket, socket.room).then(
+      roomService.leaveRoom(socket, socket.room, socket.people).then(
         res => {
           console.log(`user left room '${res.joinCode}'`);
         },
@@ -71,9 +71,9 @@ module.exports = socket => {
   socket.on('disconnect', () => {
     // if the socket is in a room, leave the room
     if (socket.room) {
-      roomService.leaveRoom(socket.room, socket).then(
+      roomService.disconnect(socket.room, socket.people, socket).then(
         room => {
-          console.log(`user left room '${room.joinCode}'`);
+          console.log(`user left room '`);// ${room.joinCode}
         },
         err => {
           console.error(err);

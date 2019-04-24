@@ -26,7 +26,8 @@ export default function configureStore() {
     // save the session state
     saveSessionState({
       roomReducer: {
-        room: state.roomReducer.room
+        room: state.roomReducer.room,
+        people: state.roomReducer.people
       },
       queueReducer: {
         votes: state.queueReducer.votes

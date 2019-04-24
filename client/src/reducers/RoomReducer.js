@@ -13,7 +13,9 @@ const initialState = {
   room: null,
   ownerId: null,
   queue: [],
-  votes: {}
+  votes: {},
+  people: 0,
+  votesToSkip: 0
 };
 
 export default (state = initialState, action) => {
