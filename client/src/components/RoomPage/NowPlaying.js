@@ -59,15 +59,22 @@ export class NowPlaying extends Component {
                   <Progress className="song-progress mt-2" value={this.playbackProgressPercent()} />
                 </div>
 
-                <div className="song-voting">
-                  <Button color="primary" className="btn-play" onClick={this.togglePlaying} disabled={!this.props.isRoomOwner}>
-                    {this.props.isPlaying ? <MdPause size="1.4em" /> : <MdPlayArrow size="1.4em" />}
-                  </Button>
+                {this.props.isRoomOwner && (
+                  <div className="song-voting">
+                    <Button
+                      color="primary"
+                      className="btn-play"
+                      onClick={this.togglePlaying}
+                      disabled={!this.props.isRoomOwner}
+                    >
+                      {this.props.isPlaying ? <MdPause size="1.4em" /> : <MdPlayArrow size="1.4em" />}
+                    </Button>
 
-                  <Button color="secondary" className="btn-skip" onClick={this.skipSong}>
-                    <MdSkipNext size="1.4em" />
-                  </Button>
-                </div>
+                    <Button color="secondary" className="btn-skip" onClick={this.skipSong}>
+                      <MdSkipNext size="1.4em" />
+                    </Button>
+                  </div>
+                )}
               </ListGroupItem>
             </ListGroup>
           </div>
