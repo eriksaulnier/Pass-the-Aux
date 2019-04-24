@@ -54,15 +54,19 @@ export class NowPlaying extends Component {
                 <Progress className="song-progress mt-2" value={this.playbackProgressPercent()} />
               </div>
 
-              <div className="song-voting">
-                <Button color="primary" className="btn-play" onClick={this.togglePlaying} disabled={!this.props.isRoomOwner}>
-                  {this.props.isPlaying ? <MdPause size="1.4em" /> : <MdPlayArrow size="1.4em" />}
-                </Button>
+              {this.props.isRoomOwner ? (
+                <div className="song-voting">
+                  <Button color="primary" className="btn-play" onClick={this.togglePlaying} disabled={!this.props.isRoomOwner}>
+                    {this.props.isPlaying ? <MdPause size="1.4em" /> : <MdPlayArrow size="1.4em" />}
+                  </Button>
 
-                <Button className="ml-3" color="secondary" onClick={this.skipSong}>
-                  <MdSkipNext size="1.4em" />
-                </Button>
-              </div>
+                  <Button className="ml-3" color="secondary" onClick={this.skipSong}>
+                    <MdSkipNext size="1.4em" />
+                  </Button>
+                </div>
+                ) : null}
+              }
+                
             </ListGroupItem>
           </ListGroup>
         )}
