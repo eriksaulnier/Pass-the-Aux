@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, ListGroup, ListGroupItem, Badge, Progress } from 'reactstrap';
 import { MdPlayArrow, MdPause, MdSkipNext } from 'react-icons/md';
-import { isMobile } from 'react-device-detect';
+import { isMobile, isDesktop } from 'react-device-detect';
 import { playSong, pauseSong, skipSong } from '../../actions/PlaybackActions';
 import SpotifyPlayer from './SpotifyPlayer';
 
@@ -73,7 +73,7 @@ export class NowPlaying extends Component {
           </div>
         )}
 
-        {this.props.isRoomOwner && <SpotifyPlayer />}
+        {this.props.isRoomOwner && !isDesktop && <SpotifyPlayer />}
       </div>
     );
   }
