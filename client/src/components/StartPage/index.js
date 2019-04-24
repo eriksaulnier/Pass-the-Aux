@@ -69,7 +69,7 @@ class StartPage extends Component {
               ) : (
                 <div>
                   <JoinRoomComponent />
-                  <p className="mt-4">OR</p>
+                  <p className="or-text">or</p>
                   {this.props.userId ? (
                     <div>
                       <Button color="secondary" onClick={this.toggleIsCreating}>

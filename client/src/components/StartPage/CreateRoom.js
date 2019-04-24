@@ -41,7 +41,7 @@ class CreateRoom extends Component {
   render() {
     return (
       <Form className="create-room-form" onSubmit={this.handleSubmit}>
-        <h3>Create Room</h3>
+        <h3>Create New Room</h3>
         <FormGroup>
           <Label for="joinCode">Join Code For The Room:</Label>
           <Input

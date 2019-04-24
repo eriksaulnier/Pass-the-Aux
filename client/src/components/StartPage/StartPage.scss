@@ -15,12 +15,21 @@
     margin-bottom: 5vh;
   }
 
+  .or-text {
+    margin: 25px 0;
+    font-size: 17px;
+    text-transform: uppercase;
+    color: lightgrey;
+  }
+
   .spotify-text {
     margin-top: 10px;
+    font-size: 14px;
   }
 
   .version-number {
     margin-top: 40px;
+    font-size: 14px;
     color: lightgrey;
   }
 
@@ -38,7 +47,7 @@
 
   .create-room-form {
     h3 {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
     button[type='submit'] {
@@ -51,7 +60,12 @@
   @media (max-width: 767px) {
     .btn {
       padding: 0.4rem 0.6rem;
-      font-size: 14px;
+      font-size: 15px;
+    }
+
+    .spotify-text,
+    .version-number {
+      font-size: 13px;
     }
   }
 }
