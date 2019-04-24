@@ -17,6 +17,11 @@ class RoomPage extends Component {
   constructor(props) {
     super(props);
 
+    // setup spotify api connection if no access code is present
+    if (!this.props.loggedIn) {
+      this.props.connectSpotify();
+    }
+
     // if the user is not in a room route back to the main page
     if (!props.room) {
       this.props.route('/');
