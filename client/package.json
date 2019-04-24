@@ -1,6 +1,6 @@
 {
   "name": "pass-the-aux-client",
-  "version": "1.0.6",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "bootstrap": "^4.3.1",
