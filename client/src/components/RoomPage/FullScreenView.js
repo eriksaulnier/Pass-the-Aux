@@ -55,7 +55,7 @@ class FullScreenView extends Component {
                 </div>
               )}
               <div className="room-info">
-                Go to <b>{window.location.origin.toString()}</b> and enter the room code <Badge color="dark">{this.props.joinCode}</Badge> to add or vote on songs!
+                Go to <b>{window.location.origin.toString()}</b> and enter the room code <Badge color="dark"><b>{this.props.joinCode}</b></Badge> to add or vote on songs!
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonGroup, ListGroup, ListGroupItem, Badge } from 'reactstrap';
 import { MdKeyboardArrowUp, MdKeyboardArrowDown, MdClose } from 'react-icons/md';
+import { isMobile } from 'react-device-detect';
 import { removeSong, voteSong } from '../../actions/QueueActions';
 import AuthGuard from '../../guards/AuthGuard';
 
@@ -45,27 +46,30 @@ export class SongQueue extends Component {
   render() {
     return (
       <div>
-        <h3>Queue:</h3>
+        <h4>Queue:</h4>
         {this.props.queue && (
           <ListGroup className="song-list">
             {this.props.queue.map(song => (
               <ListGroupItem className="song" key={song._id}>
-                {song.artwork && <img className="song-art mr-2" src={song.artwork} alt={song.title} />}
+                {song.artwork && <img className="song-art" src={song.artwork} alt={song.title} />}
 
                 <div className="song-info">
                   <b>{song.title}</b>
-                  {song.explicit ? (
-                    <Badge className="ml-2" color="dark">
-                      EXPLICIT
-                    </Badge>
-                  ) : null}
                   <br />
                   {song.artist}
+                  {song.explicit ? (
+                    <span className="ml-2">
+                      &#183;
+                      <Badge className="ml-2" color="light">
+                        {isMobile ? 'EXPL' : 'EXPLICIT'}
+                      </Badge>
+                    </span>
+                  ) : null}
                 </div>
 
                 <div className="song-voting">
                   <span>{song.currentVote}</span>
-                  <ButtonGroup className="ml-2" vertical>
+                  <ButtonGroup vertical>
                     <Button
                       color={this.getSongVote(song._id) > 0 ? 'success' : 'secondary'}
                       onClick={() => this.upvoteSong(song._id)}
@@ -80,7 +84,7 @@ export class SongQueue extends Component {
                     </Button>
                   </ButtonGroup>
                   <AuthGuard>
-                    <Button className="ml-3" color="danger" onClick={() => this.removeSong(song._id)}>
+                    <Button color="danger" onClick={() => this.removeSong(song._id)}>
                       <MdClose size="1.2em" />
                     </Button>
                   </AuthGuard>

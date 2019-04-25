@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, ListGroup, ListGroupItem, Badge, Progress } from 'reactstrap';
 import { MdPlayArrow, MdPause, MdSkipNext } from 'react-icons/md';
+import { isMobile, isDesktop } from 'react-device-detect';
 import { playSong, pauseSong, skipSong } from '../../actions/PlaybackActions';
 import SpotifyPlayer from './SpotifyPlayer';
 
@@ -36,40 +37,50 @@ export class NowPlaying extends Component {
     return (
       <div>
         {this.props.currentSong && (
-          <ListGroup className="now-playing song-list mb-4">
+          <div>
             <h4>Now Playing:</h4>
-            <ListGroupItem className="song">
-              {song.artwork && <img className="song-art mr-2" src={song.artwork} alt={song.title} />}
+            <ListGroup className="now-playing song-list">
+              <ListGroupItem className="song">
+                {song.artwork && <img className="song-art" src={song.artwork} alt={song.title} />}
 
-              <div className="song-info">
-                <b>{song.title}</b>
-                {song.explicit ? (
-                  <Badge className="ml-2" color="dark">
-                    EXPLICIT
-                  </Badge>
-                ) : null}
-                <br />
-                {song.artist}
+                <div className="song-info">
+                  <b>{song.title}</b>
+                  <br />
+                  {song.artist}
+                  {song.explicit ? (
+                    <span className="ml-2">
+                      &#183;
+                      <Badge className="ml-2" color="light">
+                        {isMobile ? 'EXPL' : 'EXPLICIT'}
+                      </Badge>
+                    </span>
+                  ) : null}
 
-                <Progress className="song-progress mt-2" value={this.playbackProgressPercent()} />
-              </div>
-
-              {this.props.isRoomOwner && (
-                <div className="song-voting">
-                  <Button color="primary" className="btn-play" onClick={this.togglePlaying} disabled={!this.props.isRoomOwner}>
-                    {this.props.isPlaying ? <MdPause size="1.4em" /> : <MdPlayArrow size="1.4em" />}
-                  </Button>
-
-                  <Button className="ml-3" color="secondary" onClick={this.skipSong}>
-                    <MdSkipNext size="1.4em" />
-                  </Button>
+                  <Progress className="song-progress mt-2" value={this.playbackProgressPercent()} />
                 </div>
-              )}
-            </ListGroupItem>
-          </ListGroup>
+
+                {this.props.isRoomOwner && (
+                  <div className="song-voting">
+                    <Button
+                      color="primary"
+                      className="btn-play"
+                      onClick={this.togglePlaying}
+                      disabled={!this.props.isRoomOwner}
+                    >
+                      {this.props.isPlaying ? <MdPause size="1.4em" /> : <MdPlayArrow size="1.4em" />}
+                    </Button>
+
+                    <Button color="secondary" className="btn-skip" onClick={this.skipSong}>
+                      <MdSkipNext size="1.4em" />
+                    </Button>
+                  </div>
+                )}
+              </ListGroupItem>
+            </ListGroup>
+          </div>
         )}
 
-        {this.props.isRoomOwner && <SpotifyPlayer />}
+        {this.props.isRoomOwner && isDesktop && <SpotifyPlayer />}
       </div>
     );
   }

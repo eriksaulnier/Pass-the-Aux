@@ -4,11 +4,12 @@ import { push } from 'connected-react-router';
 import { Container, Row, Col, Button } from 'reactstrap';
 import { FaSpotify } from 'react-icons/fa';
 import { joinRoom } from '../../actions/RoomActions';
+import { logout } from '../../actions/SpotifyActions';
 import JoinRoomComponent from './JoinRoom';
 import CreateRoomComponent from './CreateRoom';
 import packageJson from '../../../package.json';
 import logo from '../../logo_ondark.svg';
-import "./StartPage.css"
+import './StartPage.scss';
 
 class StartPage extends Component {
   constructor(props) {
@@ -30,7 +31,7 @@ class StartPage extends Component {
     }
   };
 
-  // toggles beteen components for creating and joining rooms
+  // toggles between components for creating and joining rooms
   toggleIsCreating = () => {
     const isCreatingRoom = this.state.creatingRoom;
     this.setState({ creatingRoom: !isCreatingRoom });
@@ -54,45 +55,50 @@ class StartPage extends Component {
 
   render() {
     return (
-      <Container>
-        <Row>
-          <Col className="mt-5 text-center" sm="10" md={{ size: 6, offset: 3 }} lg={{ size: 4, offset: 4 }}>
-            <img class="logo" src={logo} />
-            {this.state.creatingRoom ? (
-              <div>
-                <CreateRoomComponent />
-                <Button className="mt-3" color="secondary" onClick={this.toggleIsCreating}>
-                  Cancel
-                </Button>
-              </div>
-            ) : (
-              <div>
-                <JoinRoomComponent />
-                <p className="mt-4">OR</p>
-                {this.props.userId ? (
-                  <div>
-                    <p>
-                      Logged in as
-                      <b>{` ${this.props.userId}`}</b>
-                    </p>
-                    <Button color="secondary" onClick={this.toggleIsCreating}>
-                      Create a New Room
-                    </Button>
-                  </div>
-                ) : (
-                  <Button color="secondary" onClick={this.openSpotifyAuthPopup}>
-                    <FaSpotify className="mr-2" />
-                    Login to Create Room
+      <div className="v-center">
+        <Container>
+          <Row>
+            <Col className="start-page-container" sm="10" md={{ size: 6, offset: 3 }} lg={{ size: 4, offset: 4 }}>
+              <img className="logo" src={logo} alt="Pass the Aux" />
+              {this.state.creatingRoom ? (
+                <div>
+                  <CreateRoomComponent />
+                  <Button className="mt-3" color="secondary" onClick={this.toggleIsCreating}>
+                    Cancel
                   </Button>
-                )}
-              </div>
-            )}
-            <p className="mt-4">
-              <i>{`Version: ${packageJson.version}`}</i>
-            </p>
-          </Col>
-        </Row>
-      </Container>
+                </div>
+              ) : (
+                <div>
+                  <JoinRoomComponent />
+                  <p className="or-text">or</p>
+                  {this.props.userId ? (
+                    <div>
+                      <Button color="secondary" onClick={this.toggleIsCreating}>
+                        Create a New Room
+                      </Button>
+                      <p className="spotify-text">
+                        Logged in as
+                        <b>{` ${this.props.userId}`}</b>
+                      </p>
+                      <Button className="logout-btn" color="secondary" onClick={this.props.logout}>
+                        Logout
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button color="secondary" onClick={this.openSpotifyAuthPopup}>
+                      <FaSpotify className="mr-2" />
+                      Login to Create Room
+                    </Button>
+                  )}
+                </div>
+              )}
+              <p className="version-number">
+                <i>{`Version: ${packageJson.version}`}</i>
+              </p>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }
@@ -106,7 +112,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   route: path => dispatch(push(path)),
-  joinRoom: room => dispatch(joinRoom(room))
+  joinRoom: room => dispatch(joinRoom(room)),
+  logout: () => dispatch(logout())
 });
 
 export default connect(

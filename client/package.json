@@ -1,10 +1,7 @@
 {
   "name": "pass-the-aux-client",
-  "version": "1.0.6",
+  "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": ">=7.0.0"
-  },
   "dependencies": {
     "bootstrap": "^4.3.1",
     "connected-react-router": "^6.3.2",
@@ -12,6 +9,7 @@
     "jquery": "^3.3.1",
     "js-cookie": "^2.2.0",
     "lodash": "^4.17.11",
+    "node-sass": "^4.11.0",
     "react": "^16.8.2",
     "react-device-detect": "^1.6.2",
     "react-dom": "^16.8.2",

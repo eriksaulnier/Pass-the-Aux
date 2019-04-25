@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import Cookie from 'js-cookie';
 import { getAccessToken, refreshAccessToken } from './actions/SpotifyActions';
 import { history } from './store';
-import './App.css';
 import StartPage from './components/StartPage';
+import './App.scss';
 
 class App extends Component {
   constructor(props) {

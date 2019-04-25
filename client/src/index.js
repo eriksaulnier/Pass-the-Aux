@@ -6,8 +6,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import * as serviceWorker from './serviceWorker';
 import configureStore, { history } from './store';
 import { init } from './utils/Socket';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.css';
+import './index.scss';
 
 import App from './App';
 import RoomPage from './components/RoomPage';
@@ -22,13 +21,11 @@ init(store);
 // configure routing
 const routing = (
   <ConnectedRouter history={history}>
-    <div>
-      <Switch>
-        <Route exact path="/" component={App} />
-        <Route path="/room" component={RoomPage} />
-        <Route component={NotFoundPage} />
-      </Switch>
-    </div>
+    <Switch>
+      <Route exact path="/" component={App} />
+      <Route path="/room" component={RoomPage} />
+      <Route component={NotFoundPage} />
+    </Switch>
   </ConnectedRouter>
 );
 

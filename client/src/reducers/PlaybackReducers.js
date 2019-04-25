@@ -6,7 +6,8 @@ import {
   UPDATE_PLAYBACK_STATE,
   RESET_QUEUE,
   ROOM_INFO,
-  LEAVE_ROOM
+  LEAVE_ROOM,
+  LOGOUT
 } from '../actions/Types';
 import { spotifyClient } from '../utils/SpotifyClient';
 
@@ -111,6 +112,9 @@ export default (state = initialState, action) => {
         spotifyClient.pause();
       }
 
+      return initialState;
+
+    case LOGOUT:
       return initialState;
 
     default:

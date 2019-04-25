@@ -1,4 +1,4 @@
-import { UPDATE_QUEUE, VOTE_SONG, RESET_QUEUE, LEAVE_ROOM } from '../actions/Types';
+import { UPDATE_QUEUE, VOTE_SONG, RESET_QUEUE, LEAVE_ROOM, LOGOUT } from '../actions/Types';
 
 // the initial state for the reducer
 const initialState = {
@@ -26,6 +26,9 @@ export default (state = initialState, action) => {
 
     case LEAVE_ROOM:
       // resets back to the initial state
+      return initialState;
+
+    case LOGOUT:
       return initialState;
 
     default:

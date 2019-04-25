@@ -7,7 +7,8 @@ import {
   SPOTIFY_USER_SUCCESS,
   SPOTIFY_USER_ERROR,
   SPOTIFY_PLAYER_SUCCESS,
-  SPOTIFY_PLAYER_ERROR
+  SPOTIFY_PLAYER_ERROR,
+  LOGOUT
 } from './Types';
 import { spotifyClient } from '../utils/SpotifyClient';
 import { emit } from '../utils/Socket';
@@ -129,6 +130,15 @@ export const searchSongs = query => {
           payload: err
         });
       }
+    });
+  };
+};
+
+// resets the entire state
+export const logout = () => {
+  return dispatch => {
+    dispatch({
+      type: LOGOUT
     });
   };
 };

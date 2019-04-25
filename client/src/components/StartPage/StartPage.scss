@@ -1,0 +1,75 @@
+.v-center {
+  min-height: 100%; // fallback for browsers that don't support vh
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.start-page-container {
+  margin-top: -10%; // fallback for browsers that don't support vh
+  margin-top: -10vh;
+  text-align: center;
+
+  .logo {
+    margin-bottom: 5%; // fallback for browsers that don't support vh
+    margin-bottom: 5vh;
+  }
+
+  .or-text {
+    margin: 25px 0;
+    font-size: 17px;
+    text-transform: uppercase;
+    color: lightgrey;
+  }
+
+  .spotify-text {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  .logout-btn {
+    margin-top: 10px;
+  }
+
+  .version-number {
+    margin-top: 40px;
+    font-size: 14px;
+    color: lightgrey;
+  }
+
+  input {
+    width: 84%;
+    margin: 0 8%;
+    text-align: center;
+  }
+
+  .join-room-form {
+    button[type='submit'] {
+      margin-top: 5px;
+    }
+  }
+
+  .create-room-form {
+    h3 {
+      margin-bottom: 20px;
+    }
+
+    button[type='submit'] {
+      margin-top: 5px;
+      margin-bottom: 20px;
+    }
+  }
+
+  // mobile styling
+  @media (max-width: 767px) {
+    .btn {
+      padding: 0.4rem 0.6rem;
+      font-size: 15px;
+    }
+
+    .spotify-text,
+    .version-number {
+      font-size: 13px;
+    }
+  }
+}

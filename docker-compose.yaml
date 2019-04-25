@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    image: node:7
+    image: node:11
     command: npm run start:dev
     working_dir: /app
     volumes:
