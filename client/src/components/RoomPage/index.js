@@ -5,7 +5,6 @@ import { Container, Button } from 'reactstrap';
 import { isMobile } from 'react-device-detect';
 import { leaveRoom } from '../../actions/RoomActions';
 import { resetQueue } from '../../actions/QueueActions';
-import { getAccessToken } from '../../actions/SpotifyActions';
 import AuthGuard from '../../guards/AuthGuard';
 import SongQueueComponent from './SongQueue';
 import AddSongComponent from './AddSong';
@@ -94,8 +93,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   route: path => dispatch(push(path)),
   leaveRoom: () => dispatch(leaveRoom()),
-  resetQueue: () => dispatch(resetQueue()),
-  connectSpotify: () => dispatch(getAccessToken())
+  resetQueue: () => dispatch(resetQueue())
 });
 
 export default connect(

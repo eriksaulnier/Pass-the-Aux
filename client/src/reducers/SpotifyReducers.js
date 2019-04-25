@@ -8,7 +8,8 @@ import {
   SPOTIFY_PLAYER_SUCCESS,
   SPOTIFY_PLAYER_ERROR,
   ROOM_INFO,
-  LEAVE_ROOM
+  LEAVE_ROOM,
+  LOGOUT
 } from '../actions/Types';
 import { spotifyClient } from '../utils/SpotifyClient';
 
@@ -94,6 +95,9 @@ export default (state = initialState, action) => {
         isRoomOwner: false,
         searchResults: []
       });
+
+    case LOGOUT:
+      return initialState;
 
     default:
       return state;

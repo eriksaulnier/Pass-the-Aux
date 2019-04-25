@@ -80,7 +80,7 @@ export class NowPlaying extends Component {
           </div>
         )}
 
-        {this.props.isRoomOwner && !isDesktop && <SpotifyPlayer />}
+        {this.props.isRoomOwner && isDesktop && <SpotifyPlayer />}
       </div>
     );
   }

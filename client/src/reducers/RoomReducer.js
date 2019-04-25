@@ -5,7 +5,8 @@ import {
   CREATE_ROOM_SUCCESS,
   CREATE_ROOM_ERROR,
   ROOM_INFO,
-  LEAVE_ROOM
+  LEAVE_ROOM,
+  LOGOUT
 } from '../actions/Types';
 
 // the initial state for the reducer
@@ -54,6 +55,9 @@ export default (state = initialState, action) => {
 
     case LEAVE_ROOM:
       // reset back to the initial state
+      return initialState;
+
+    case LOGOUT:
       return initialState;
 
     default:

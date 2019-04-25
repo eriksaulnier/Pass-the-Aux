@@ -4,6 +4,7 @@ import { push } from 'connected-react-router';
 import { Container, Row, Col, Button } from 'reactstrap';
 import { FaSpotify } from 'react-icons/fa';
 import { joinRoom } from '../../actions/RoomActions';
+import { logout } from '../../actions/SpotifyActions';
 import JoinRoomComponent from './JoinRoom';
 import CreateRoomComponent from './CreateRoom';
 import packageJson from '../../../package.json';
@@ -30,7 +31,7 @@ class StartPage extends Component {
     }
   };
 
-  // toggles beteen components for creating and joining rooms
+  // toggles between components for creating and joining rooms
   toggleIsCreating = () => {
     const isCreatingRoom = this.state.creatingRoom;
     this.setState({ creatingRoom: !isCreatingRoom });
@@ -79,6 +80,9 @@ class StartPage extends Component {
                         Logged in as
                         <b>{` ${this.props.userId}`}</b>
                       </p>
+                      <Button className="logout-btn" color="secondary" onClick={this.props.logout}>
+                        Logout
+                      </Button>
                     </div>
                   ) : (
                     <Button color="secondary" onClick={this.openSpotifyAuthPopup}>
@@ -108,7 +112,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   route: path => dispatch(push(path)),
-  joinRoom: room => dispatch(joinRoom(room))
+  joinRoom: room => dispatch(joinRoom(room)),
+  logout: () => dispatch(logout())
 });
 
 export default connect(
